@@ -1,0 +1,105 @@
+{
+  "jobDescrition": "",
+  "questions": [
+    {
+      "question": "When optimizing UI performance in Angular applications, what specific techniques or tools have you used to identify and address rendering bottlenecks?",
+      "choices": [
+        "Code splitting and lazy loading",
+        "Performance profiling with Chrome DevTools",
+        "Minification and compression of assets",
+        "Usage of Web Workers for parallel processing"
+      ],
+      "answer": "Performance profiling with Chrome DevTools"
+    },
+    {
+      "question": "Describe a scenario where you encountered a memory leak issue in an Angular application. How did you diagnose and resolve it?",
+      "choices": [
+        "Manually managing memory with the ngOnDestroy lifecycle hook",
+        "Using tools like Heap Profiler to analyze memory usage",
+        "Optimizing garbage collection through RxJS operators",
+        "Increasing the heap size in the browser settings"
+      ],
+      "answer": "Using tools like Heap Profiler to analyze memory usage"
+    },
+    {
+      "question": "In a large-scale Angular project, how do you organize and manage shared UI components to ensure reusability and maintainability?",
+      "choices": [
+        "Using Angular Elements to create framework-agnostic components",
+        "Implementing a centralized UI library with Angular CDK",
+        "Utilizing Angular Dependency Injection for component composition",
+        "Using global CSS styles for consistent styling"
+      ],
+      "answer": "Implementing a centralized UI library with Angular CDK"
+    },
+    {
+      "question": "When integrating Angular applications with backend APIs, what strategies do you employ to handle authentication and authorization securely?",
+      "choices": [
+        "Implementing JSON Web Tokens (JWT) with refresh tokens",
+        "Using session-based authentication with cookies",
+        "Storing sensitive data in browser local storage",
+        "Encrypting data with symmetric encryption algorithms"
+      ],
+      "answer": "Implementing JSON Web Tokens (JWT) with refresh tokens"
+    },
+    {
+      "question": "Discuss your approach to unit testing Angular components that rely heavily on asynchronous operations, such as HTTP requests or timers.",
+      "choices": [
+        "Using fakeAsync and tick to simulate asynchronous behavior",
+        "Mocking HTTP responses with Angular HttpClientTestingModule",
+        "Using Jasmine's done function for asynchronous testing",
+        "Integrating with third-party libraries like Sinon.js for spies and stubs"
+      ],
+      "answer": "Using fakeAsync and tick to simulate asynchronous behavior"
+    },
+    {
+      "question": "Describe a scenario where you optimized an Angular application for accessibility (a11y). What specific techniques or tools did you use to ensure compliance with WCAG standards?",
+      "choices": [
+        "Utilizing ARIA attributes for dynamic content",
+        "Running automated accessibility audits with tools like Axe or Lighthouse",
+        "Enabling screen reader support in Angular Material components",
+        "Disabling keyboard navigation for mouse-based interactions"
+      ],
+      "answer": "Running automated accessibility audits with tools like Axe or Lighthouse"
+    },
+    {
+      "question": "When collaborating with cross-functional teams, how do you ensure effective communication and alignment of technical decisions, especially in projects involving both frontend and backend development?",
+      "choices": [
+        "Conducting regular stand-up meetings to discuss progress and challenges",
+        "Documenting technical specifications using tools like Swagger or OpenAPI",
+        "Using version control systems like Git for code review and collaboration",
+        "Encouraging pair programming sessions to facilitate knowledge sharing"
+      ],
+      "answer": "Documenting technical specifications using tools like Swagger or OpenAPI"
+    },
+    {
+      "question": "Discuss your experience with performance optimization techniques specific to Angular's change detection mechanism. How do you minimize unnecessary re-renders and improve overall application performance?",
+      "choices": [
+        "Using OnPush change detection strategy for components",
+        "Optimizing template bindings with ngTemplateOutlet and ng-container",
+        "Using trackBy function in ngFor directive to minimize DOM updates",
+        "Disabling zone.js for manual control over change detection"
+      ],
+      "answer": "Using OnPush change detection strategy for components"
+    },
+    {
+      "question": "In your experience, what are some common pitfalls or challenges when migrating an existing AngularJS (1.x) application to Angular? How do you mitigate these risks?",
+      "choices": [
+        "Managing the transition from $scope to component-based architecture",
+        "Ensuring compatibility with existing third-party libraries and plugins",
+        "Handling differences in routing and dependency injection between AngularJS and Angular",
+        "Migrating templates and styles while maintaining backwards compatibility"
+      ],
+      "answer": "Handling differences in routing and dependency injection between AngularJS and Angular"
+    },
+    {
+      "question": "Describe a scenario where you implemented server-side rendering (SSR) in an Angular application to improve initial page load performance. What were the key challenges you faced and how did you address them?",
+      "choices": [
+        "Handling authentication and session management with SSR",
+        "Ensuring SEO-friendly rendering of dynamic content",
+        "Minimizing bundle size and optimizing resource loading for SSR",
+        "Integrating with caching solutions like Redis or Varnish for improved scalability"
+      ],
+      "answer": "Minimizing bundle size and optimizing resource loading for SSR"
+    }
+  ]
+}
