@@ -51,11 +51,11 @@ const LoginPage = (props: Props) => {
         setSigninFormErrorMessages(response.errorMessages);
         if (response.outcome === "SUCCESS") {
           setSessionValue(
-            `talentprobe-access_token`,
+            `testgenie-access_token`,
             response.data.access_token
           );
           setSessionValue(
-            `talentprobe-refresh_token`,
+            `testgenie-refresh_token`,
             response.data.refresh_token
           );
           AuthorizationState.next({ ...response.data, isAuth: true });

@@ -18,8 +18,8 @@ export function useInitialization() {
   }, []);
 
   const authorizeFromSession = () => {
-    const accessToken = getSessionValue(`talentprobe-access_token`);
-    const refreshToken = getSessionValue(`talentprobe-refresh_token`);
+    const accessToken = getSessionValue(`testgenie-access_token`);
+    const refreshToken = getSessionValue(`testgenie-refresh_token`);
     if (accessToken && refreshToken) {
       httpPost(
         `/${appRealm}/user/auth/token`,
@@ -32,7 +32,7 @@ export function useInitialization() {
             let newAccessToken = accessToken;
             if (response.data?.access_token) {
               newAccessToken = response.data.access_token;
-              setSessionValue(`talentprobe-access_token`, newAccessToken);
+              setSessionValue(`testgenie-access_token`, newAccessToken);
             }
             AuthorizationState.next({
               isAuth: true,
@@ -44,8 +44,8 @@ export function useInitialization() {
           }
         })
         .catch((error: any) => {
-          removeSessionValue(`talentprobe-access_token`);
-          removeSessionValue(`talentprobe-refresh_token`);
+          removeSessionValue(`testgenie-access_token`);
+          removeSessionValue(`testgenie-refresh_token`);
           router.push(`/login`);
         });
     } else {
