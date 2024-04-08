@@ -1,4 +1,4 @@
-export type Assessment = {
+export type Project = {
   name: string;
   jobDescription?: string;
   duration?: string;

@@ -23,10 +23,7 @@ const Navbar = () => {
     <nav className="navbar">
       <ul>
         <li>
-          <Link href="/assessments">Candidate Assessment</Link>
-        </li>
-        <li>
-          <Link href="/resumes">Resume screener</Link>
+          <Link href="/project/list">All projects</Link>
         </li>
       </ul>
       <div>

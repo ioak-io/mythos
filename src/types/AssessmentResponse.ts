@@ -1,5 +1,5 @@
-export type AssessmentResponse = {
-  assessmentId: string;
+export type ProjectResponse = {
+  projectId: string;
   participantEmail: string;
   status: boolean;
   score: string;

@@ -1,9 +1,9 @@
 import { httpGet, httpPost } from "@/lib/RestTemplate";
-import { Assessment } from "@/types/Assessment";
+import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
 
-export const getAssessments = (authorization?: Authorization) => {
-  return httpGet(`/assessment`, {
+export const getProjects = (authorization?: Authorization) => {
+  return httpGet(`/project`, {
     headers: {
       Authorization: authorization?.access_token,
     },
@@ -19,8 +19,8 @@ export const getAssessments = (authorization?: Authorization) => {
     });
 };
 
-export const saveAssessment = (payload: Assessment, authorization?: any) => {
-  return httpPost(`/assessment`, payload, {
+export const saveProject = (payload: Project, authorization?: any) => {
+  return httpPost(`/project`, payload, {
     headers: {
       Authorization: authorization?.access_token,
     },

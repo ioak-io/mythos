@@ -15,11 +15,11 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import "./style.css";
-import { Assessment } from "@/types/Assessment";
+import { Project } from "@/types/Project";
 import {
-  deleteAssessmentById,
-  getAssessmentById,
-  saveAssessmentById,
+  deleteProjectById,
+  getProjectById,
+  saveProjectById,
 } from "./service";
 import withAuthValidation from "@/components/Authorization/withAuthValidation";
 import {
@@ -31,14 +31,14 @@ import { AuthorizationState } from "@/store/AuthorizationStore";
 
 const sampleData = require("./data.json");
 
-const AssessmentPage = () => {
+const EditProjectPage = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
   useLayoutEffect(() => {
     hasPermissions([PermissionType.USER]);
   }, []);
   const [authorization, setAuthorization] = useState<Authorization>({});
 
-  const [assessmentData, setAssessmentData] = useState<Assessment>({
+  const [projectData, setProjectData] = useState<Project>({
     name: "",
   });
   const [state, setState] = useState<any>({ ...sampleData });
@@ -51,9 +51,9 @@ const AssessmentPage = () => {
     });
   }, []);
 
-  const handleAssessmentDataChange = (event: any) => {
-    setAssessmentData({
-      ...assessmentData,
+  const handleProjectDataChange = (event: any) => {
+    setProjectData({
+      ...projectData,
       [event.currentTarget.name]: event.currentTarget.value,
     });
   };
@@ -62,16 +62,16 @@ const AssessmentPage = () => {
     console.log(data);
   };
 
-  const saveAssessment = () => {
-    saveAssessmentById(assessmentData?.id || "", assessmentData).then(
+  const saveProject = () => {
+    saveProjectById(projectData?.id || "", projectData).then(
       (response) => {
-        fetchAssessmentById();
+        fetchProjectById();
       }
     );
   };
 
-  const handleDeleteAssessment = () => {
-    deleteAssessmentById(assessmentData?.id || "").then((response) => {
+  const handleDeleteProject = () => {
+    deleteProjectById(projectData?.id || "").then((response) => {
       router.back();
     });
   };
@@ -84,16 +84,18 @@ const AssessmentPage = () => {
 
   useEffect(() => {
     if (searchParams.has("id")) {
-      fetchAssessmentById();
+      fetchProjectById();
     }
   }, [authorization, searchParams]);
 
-  const fetchAssessmentById = () => {
+  const fetchProjectById = () => {
     console.log(authorization);
     if (authorization.isAuth) {
-      getAssessmentById(authorization, searchParams.get("id") || "").then((response) => {
-        setAssessmentData(response);
-      });
+      getProjectById(authorization, searchParams.get("id") || "").then(
+        (response) => {
+          setProjectData(response);
+        }
+      );
     }
   };
 
@@ -103,40 +105,40 @@ const AssessmentPage = () => {
 
   return (
     <div>
-      <ContextBar title={assessmentData.name}>
-        <Button onClick={saveAssessment} theme={ThemeType.primary}>
+      <ContextBar title={projectData.name}>
+        <Button onClick={saveProject} theme={ThemeType.primary}>
           Save
         </Button>
-        <Button onClick={handleDeleteAssessment} theme={ThemeType.danger}>
+        <Button onClick={handleDeleteProject} theme={ThemeType.danger}>
           Delete
         </Button>
-        <Button onClick={saveAssessment}>Close</Button>
+        <Button onClick={saveProject}>Close</Button>
       </ContextBar>
       <div className="page">
         <Tabs activeTabId={tab} onChange={handleTabChange}>
           <Tab id="1">
             <TabHeader>Details</TabHeader>
             <TabDetail>
-              <form className="assessment-detail-form">
+              <form className="project-detail-form">
                 <Input
-                  label="Assessment name"
+                  label="Project name"
                   name="name"
-                  value={assessmentData?.name}
-                  onInput={handleAssessmentDataChange}
+                  value={projectData?.name}
+                  onInput={handleProjectDataChange}
                 />
                 <Textarea
                   label="Job description"
                   name="jobDescription"
-                  value={assessmentData?.jobDescription}
-                  onInput={handleAssessmentDataChange}
+                  value={projectData?.jobDescription}
+                  onInput={handleProjectDataChange}
                 />
               </form>
             </TabDetail>
           </Tab>
           <Tab id="2">
-            <TabHeader>Questions</TabHeader>
+            <TabHeader>Test cases</TabHeader>
             <TabDetail>
-              <div className="assessment-questions">
+              <div className="project-questions">
                 {state.questions.map((item: any, index: number) => (
                   <ObjectiveQuestion
                     onChange={handleQuestionChange}
@@ -154,5 +156,4 @@ const AssessmentPage = () => {
   );
 };
 
-// export default withAuthValidation(AssessmentPage);
-export default AssessmentPage;
+export default EditProjectPage;

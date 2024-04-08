@@ -12,8 +12,8 @@ import {
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { getAssessments, saveAssessment } from "./service";
-import { Assessment } from "@/types/Assessment";
+import { getProjects, saveProject } from "./service";
+import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import {
@@ -21,7 +21,7 @@ import {
   useRouteAuthorization,
 } from "@/lib/RouteAuthorizationHook";
 
-const AssessmentsPage = () => {
+const ListProjectPage = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
   useLayoutEffect(() => {
     hasPermissions([PermissionType.USER]);
@@ -29,10 +29,10 @@ const AssessmentsPage = () => {
   const [authorization, setAuthorization] = useState<Authorization>({});
   
   const router = useRouter();
-  const [data, setData] = useState<Assessment[]>();
-  const [isNewAssessmentDialogOpen, setIsNewAssessmentDialogOpen] =
+  const [data, setData] = useState<Project[]>();
+  const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] =
     useState(false);
-  const [newAssignmentForm, setNewAssignmentForm] = useState<Assessment>({
+  const [newAssignmentForm, setNewAssignmentForm] = useState<Project>({
     name: "",
   });
 
@@ -44,7 +44,7 @@ const AssessmentsPage = () => {
 
   useEffect(() => {
     setNewAssignmentForm({ name: "" });
-  }, [isNewAssessmentDialogOpen]);
+  }, [isNewProjectDialogOpen]);
 
   const handleChange = (event: any) => {
     setNewAssignmentForm({
@@ -54,30 +54,30 @@ const AssessmentsPage = () => {
   };
 
   const handleSaveNewAssignment = () => {
-    saveAssessment(newAssignmentForm).then((response: any) => {
-      setIsNewAssessmentDialogOpen(false);
-      fetchAssessments();
+    saveProject(newAssignmentForm).then((response: any) => {
+      setIsNewProjectDialogOpen(false);
+      fetchProjects();
     });
   };
 
-  const manageAssessment = (id: string) => {
-    router.push(`/assessment?id=${id}`);
+  const manageProject = (id: string) => {
+    router.push(`/project/edit?id=${id}`);
   };
 
   const handleKeydown = (event: any, id: string) => {
     if (event.key === "Enter" || event.key === " ") {
-      manageAssessment(id);
+      manageProject(id);
     }
   };
 
   useEffect(() => {
     if (authorization.isAuth) {
-      fetchAssessments();
+      fetchProjects();
     }
   }, [authorization]);
 
-  const fetchAssessments = () => {
-    getAssessments(authorization).then((response: any) => {
+  const fetchProjects = () => {
+    getProjects(authorization).then((response: any) => {
       setData(response);
     });
   };
@@ -89,16 +89,16 @@ const AssessmentsPage = () => {
   return (
     <>
       <div>
-        <ContextBar title="Assessments list">
-          <Button onClick={() => setIsNewAssessmentDialogOpen(true)}>
-            New assessment
+        <ContextBar title="Projects list">
+          <Button onClick={() => setIsNewProjectDialogOpen(true)}>
+            New project
           </Button>
         </ContextBar>
         <div className="page">
           <table className="basicui-table theme-default table-hover">
             <thead>
               <tr>
-                <th>Assessment name</th>
+                <th>Project name</th>
                 <th>Created on</th>
                 <th>Status</th>
                 <th>Responses</th>
@@ -109,7 +109,7 @@ const AssessmentsPage = () => {
                 <tr
                   key={index}
                   tabIndex={0}
-                  onClick={() => manageAssessment(item.id || "")}
+                  onClick={() => manageProject(item.id || "")}
                   onKeyDown={(event) => handleKeydown(event, item.id || "")}
                 >
                   <td>{item.name}</td>
@@ -123,20 +123,20 @@ const AssessmentsPage = () => {
         </div>
       </div>
       <Modal
-        isOpen={isNewAssessmentDialogOpen}
-        onClose={() => setIsNewAssessmentDialogOpen(false)}
+        isOpen={isNewProjectDialogOpen}
+        onClose={() => setIsNewProjectDialogOpen(false)}
       >
         <ModalHeader
-          onClose={() => setIsNewAssessmentDialogOpen(false)}
-          heading="Create new assessment"
+          onClose={() => setIsNewProjectDialogOpen(false)}
+          heading="Create new project"
         />
 
         <ModalBody>
-          <div className="new-assessment-dialog">
+          <div className="new-project-dialog">
             <Input
               name="name"
               value={newAssignmentForm.name}
-              label="Assessment name"
+              label="Project name"
               onInput={handleChange}
               autoFocus
             />
@@ -146,7 +146,7 @@ const AssessmentsPage = () => {
           <Button theme={ThemeType.primary} onClick={handleSaveNewAssignment}>
             Save
           </Button>
-          <Button onClick={() => setIsNewAssessmentDialogOpen(false)}>
+          <Button onClick={() => setIsNewProjectDialogOpen(false)}>
             Close
           </Button>
         </ModalFooter>
@@ -155,5 +155,4 @@ const AssessmentsPage = () => {
   );
 };
 
-// export default withAuthValidation(AssessmentsPage);
-export default AssessmentsPage;
+export default ListProjectPage;

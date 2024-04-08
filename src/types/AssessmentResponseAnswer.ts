@@ -1,6 +1,6 @@
-export type AssessmentResponseAnswer = {
-  assessmentResponseId: string;
-  assessmentQuestionId: string;
+export type ProjectResponseAnswer = {
+  projectResponseId: string;
+  projectQuestionId: string;
   answer: string;
   score: string;
   id: string;

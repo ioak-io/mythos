@@ -1,5 +1,5 @@
-export type AssessmentQuestion = {
-  assessmentId: string;
+export type ProjectQuestion = {
+  projectId: string;
   type: string;
   question: string;
   answer: string;

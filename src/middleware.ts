@@ -12,17 +12,17 @@ const appRealm = process.env.NEXT_PUBLIC_AUTHLITE_REALM_ID || "";
 
 // This function can be marked `async` if using `await` inside
 export const middleware = (request: NextRequest) => {
-  //   if (request.nextUrl.pathname.startsWith("/assessment")) {
-  //     return NextResponse.rewrite(new URL("/assessments", request.url));
+  //   if (request.nextUrl.pathname.startsWith("/project")) {
+  //     return NextResponse.rewrite(new URL("/projects", request.url));
   //   }
-  // return NextResponse.rewrite(new URL("/assessments", request.url));
+  // return NextResponse.rewrite(new URL("/projects", request.url));
   if (!isUserLoggedIn()) {
     // return NextResponse.rewrite(new URL("/login", request.url));
   }
 };
 
 export const config = {
-  matcher: ["/assessments-abcd"],
+  matcher: ["/projects-abcd"],
 };
 
 const isUserLoggedIn = () => {

@@ -1,9 +1,9 @@
 import { httpDelete, httpGet, httpPost, httpPut } from "@/lib/RestTemplate";
-import { Assessment } from "@/types/Assessment";
+import { Project } from "@/types/Project";
 
-export const getAssessmentById = (authorization: any, id: string) => {
+export const getProjectById = (authorization: any, id: string) => {
   console.log(authorization, id)
-  return httpGet(`/assessment/${id}`, {
+  return httpGet(`/project/${id}`, {
     headers: {
       Authorization: authorization?.access_token,
     },
@@ -19,8 +19,8 @@ export const getAssessmentById = (authorization: any, id: string) => {
     });
 };
 
-export const saveAssessmentById = (id: string, payload: Assessment, authorization?: any) => {
-  return httpPut(`/assessment/${id}`, payload, {
+export const saveProjectById = (id: string, payload: Project, authorization?: any) => {
+  return httpPut(`/project/${id}`, payload, {
     headers: {
       Authorization: authorization?.access_token,
     },
@@ -36,8 +36,8 @@ export const saveAssessmentById = (id: string, payload: Assessment, authorizatio
     });
 };
 
-export const deleteAssessmentById = (id: string, authorization?: any) => {
-  return httpDelete(`/assessment/${id}`, {
+export const deleteProjectById = (id: string, authorization?: any) => {
+  return httpDelete(`/project/${id}`, {
     headers: {
       Authorization: authorization?.access_token,
     },

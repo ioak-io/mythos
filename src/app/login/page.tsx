@@ -59,7 +59,7 @@ const LoginPage = (props: Props) => {
             response.data.refresh_token
           );
           AuthorizationState.next({ ...response.data, isAuth: true });
-          router.push(searchParams.get("from") || "/assessments");
+          router.push(searchParams.get("from") || "/projects");
         }
       }
     );
