@@ -58,6 +58,10 @@ const LoginPage = (props: Props) => {
             `testgenie-refresh_token`,
             response.data.refresh_token
           );
+          setSessionValue(
+            `email`,
+            payload.email
+          );
           AuthorizationState.next({ ...response.data, isAuth: true });
           router.push(searchParams.get("from") || "/projects");
         }

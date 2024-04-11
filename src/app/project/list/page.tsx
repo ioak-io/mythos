@@ -34,6 +34,7 @@ const ListProjectPage = () => {
     useState(false);
   const [newAssignmentForm, setNewAssignmentForm] = useState<Project>({
     name: "",
+    createdBy :""
   });
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const ListProjectPage = () => {
   }, []);
 
   useEffect(() => {
-    setNewAssignmentForm({ name: "" });
+    setNewAssignmentForm({ name: "",createdBy:sessionStorage.getItem('email')});
   }, [isNewProjectDialogOpen]);
 
   const handleChange = (event: any) => {

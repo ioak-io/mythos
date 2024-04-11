@@ -3,7 +3,7 @@ import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
 
 export const getProjects = (authorization?: Authorization) => {
-  return httpGet(`/project`, {
+  return httpGet(`/suite`, {
     headers: {
       Authorization: authorization?.access_token,
     },
@@ -20,7 +20,7 @@ export const getProjects = (authorization?: Authorization) => {
 };
 
 export const saveProject = (payload: Project, authorization?: any) => {
-  return httpPost(`/project`, payload, {
+  return httpPost(`/suite`, payload, {
     headers: {
       Authorization: authorization?.access_token,
     },
