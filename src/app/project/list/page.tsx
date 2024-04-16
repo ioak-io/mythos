@@ -9,6 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
+  IconButton
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -74,6 +75,14 @@ const ListProjectPage = () => {
     }
   };
 
+  const deleteProject = (id:string) => {
+    console.log(id)
+  }
+
+  const navigateToUsecase = (id:string) => {
+    router.push(`/project/usecase/list`);
+  }
+
   useEffect(() => {
     if (authorization.isAuth) {
       fetchProjects();
@@ -82,6 +91,7 @@ const ListProjectPage = () => {
 
   const fetchProjects = () => {
     getProjects(authorization).then((response: any) => {
+      console.log(response)
       setData(response);
     });
   };
@@ -104,6 +114,7 @@ const ListProjectPage = () => {
               <tr>
                 <th>Project name</th>
                 <th>Created on</th>
+                <th>UseCase</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -116,8 +127,9 @@ const ListProjectPage = () => {
                 >
                   <td>{item.name}</td>
                   <td>{item.createdDate}</td>
+                  <td><Button onClick={() => navigateToUsecase(item.id || "")}>View usecase</Button></td>
                   <td><div className="action_icons">
-                    <span onClick={() => manageProject(item.id || "")}><svg
+                    <IconButton circle={true} onClick={() => manageProject(item.id || "")}><svg
                       width="16px"
                       height="16px"
                       viewBox="0 0 16 16"
@@ -154,7 +166,8 @@ const ListProjectPage = () => {
                         </g>
                       </g>
                     </svg>
-                    </span>
+                    </IconButton>
+                    <IconButton circle={true} onClick={() => deleteProject(item.id || "")}>
                     <svg
                       width="12px"
                       height="16px"
@@ -192,6 +205,7 @@ const ListProjectPage = () => {
                         </g>
                       </g>
                     </svg>
+                    </IconButton>
                     </div>
                   </td>
                 </tr>
