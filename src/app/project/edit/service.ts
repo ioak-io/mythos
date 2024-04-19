@@ -3,7 +3,7 @@ import { Project } from "@/types/Project";
 
 export const getProjectById = (authorization: any, id: string) => {
   console.log(authorization, id)
-  return httpGet(`/project/${id}`, {
+  return httpGet(`/suite/${id}`, {
     headers: {
       Authorization: authorization?.access_token,
     },
@@ -20,7 +20,7 @@ export const getProjectById = (authorization: any, id: string) => {
 };
 
 export const saveProjectById = (id: string, payload: Project, authorization?: any) => {
-  return httpPut(`/project/${id}`, payload, {
+  return httpPut(`/suite/${id}`, payload, {
     headers: {
       Authorization: authorization?.access_token,
     },
@@ -37,7 +37,7 @@ export const saveProjectById = (id: string, payload: Project, authorization?: an
 };
 
 export const deleteProjectById = (id: string, authorization?: any) => {
-  return httpDelete(`/project/${id}`, {
+  return httpDelete(`/suite/${id}`, {
     headers: {
       Authorization: authorization?.access_token,
     },

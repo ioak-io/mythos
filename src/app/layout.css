@@ -12,3 +12,7 @@ main {
   width: 90%;
 }
 
+.action_icons button svg {
+  height: 16px;
+  width: 16px;
+}

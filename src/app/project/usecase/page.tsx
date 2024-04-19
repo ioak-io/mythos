@@ -9,26 +9,65 @@ import {
   Textarea,
   ThemeType
 } from "basicui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Project } from "@/types/Project";
 import ContextBar from "@/components/ContextBar";
+import { useRouter, useSearchParams } from "next/navigation";
 import "./style.css";
+import { AuthorizationState, SuiteIdState } from "@/store/AuthorizationStore";
+import { Authorization } from "@/types/Authorization";
+import { editUseCase, getUseCaseById } from "./list/service";
 
 const usecase = () => {
 
+  const [authorization, setAuthorization] = useState<Authorization>({});
   const [projectData, setProjectData] = useState<Project>({
-    name: "",
+    description: "",
   });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [suiteId, setSuiteId] = useState<any>();
+
+  useEffect(() => {
+    SuiteIdState.subscribe((id:string) =>{
+      setSuiteId(id);
+    })
+    AuthorizationState.subscribe((message) => {
+      setAuthorization(message);
+    });
+  }, []);
+
 
   const handleProjectDataChange = (event: any) => {
     setProjectData({
       ...projectData,
-      [event.currentTarget.name]: event.currentTarget.value,
+      [event.currentTarget.description]: event.currentTarget.value,
     });
   };
 
-  const saveUsecase = () =>{
+  useEffect(() => {
+    if (searchParams.has("id")) {
+      fetchUseCaseById();
+    }
+  }, [authorization, searchParams]);
 
+  const fetchUseCaseById = () => {
+    console.log(authorization);
+    if (authorization.isAuth) {
+      getUseCaseById(suiteId, searchParams.get("id"),authorization).then(
+        (response) => {
+          setProjectData(response);
+        }
+      );
+    }
+  };
+
+  const saveUsecase = () =>{
+    editUseCase(suiteId,projectData?.id || "", projectData,authorization).then(
+      (response) => {
+        fetchUseCaseById();
+      }
+    );
   }
 
   const handleDeleteProject = () =>{
@@ -52,7 +91,7 @@ const usecase = () => {
                 <Input
                   label="Usecase name"
                   name="name"
-                  value={projectData?.name}
+                  value={projectData?.description}
                   onInput={handleProjectDataChange}
                 />
                 <Textarea

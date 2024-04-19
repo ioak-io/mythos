@@ -63,7 +63,7 @@ const EditProjectPage = () => {
   };
 
   const saveProject = () => {
-    saveProjectById(projectData?.id || "", projectData).then(
+    saveProjectById(projectData?.id || "", projectData,authorization).then(
       (response) => {
         fetchProjectById();
       }

@@ -13,15 +13,21 @@ import {
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { getProjects, saveProject } from "./service";
+import { getProjects, saveProject, deleteProject } from "./service";
 import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
+import { SuiteIdState } from "@/store/AuthorizationStore";
 import {
   PermissionType,
   useRouteAuthorization,
 } from "@/lib/RouteAuthorizationHook";
 import "../edit/style.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPen,
+  faTrash,faEye
+} from "@fortawesome/free-solid-svg-icons";
 
 const ListProjectPage = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
@@ -40,6 +46,7 @@ const ListProjectPage = () => {
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
+      console.log(message)
       setAuthorization(message);
     });
   }, []);
@@ -75,13 +82,22 @@ const ListProjectPage = () => {
     }
   };
 
-  const deleteProject = (id:string) => {
-    console.log(id)
-  }
 
-  const navigateToUsecase = (id:string) => {
+  const handleDelete = async (id:string,) => {
+    console.log(id)
+    deleteProject(id, authorization).then((response) => {
+      fetchProjects();
+    });
+  };
+
+  const navigateToUsecase = (suiteId: string) => {
+    // router.push({
+    //   pathname: '/project/usecase/list',
+    //   query: { suiteId: suiteId },
+    // });
+    SuiteIdState.next(suiteId);
     router.push(`/project/usecase/list`);
-  }
+  };
 
   useEffect(() => {
     if (authorization.isAuth) {
@@ -91,10 +107,19 @@ const ListProjectPage = () => {
 
   const fetchProjects = () => {
     getProjects(authorization).then((response: any) => {
-      console.log(response)
-      setData(response);
+      console.log(response);
+      const convertedData = response.map((item: { createdDate: string | number | Date; }) => {
+        const createdDate = new Date(item.createdDate);
+        const formattedDate = createdDate.toLocaleDateString('en-GB');
+        return {
+            ...item,
+            createdDate: formattedDate
+        };
+    });
+      setData(convertedData);
     });
   };
+
 
   if (!isRouteAuthorized) {
     return <></>;
@@ -114,8 +139,7 @@ const ListProjectPage = () => {
               <tr>
                 <th>Project name</th>
                 <th>Created on</th>
-                <th>UseCase</th>
-                <th>Action</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -127,85 +151,23 @@ const ListProjectPage = () => {
                 >
                   <td>{item.name}</td>
                   <td>{item.createdDate}</td>
-                  <td><Button onClick={() => navigateToUsecase(item.id || "")}>View usecase</Button></td>
                   <td><div className="action_icons">
-                    <IconButton circle={true} onClick={() => manageProject(item.id || "")}><svg
-                      width="16px"
-                      height="16px"
-                      viewBox="0 0 16 16"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlnsXlink="http://www.w3.org/1999/xlink"
-                    >
-                      <g
-                        id="Assistent"
-                        stroke="none"
-                        stroke-width="1"
-                        fill="none"
-                        fill-rule="evenodd"
-                      >
-                        <g
-                          id="Artboard"
-                          transform="translate(-189.000000, -175.000000)"
-                        >
-                          <g
-                            id="icon/edit"
-                            transform="translate(189.000000, 175.000000)"
-                          >
-                            <polygon
-                              id="Path"
-                              points="0 0 16 0 16 16 0 16"
-                            ></polygon>
-                            <path
-                              d="M0,12.6671296 L0,16 L3.33287043,16 L13.1626163,6.17025413 L9.82974587,2.8373837 L0,12.6671296 Z M15.7400361,3.59283433 C16.0866546,3.2462158 16.0866546,2.68629357 15.7400361,2.33967505 L13.660325,0.259963894 C13.3137064,-0.0866546313 12.7537842,-0.0866546313 12.4071657,0.259963894 L10.7807249,1.88640467 L14.1135953,5.2192751 L15.7400361,3.59283433 Z"
-                              id="Shape"
-                              fill="#FFFFFF"
-                              fill-rule="nonzero"
-                            ></path>
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
+                  <IconButton circle={true} onClick={() => navigateToUsecase(item.id || "")}>
+                    <FontAwesomeIcon
+                      icon={faEye} size="1x"
+                    />
                     </IconButton>
-                    <IconButton circle={true} onClick={() => deleteProject(item.id || "")}>
-                    <svg
-                      width="12px"
-                      height="16px"
-                      viewBox="0 0 12 16"
-                      version="1.1"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlnsXlink="http://www.w3.org/1999/xlink"
-                    >
-                      <g
-                        id="Assistent"
-                        stroke="none"
-                        stroke-width="1"
-                        fill="none"
-                        fill-rule="evenodd"
-                      >
-                        <g
-                          id="Artboard"
-                          transform="translate(-231.000000, -175.000000)"
-                        >
-                          <g
-                            id="icon/delete"
-                            transform="translate(229.000000, 175.000000)"
-                          >
-                            <polygon
-                              id="Path"
-                              points="0 0 16 0 16 16 0 16"
-                            ></polygon>
-                            <path
-                              d="M2.85714286,14.2222222 C2.85714286,15.2 3.62857143,16 4.57142857,16 L11.4285714,16 C12.3714286,16 13.1428571,15.2 13.1428571,14.2222222 L13.1428571,3.55555556 L2.85714286,3.55555556 L2.85714286,14.2222222 Z M14,0.888888889 L11,0.888888889 L10.1428571,0 L5.85714286,0 L5,0.888888889 L2,0.888888889 L2,2.66666667 L14,2.66666667 L14,0.888888889 Z"
-                              id="Shape"
-                              fill="#FFFFFF"
-                              fill-rule="nonzero"
-                            ></path>
-                          </g>
-                        </g>
-                      </g>
-                    </svg>
+                    <IconButton circle={true} onClick={() => manageProject(item.id || "")}>
+                    <FontAwesomeIcon
+                      icon={faPen} size="2x"
+                    />
                     </IconButton>
+                    <IconButton circle={true} onClick={() => handleDelete(item.id || "")}>
+                    <FontAwesomeIcon
+                      icon={faTrash} size="-1x"
+                    />
+                    </IconButton>
+                    
                     </div>
                   </td>
                 </tr>
