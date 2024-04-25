@@ -10,7 +10,7 @@ import {
   ThemeType,
   IconButton
 } from "basicui";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Project } from "@/types/Project";
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,26 +21,15 @@ import {
 import { deleteUseCase, getAllUseCases } from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
-import { SuiteIdState } from "@/store/AuthorizationStore";
+import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
 
 const usecases = () => {
- 
-  const sampleData=[{
-    createdBy: "user1",
-    createdDate: "2024-04-11T18:42:05.698+05:30",
-    id: "6617e1a5979a822b1045acbb",
-    lastModifiedBy: null,
-    lastModifiedDate: "2024-04-11T18:42:05.698+05:30",
-    name: "usecase1"},
-    {
-    createdBy: "user2",
-    createdDate: "2024-04-11T18:42:05.698+05:30",
-    id: "6617e1a5979a822b1045acbb",
-    lastModifiedBy: null,
-    lastModifiedDate: "2024-04-11T18:42:05.698+05:30",
-    name: "usecase2"
-    }]
+  const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
+  useLayoutEffect(() => {
+    hasPermissions([PermissionType.USER]);
+  }, []);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [suiteId, setSuiteId] = useState<any>();
   const [data, setData] = useState<Project[]>();
   const [authorization, setAuthorization] = useState<Authorization>({});
@@ -52,18 +41,18 @@ const usecases = () => {
     });
   }, []);
 
+
   useEffect(() => {
-    SuiteIdState.subscribe((id) =>{
-      setSuiteId(id);
-    })
-    if (authorization.isAuth) {
+    setSuiteId(searchParams.get('suiteId'))
+    if (searchParams.get('suiteId')) {
       fetchUseCases();
     }
-  }, [authorization]);
+  }, [authorization,searchParams]);
 
 
   const fetchUseCases = () => {
-    getAllUseCases(suiteId,authorization).then((response: any) => {
+    if (authorization.isAuth) {
+    getAllUseCases(searchParams.get('suiteId'),authorization).then((response: any) => {
       console.log(response);
       const convertedData = response.map((item: { createdDate: string | number | Date; }) => {
         const createdDate = new Date(item.createdDate);
@@ -75,6 +64,7 @@ const usecases = () => {
     });
       setData(convertedData);
     });
+    }
   };
 
 
@@ -83,7 +73,7 @@ const usecases = () => {
   }
 
   const manageUseCase = (id:string) => {
-    router.push(`/project/usecase?id=${id}`);
+    router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
   }
 
   const handleDelete = (useCaseId:string) => {
@@ -92,6 +82,9 @@ const usecases = () => {
     });
   }
 
+  if (!isRouteAuthorized) {
+    return <></>;
+  }
   
   return (
     <>

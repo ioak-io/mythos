@@ -9,17 +9,21 @@ import {
   Textarea,
   ThemeType
 } from "basicui";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Project } from "@/types/Project";
 import ContextBar from "@/components/ContextBar";
 import { useRouter, useSearchParams } from "next/navigation";
 import "./style.css";
-import { AuthorizationState, SuiteIdState } from "@/store/AuthorizationStore";
+import { AuthorizationState} from "@/store/AuthorizationStore";
 import { Authorization } from "@/types/Authorization";
 import { editUseCase, getUseCaseById } from "./list/service";
+import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
 
 const usecase = () => {
-
+  const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
+  useLayoutEffect(() => {
+    hasPermissions([PermissionType.USER]);
+  }, []);
   const [authorization, setAuthorization] = useState<Authorization>({});
   const [projectData, setProjectData] = useState<Project>({
     description: "",
@@ -29,9 +33,7 @@ const usecase = () => {
   const [suiteId, setSuiteId] = useState<any>();
 
   useEffect(() => {
-    SuiteIdState.subscribe((id:string) =>{
-      setSuiteId(id);
-    })
+    setSuiteId(searchParams.get('suiteId'))
     AuthorizationState.subscribe((message) => {
       setAuthorization(message);
     });
@@ -41,7 +43,7 @@ const usecase = () => {
   const handleProjectDataChange = (event: any) => {
     setProjectData({
       ...projectData,
-      [event.currentTarget.description]: event.currentTarget.value,
+      [event.currentTarget.name]: event.currentTarget.value,
     });
   };
 
@@ -54,7 +56,7 @@ const usecase = () => {
   const fetchUseCaseById = () => {
     console.log(authorization);
     if (authorization.isAuth) {
-      getUseCaseById(suiteId, searchParams.get("id"),authorization).then(
+      getUseCaseById(searchParams.get('suiteId'), searchParams.get("id"),authorization).then(
         (response) => {
           setProjectData(response);
         }
@@ -66,12 +68,17 @@ const usecase = () => {
     editUseCase(suiteId,projectData?.id || "", projectData,authorization).then(
       (response) => {
         fetchUseCaseById();
+        router.back();
       }
     );
   }
 
   const handleDeleteProject = () =>{
 
+  }
+
+  if (!isRouteAuthorized) {
+    return <></>;
   }
   
   return (
@@ -90,7 +97,7 @@ const usecase = () => {
       <form className="project-detail-form">
                 <Input
                   label="Usecase name"
-                  name="name"
+                  name="description"
                   value={projectData?.description}
                   onInput={handleProjectDataChange}
                 />

@@ -1,6 +1,6 @@
 export type Project = {
   name: string;
-  jobDescription?: string;
+  description?: string;
   duration?: string;
   id?: string;
   status?: "New" | "Active" | "Closed";

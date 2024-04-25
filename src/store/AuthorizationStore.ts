@@ -3,7 +3,6 @@ import { BehaviorSubject } from "rxjs";
 
 export const AuthorizationState = new BehaviorSubject<Authorization>({});
 
-export const SuiteIdState = new BehaviorSubject<any>({});
 
 export const isAuthenticated = (): boolean => {
   return !!AuthorizationState.value?.isAuth;

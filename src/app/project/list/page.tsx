@@ -66,7 +66,7 @@ const ListProjectPage = () => {
   };
 
   const handleSaveNewAssignment = () => {
-    saveProject(newAssignmentForm).then((response: any) => {
+    saveProject(newAssignmentForm,authorization).then((response: any) => {
       setIsNewProjectDialogOpen(false);
       fetchProjects();
     });
@@ -91,12 +91,7 @@ const ListProjectPage = () => {
   };
 
   const navigateToUsecase = (suiteId: string) => {
-    // router.push({
-    //   pathname: '/project/usecase/list',
-    //   query: { suiteId: suiteId },
-    // });
-    SuiteIdState.next(suiteId);
-    router.push(`/project/usecase/list`);
+    router.push(`/project/usecase/list/?suiteId=${suiteId}`)
   };
 
   useEffect(() => {
