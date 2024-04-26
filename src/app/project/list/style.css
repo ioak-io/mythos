@@ -1,0 +1,55 @@
+@import "../../globals.css";
+
+.project_title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+.MuiCard-root {
+  height: 150px;
+}
+
+.MuiCardContent-root {
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.MuiTypography-h6 {
+  padding: 5px;
+}
+
+.MuiTypography-body2 {
+  padding: 5px;
+}
+.basicui-icon-button--circle {
+  height: 25px;
+  width: 25px;
+}
+.basicui-icon-button--circle svg {
+  height: 12px;
+  width: 12px;
+  padding: 2px;
+}
+.editor_footer_container .basicui-modal-footer {
+  display: block;
+}
+.editor_footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.footer_save {
+  display: flex;
+}
+
+.icon_button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}

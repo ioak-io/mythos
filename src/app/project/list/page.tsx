@@ -9,10 +9,10 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton
+  IconButton,
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { getProjects, saveProject, deleteProject } from "./service";
 import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
@@ -24,10 +24,12 @@ import {
 } from "@/lib/RouteAuthorizationHook";
 import "../edit/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPen,
-  faTrash,faEye
-} from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { Card, CardContent, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
+import "./style.css";
+import EditProjectPage from "../edit/page";
+import { deleteProjectById, saveProjectById } from "../edit/service";
 
 const ListProjectPage = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
@@ -39,14 +41,19 @@ const ListProjectPage = () => {
   const router = useRouter();
   const [data, setData] = useState<Project[]>();
   const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
+  const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false);
+  const [projectData, setProjectData] = useState<Project>({
+    name: "",
+  });
   const [newAssignmentForm, setNewAssignmentForm] = useState<Project>({
     name: "",
     createdBy: "",
   });
+  const editProjectRef = useRef();
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
-      console.log(message)
+      console.log(message);
       setAuthorization(message);
     });
   }, []);
@@ -66,7 +73,7 @@ const ListProjectPage = () => {
   };
 
   const handleSaveNewAssignment = () => {
-    saveProject(newAssignmentForm,authorization).then((response: any) => {
+    saveProject(newAssignmentForm, authorization).then((response: any) => {
       setIsNewProjectDialogOpen(false);
       fetchProjects();
     });
@@ -82,16 +89,15 @@ const ListProjectPage = () => {
     }
   };
 
-
-  const handleDelete = async (id:string,) => {
-    console.log(id)
-    deleteProject(id, authorization).then((response) => {
+  const handleDelete = () => {
+    deleteProject(projectData.id, authorization).then((response) => {
+      setIsEditProjectDialogOpen(false);
       fetchProjects();
     });
   };
 
   const navigateToUsecase = (suiteId: string) => {
-    router.push(`/project/usecase/list/?suiteId=${suiteId}`)
+    router.push(`/project/usecase/list/?suiteId=${suiteId}`);
   };
 
   useEffect(() => {
@@ -103,18 +109,49 @@ const ListProjectPage = () => {
   const fetchProjects = () => {
     getProjects(authorization).then((response: any) => {
       console.log(response);
-      const convertedData = response.map((item: { createdDate: string | number | Date; }) => {
-        const createdDate = new Date(item.createdDate);
-        const formattedDate = createdDate.toLocaleDateString('en-GB');
-        return {
+      const convertedData = response.map(
+        (item: { createdDate: string | number | Date }) => {
+          const createdDate = new Date(item.createdDate);
+          const formattedDate = createdDate.toLocaleDateString("en-GB");
+          return {
             ...item,
-            createdDate: formattedDate
-        };
-    });
+            createdDate: formattedDate,
+          };
+        }
+      );
       setData(convertedData);
     });
   };
 
+  // const updateProject = () =>{
+  //   editProjectRef?.current?.updateProject();
+  // }
+
+  const handleProjectDataChange = (event: any) => {
+    setProjectData({
+      ...projectData,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
+
+
+  const updateProject = () => {
+    console.log(authorization)
+    saveProjectById(projectData?.id || "", projectData,authorization).then(
+      (response) => {
+        console.log(response)
+        setIsEditProjectDialogOpen(false);
+        fetchProjects();
+      }
+    );
+  };
+
+  const handleDeleteProject = () => {
+    console.log("delete project by id")
+    deleteProjectById(projectData?.id || "").then((response) => {
+      // router.back();
+    });
+  };
 
   if (!isRouteAuthorized) {
     return <></>;
@@ -129,7 +166,7 @@ const ListProjectPage = () => {
           </Button>
         </ContextBar>
         <div className="page">
-          <table className="basicui-table theme-default table-hover">
+          {/* <table className="basicui-table theme-default table-hover">
             <thead>
               <tr>
                 <th>Project name</th>
@@ -168,7 +205,41 @@ const ListProjectPage = () => {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table> */}
+          <div className="listing_page">
+            <Grid container spacing={2} sx={{ height: "150px" }}>
+              {data?.map((item, index) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                  <Card variant="outlined">
+                  <CardContent>
+                  <IconButton
+                          className="icon_button"
+                          circle={true}
+                          onClick={() => {
+                            setIsEditProjectDialogOpen(true);
+                            setProjectData(item)
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPen} size="0.1x"/>
+                        </IconButton>
+                      <Typography variant="h6" component="div" className="project_title">
+                        <a onClick={() => navigateToUsecase(item.id || "")}>
+                          {item.name}
+                        </a>
+                      </Typography>
+                      <Typography variant="body2">
+                        Created on: {item.createdDate}
+                      </Typography>
+                      <Typography variant="body2">
+                        Number of use cases: 2 <br />
+                        Number of test cases: 12
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </div>
         </div>
       </div>
       <Modal
@@ -199,6 +270,47 @@ const ListProjectPage = () => {
             Close
           </Button>
         </ModalFooter>
+      </Modal>
+
+      <Modal
+        isOpen={isEditProjectDialogOpen}
+        onClose={() => setIsEditProjectDialogOpen(false)}
+      >
+        <ModalHeader
+          onClose={() => setIsEditProjectDialogOpen(false)}
+          heading="Edit project"
+        />
+
+        <ModalBody>
+          <div className="new-project-dialog">
+            {/* <EditProjectPage ref={editProjectRef} data={isEditProjectId} auth={authorization}></EditProjectPage> */}
+            <form className="project-detail-form">
+                <Input
+                  label="Project name"
+                  name="name"
+                  value={projectData?.name}
+                  onInput={handleProjectDataChange}
+                />
+              </form>
+          </div>
+        </ModalBody>
+        <div className="editor_footer_container">
+        <ModalFooter >
+          <div className="editor_footer">
+          <div className="footer_delete">
+          <Button theme={ThemeType.danger}  onClick={handleDelete}>Delete</Button>
+          </div>
+          <div className="footer_save">
+          <Button theme={ThemeType.primary} onClick={updateProject}>
+            Save
+          </Button>
+          <Button onClick={() => setIsEditProjectDialogOpen(false)}>
+            Close
+          </Button>
+          </div>
+          </div>
+        </ModalFooter>
+        </div>
       </Modal>
     </>
   );
