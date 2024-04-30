@@ -40,8 +40,7 @@ export const editProject = (payload: Project, projectId:string, authorization: a
   console.log(authorization)
   return httpPut(`/suite/${projectId}`, payload, {
     headers: {
-      Authorization: authorization?.access_token,
-      'Content-Type': 'application/json'
+      Authorization: authorization?.access_token
     },
   })
     .then((response) => {

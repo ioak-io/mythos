@@ -135,8 +135,10 @@ const ListProjectPage = () => {
 
 
   const updateProject = () => {
-    console.log(authorization)
-    editProject(projectData, projectData?.id, authorization).then(
+    const payload = {
+      name: projectData.name
+    }
+    editProject(payload, projectData?.id, authorization).then(
       (response) => {
         console.log(response)
         setIsEditProjectDialogOpen(false);
