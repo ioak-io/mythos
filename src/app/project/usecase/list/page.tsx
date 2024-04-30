@@ -24,7 +24,7 @@ import { AuthorizationState } from "@/store/AuthorizationStore";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
 import ExportDropdown from "../export/page";
 
-const usecases = () => {
+const Usecases = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
   useLayoutEffect(() => {
     hasPermissions([PermissionType.USER]);
@@ -70,7 +70,7 @@ const usecases = () => {
 
 
   const navigateToTestcase = (id:string) => {
-    router.push(`testcase/list`);
+    router.push(`testcase/list?id=${id}&suiteId=${suiteId}`);
   }
 
   const manageUseCase = (id:string) => {
@@ -139,4 +139,4 @@ const usecases = () => {
   );
 };
 
-export default usecases;
+export default Usecases;
