@@ -1,0 +1,10 @@
+.main-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.left,
+.right {
+    overflow-y: auto;
+    max-height: 100vh;
+}
