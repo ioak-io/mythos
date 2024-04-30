@@ -36,10 +36,12 @@ export const saveProject = (payload: Project, authorization?: any) => {
     });
 };
 
-export const editProject = (payload: Project,projectId:string, authorization?: any) => {
+export const editProject = (payload: Project, projectId:string, authorization: any) => {
+  console.log(authorization)
   return httpPut(`/suite/${projectId}`, payload, {
     headers: {
       Authorization: authorization?.access_token,
+      'Content-Type': 'application/json'
     },
   })
     .then((response) => {

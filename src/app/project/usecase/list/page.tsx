@@ -22,6 +22,7 @@ import { deleteUseCase, getAllUseCases } from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
+import ExportDropdown from "../export/page";
 
 const usecases = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
@@ -91,6 +92,7 @@ const usecases = () => {
       <div>
         
         <div className="page">
+          <ExportDropdown suiteId={suiteId}></ExportDropdown>
           <table className="basicui-table theme-default table-hover">
             <thead>
               <tr>

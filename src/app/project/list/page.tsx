@@ -13,11 +13,10 @@ import {
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { getProjects, saveProject, deleteProject } from "./service";
+import { getProjects, saveProject, deleteProject, editProject } from "./service";
 import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
-import { SuiteIdState } from "@/store/AuthorizationStore";
 import {
   PermissionType,
   useRouteAuthorization,
@@ -137,7 +136,7 @@ const ListProjectPage = () => {
 
   const updateProject = () => {
     console.log(authorization)
-    saveProjectById(projectData?.id || "", projectData,authorization).then(
+    editProject(projectData, projectData?.id, authorization).then(
       (response) => {
         console.log(response)
         setIsEditProjectDialogOpen(false);
