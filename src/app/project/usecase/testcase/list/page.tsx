@@ -76,34 +76,38 @@ const testcases = () => {
   return (
     <div className="page">
       <div className="main-wrapper">
-        <div className="left">
-          <h4>Usecase</h4>
-          <div>
-            <div className="item">
-              <div className="description">{projectData.description}</div>
+        <h4>Testcases</h4>
+        <div className="cards">
+        <div className="information card">
+              <h2 className="title">testCase.description</h2>
+              <p className="info">testCase.summary</p>
+              <dl className="details">
+                <div>
+                  <dt>Priority</dt>
+                  <dd>testCase.priority</dd>
+                </div>
+                <div>
+                  <dt>Comments</dt>
+                  <dd>testCase.comments</dd>
+                </div>
+              </dl>
             </div>
-          </div>
-        </div>
-        <div className="right">
-          <h4>Testcases</h4>
-          <div className="cards">
-            {testCases.map((testCase) => (
-              <div key={testCase.id} className="information card">
-                <h2 className="title">{testCase.description}</h2>
-                <p className="info">{testCase.summary}</p>
-                <dl className="details">
-                  <div>
-                    <dt>Priority</dt>
-                    <dd>{testCase.priority}</dd>
-                  </div>
-                  <div>
-                    <dt>Comments</dt>
-                    <dd>{testCase.comments}</dd>
-                  </div>
-                </dl>
-              </div>
-            ))}
-          </div>
+          {testCases.map((testCase) => (
+            <div key={testCase.id} className="information card">
+              <h2 className="title">{testCase.description}</h2>
+              <p className="info">{testCase.summary}</p>
+              <dl className="details">
+                <div>
+                  <dt>Priority</dt>
+                  <dd>{testCase.priority}</dd>
+                </div>
+                <div>
+                  <dt>Comments</dt>
+                  <dd>{testCase.comments}</dd>
+                </div>
+              </dl>
+            </div>
+          ))}
         </div>
       </div>
     </div>

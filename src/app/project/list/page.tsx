@@ -9,11 +9,17 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton,Link
+  IconButton,
+  Link,
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { getProjects, saveProject, deleteProject, editProject } from "./service";
+import {
+  getProjects,
+  saveProject,
+  deleteProject,
+  editProject,
+} from "./service";
 import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
@@ -23,7 +29,12 @@ import {
 } from "@/lib/RouteAuthorizationHook";
 import "../edit/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash, faEye,faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faTrash,
+  faEye,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { Card, CardContent, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/material";
 import "./style.css";
@@ -133,22 +144,19 @@ const ListProjectPage = () => {
     });
   };
 
-
   const updateProject = () => {
     const payload = {
-      name: projectData.name
-    }
-    editProject(payload, projectData?.id, authorization).then(
-      (response) => {
-        console.log(response)
-        setIsEditProjectDialogOpen(false);
-        fetchProjects();
-      }
-    );
+      name: projectData.name,
+    };
+    editProject(payload, projectData?.id, authorization).then((response) => {
+      console.log(response);
+      setIsEditProjectDialogOpen(false);
+      fetchProjects();
+    });
   };
 
   const handleDeleteProject = () => {
-    console.log("delete project by id")
+    console.log("delete project by id");
     deleteProjectById(projectData?.id || "").then((response) => {
       // router.back();
     });
@@ -168,58 +176,99 @@ const ListProjectPage = () => {
         </ContextBar>
         <div className="page">
           <div className="listing_page">
-            
-              {data?.map((item, index) => (
-                <div className="box cyan">
-                <h3 onClick={() => navigateToUsecase(item.id || "")}>{item.name}</h3>
-                <p> Created on: {item.createdDate}</p>
-          
-                           <IconButton
-                          className="icon_button"
-                          circle={true}
-                          onClick={() => {
-                            setIsEditProjectDialogOpen(true);
-                            setProjectData(item)
-                          }}
-                        >
-                          <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
-                        </IconButton>
+            {data?.map((item, index) => (
+              <div className="box cyan" key={index}>
+                <h3 onClick={() => navigateToUsecase(item.id || "")}>
+                  {item.name}
+                </h3>
+                <IconButton
+                  className="icon_button"
+                  circle={true}
+                  onClick={() => {
+                    setIsEditProjectDialogOpen(true);
+                    setProjectData(item);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPen} size="0.1x" />
+                </IconButton>
+                <div className="card-footer">
+                  <div className="card-meta">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      display="block"
+                      id="EyeOpen"
+                    >
+                      <path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19c-4.182 0-7.764-4.013-9.257-5.962a1.692 1.692 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5c4.182 0 7.764 4.013 9.257 5.962z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    23
+                  </div>
+                  <div className="card-meta">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      display="block"
+                      id="Calendar"
+                    >
+                      <rect x="2" y="4" width="20" height="18" rx="4"></rect>
+                      <path d="M8 2v4"></path>
+                      <path d="M16 2v4"></path>
+                      <path d="M2 10h20"></path>
+                    </svg>
+                    {item.createdDate}
+                  </div>
+                </div>
               </div>
-                // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                //   <Card variant="outlined">
-                //   <CardContent>
-                //   <IconButton
-                //           className="icon_button"
-                //           circle={true}
-                //           onClick={() => {
-                //             setIsEditProjectDialogOpen(true);
-                //             setProjectData(item)
-                //           }}
-                //         >
-                //           <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
-                //         </IconButton>
-                //       <Typography variant="h6" component="div" className="project_title">
-                //         <Link theme={ThemeType.primary} onClick={() => navigateToUsecase(item.id || "")}>
-                //           {item.name}
-                //         </Link>
-                //       </Typography>
-                //       <Typography variant="body2">
-                //         Created on: {item.createdDate}
-                //       </Typography>
-                //       <Typography variant="body2">
-                //         Number of use cases: 2 <br />
-                //         Number of test cases: 12
-                //       </Typography>
-                //     </CardContent>
-                //   </Card>
-                // </Grid>
-              ))}
-              <div className="box dotted">
-                <h3>Add Project</h3>
-                <Button>
-                <FontAwesomeIcon color='white' icon={faPlus}/>
-                </Button>
-              </div>
+              // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              //   <Card variant="outlined">
+              //   <CardContent>
+              //   <IconButton
+              //           className="icon_button"
+              //           circle={true}
+              //           onClick={() => {
+              //             setIsEditProjectDialogOpen(true);
+              //             setProjectData(item)
+              //           }}
+              //         >
+              //           <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
+              //         </IconButton>
+              //       <Typography variant="h6" component="div" className="project_title">
+              //         <Link theme={ThemeType.primary} onClick={() => navigateToUsecase(item.id || "")}>
+              //           {item.name}
+              //         </Link>
+              //       </Typography>
+              //       <Typography variant="body2">
+              //         Created on: {item.createdDate}
+              //       </Typography>
+              //       <Typography variant="body2">
+              //         Number of use cases: 2 <br />
+              //         Number of test cases: 12
+              //       </Typography>
+              //     </CardContent>
+              //   </Card>
+              // </Grid>
+            ))}
+            <div className="box dotted">
+              <h3>Add Project</h3>
+              <Button>
+                <FontAwesomeIcon icon={faPlus} />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -266,31 +315,33 @@ const ListProjectPage = () => {
           <div className="new-project-dialog">
             {/* <EditProjectPage ref={editProjectRef} data={isEditProjectId} auth={authorization}></EditProjectPage> */}
             <form className="project-detail-form">
-                <Input
-                  label="Project name"
-                  name="name"
-                  value={projectData?.name}
-                  onInput={handleProjectDataChange}
-                />
-              </form>
+              <Input
+                label="Project name"
+                name="name"
+                value={projectData?.name}
+                onInput={handleProjectDataChange}
+              />
+            </form>
           </div>
         </ModalBody>
         <div className="editor_footer_container">
-        <ModalFooter >
-          <div className="editor_footer">
-          <div className="footer_delete">
-          <Button theme={ThemeType.danger}  onClick={handleDelete}>Delete</Button>
-          </div>
-          <div className="footer_save">
-          <Button theme={ThemeType.primary} onClick={updateProject}>
-            Save
-          </Button>
-          <Button onClick={() => setIsEditProjectDialogOpen(false)}>
-            Close
-          </Button>
-          </div>
-          </div>
-        </ModalFooter>
+          <ModalFooter>
+            <div className="editor_footer">
+              <div className="footer_delete">
+                <Button theme={ThemeType.danger} onClick={handleDelete}>
+                  Delete
+                </Button>
+              </div>
+              <div className="footer_save">
+                <Button theme={ThemeType.primary} onClick={updateProject}>
+                  Save
+                </Button>
+                <Button onClick={() => setIsEditProjectDialogOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </ModalFooter>
         </div>
       </Modal>
     </>

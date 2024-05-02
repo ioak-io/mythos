@@ -1,12 +1,22 @@
-.main-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+:root {
+    --c-white: #fff;
+    --c-black: #000;
+    --c-ash: #eaeef6;
+    --c-charcoal: #a0a0a0;
+    --c-fair-pink: #FFEDEC;
+    --c-apricot: #FBC8BE;
+    --c-coffee: #754D42;
+    --c-del-rio: #917072;
+    --c-java: #1FCAC5;
+    --c-titan-white: #f1eeff;
+    --c-cold-purple: #a69fd6;
+    --c-indigo: #6558d3;
+    --c-governor: #4133B7;
 }
 
-.left,
-.right {
-    overflow-y: auto;
-    max-height: 100vh;
+.main-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
 .cards {
@@ -14,10 +24,9 @@
     flex-wrap: wrap;
     align-items: flex-start;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 2.5rem;
-    width: 90%;
-    margin: 10vh auto;
+    margin: 16px auto;
+    width: 100%;
 }
 
 .card {
@@ -29,6 +38,7 @@
     background-color: var(--theme-adaptive-300);
     color: var(--theme-adaptive-300i);
     padding: 1.5rem;
+    width: 100%;
 }
 
 .information .tag {
@@ -61,6 +71,7 @@
 .information .info+* {
     margin-top: 1.25rem;
 }
+
 /* 
 .information .button {
     font: inherit;

@@ -12,6 +12,7 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 /* .MuiCard-root {
   height: 150px;
   background-color:var(--theme-black-50) !important;
@@ -40,14 +41,17 @@
   width: 12px;
   padding: 2px;
 }
+
 .editor_footer_container .basicui-modal-footer {
   display: block;
 }
+
 .editor_footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+
 .footer_save {
   display: flex;
 }
@@ -117,15 +121,19 @@ img {
 .cyan {
   border-top: 3px solid var(--theme-primary-500);
 }
+
 .red {
   border-top: 3px solid hsl(0, 78%, 62%);
 }
+
 .blue {
   border-top: 3px solid hsl(212, 86%, 64%);
 }
+
 .orange {
   border-top: 3px solid hsl(34, 97%, 64%);
 }
+
 .dotted {
   border: 1px dashed var(--theme-primary-500);
   display: flex;
@@ -135,9 +143,43 @@ img {
 }
 
 h3 {
-  color: hsl(234, 12%, 34%);
+  color: var(--theme-adaptive-500i);
   font-weight: 600;
-  margin: 10px 0;
+  margin: 0 0 10px 0;
+  cursor: pointer;
+}
+
+.card-footer {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--theme-adaptive-800);
+  padding-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  color: #787878;
+}
+
+.card-meta svg {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.25em;
+}
+
+.card-meta:first-child:after {
+  display: block;
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: currentcolor;
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
 }
 
 @media (min-width: 950px) {
