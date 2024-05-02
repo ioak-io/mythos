@@ -9,7 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton,
+  IconButton,Link
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -221,12 +221,12 @@ const ListProjectPage = () => {
                             setProjectData(item)
                           }}
                         >
-                          <FontAwesomeIcon icon={faPen} size="0.1x"/>
+                          <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
                         </IconButton>
                       <Typography variant="h6" component="div" className="project_title">
-                        <a onClick={() => navigateToUsecase(item.id || "")}>
+                        <Link onClick={() => navigateToUsecase(item.id || "")}>
                           {item.name}
-                        </a>
+                        </Link>
                       </Typography>
                       <Typography variant="body2">
                         Created on: {item.createdDate}

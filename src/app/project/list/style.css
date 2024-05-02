@@ -8,6 +8,8 @@
 }
 .MuiCard-root {
   height: 150px;
+  background-color:var(--theme-black-50) !important;
+  color:var(--theme-black-50i) !important;
 }
 
 .MuiCardContent-root {
