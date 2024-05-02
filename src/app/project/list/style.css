@@ -6,7 +6,13 @@
   justify-content: center;
   gap: 20px;
 }
-.MuiCard-root {
+
+.listing_page {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+/* .MuiCard-root {
   height: 150px;
   background-color:var(--theme-black-50) !important;
   color:var(--theme-black-50i) !important;
@@ -24,7 +30,7 @@
 
 .MuiTypography-body2 {
   padding: 5px;
-}
+} */
 /* .basicui-icon-button--circle {
   height: 25px;
   width: 25px;
@@ -48,10 +54,95 @@
 
 .icon_button {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  bottom: 10px;
+  right: 15px;
   background-color: transparent;
   border: none;
   padding: 10px;
   cursor: pointer;
+  color: hsl(180, 62%, 55%);
+}
+
+/* new design */
+
+h1:first-of-type {
+  font-weight: 200;
+  color: hsl(234, 12%, 34%);
+}
+
+h1:last-of-type {
+  color: hsl(234, 12%, 34%);
+}
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.box p {
+  /* color: hsl(229, 6%, 66%); */
+  color: var(--theme-adaptive-300i);
+}
+
+.box {
+  border-radius: 5px;
+  box-shadow: 0px 30px 40px -20px var(--theme-adaptive-50);
+  padding: 40px;
+  margin: 25px;
+  width: 300px;
+  height: auto;
+  position: relative;
+  background-color: var(--theme-adaptive-400);
+  color: var(--theme-adaptive-300i);
+}
+
+img {
+  float: right;
+}
+
+@media (max-width: 450px) {
+  .box {
+    height: 200px;
+  }
+}
+
+@media (max-width: 950px) and (min-width: 450px) {
+  .box {
+    text-align: center;
+    height: 180px;
+  }
+}
+
+.cyan {
+  border-top: 3px solid var(--theme-primary-500);
+}
+.red {
+  border-top: 3px solid hsl(0, 78%, 62%);
+}
+.blue {
+  border-top: 3px solid hsl(212, 86%, 64%);
+}
+.orange {
+  border-top: 3px solid hsl(34, 97%, 64%);
+}
+.dotted {
+  border: 1px dashed var(--theme-primary-500);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+h3 {
+  color: hsl(234, 12%, 34%);
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+@media (min-width: 950px) {
+  /* .box {
+      width: 20%;
+   
+  }   */
 }

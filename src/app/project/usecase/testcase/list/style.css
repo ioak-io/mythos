@@ -93,7 +93,7 @@
     background-color: var(--c-titan-white);
     border-radius: 8px;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 0.125em;
     flex-basis: 50%;
 }
@@ -107,4 +107,5 @@
     color: var(--c-indigo);
     font-weight: 600;
     font-size: 1.25rem;
+    margin: 0;
 }

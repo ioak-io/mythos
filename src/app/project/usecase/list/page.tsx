@@ -34,6 +34,8 @@ const Usecases = () => {
   const [suiteId, setSuiteId] = useState<any>();
   const [data, setData] = useState<Project[]>();
   const [authorization, setAuthorization] = useState<Authorization>({});
+  const [isDeleteUsecaseDialogOpen, setIsDeleteUsecaseDialogOpen] = useState(false);
+  const [toDeleteUsecaseId, setToDeleteUsecaseId] = useState("");
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -77,10 +79,16 @@ const Usecases = () => {
     router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
   }
 
-  const handleDelete = (useCaseId:string) => {
-    deleteUseCase(suiteId, useCaseId, authorization).then((response) => {
+  const handleDelete = () => {
+    deleteUseCase(suiteId, toDeleteUsecaseId, authorization).then((response) => {
       fetchUseCases();
+      setIsDeleteUsecaseDialogOpen(false)
     });
+  }
+
+  const confirmDelete = (useCaseId:string) => {
+    setIsDeleteUsecaseDialogOpen(true)
+    setToDeleteUsecaseId(useCaseId);
   }
 
   if (!isRouteAuthorized) {
@@ -121,7 +129,7 @@ const Usecases = () => {
                       icon={faPen} 
                     />
                     </IconButton>
-                    <IconButton circle={true} onClick={() => handleDelete(item.id || "")}>
+                    <IconButton circle={true} onClick={() => confirmDelete(item.id || "")}>
                     <FontAwesomeIcon
                       icon={faTrash} 
                     />
@@ -135,6 +143,29 @@ const Usecases = () => {
           </table>
         </div>
       </div>
+      <Modal
+        isOpen={isDeleteUsecaseDialogOpen}
+        onClose={() => setIsDeleteUsecaseDialogOpen(false)}
+      >
+        <ModalHeader
+          onClose={() => setIsDeleteUsecaseDialogOpen(false)}
+          heading="Delete Usecase"
+        />
+
+        <ModalBody>
+          <div className="new-project-dialog">
+            <p>Are you sure to delete this usecase?</p>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button theme={ThemeType.danger} onClick={handleDelete}>
+            Delete
+          </Button>
+          <Button onClick={() => setIsDeleteUsecaseDialogOpen(false)}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
       </>
   );
 };

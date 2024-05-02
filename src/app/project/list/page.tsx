@@ -23,7 +23,7 @@ import {
 } from "@/lib/RouteAuthorizationHook";
 import "../edit/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash, faEye,faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardContent, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/material";
 import "./style.css";
@@ -167,53 +167,14 @@ const ListProjectPage = () => {
           </Button>
         </ContextBar>
         <div className="page">
-          {/* <table className="basicui-table theme-default table-hover">
-            <thead>
-              <tr>
-                <th>Project name</th>
-                <th>Created on</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.map((item, index) => (
-                <tr
-                  key={index}
-                  tabIndex={0}
-                  onKeyDown={(event) => handleKeydown(event, item.id || "")}
-                >
-                  <td>{item.name}</td>
-                  <td>{item.createdDate}</td>
-                  <td><div className="action_icons">
-                  <IconButton circle={true} onClick={() => navigateToUsecase(item.id || "")}>
-                    <FontAwesomeIcon
-                      icon={faEye} size="1x"
-                    />
-                    </IconButton>
-                    <IconButton circle={true} onClick={() => manageProject(item.id || "")}>
-                    <FontAwesomeIcon
-                      icon={faPen} size="2x"
-                    />
-                    </IconButton>
-                    <IconButton circle={true} onClick={() => handleDelete(item.id || "")}>
-                    <FontAwesomeIcon
-                      icon={faTrash} size="-1x"
-                    />
-                    </IconButton>
-                    
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
           <div className="listing_page">
-            <Grid container spacing={2} sx={{ height: "150px" }}>
+            
               {data?.map((item, index) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                  <Card variant="outlined">
-                  <CardContent>
-                  <IconButton
+                <div className="box cyan">
+                <h3 onClick={() => navigateToUsecase(item.id || "")}>{item.name}</h3>
+                <p> Created on: {item.createdDate}</p>
+          
+                           <IconButton
                           className="icon_button"
                           circle={true}
                           onClick={() => {
@@ -223,23 +184,42 @@ const ListProjectPage = () => {
                         >
                           <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
                         </IconButton>
-                      <Typography variant="h6" component="div" className="project_title">
-                        <Link onClick={() => navigateToUsecase(item.id || "")}>
-                          {item.name}
-                        </Link>
-                      </Typography>
-                      <Typography variant="body2">
-                        Created on: {item.createdDate}
-                      </Typography>
-                      <Typography variant="body2">
-                        Number of use cases: 2 <br />
-                        Number of test cases: 12
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
+              </div>
+                // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                //   <Card variant="outlined">
+                //   <CardContent>
+                //   <IconButton
+                //           className="icon_button"
+                //           circle={true}
+                //           onClick={() => {
+                //             setIsEditProjectDialogOpen(true);
+                //             setProjectData(item)
+                //           }}
+                //         >
+                //           <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
+                //         </IconButton>
+                //       <Typography variant="h6" component="div" className="project_title">
+                //         <Link theme={ThemeType.primary} onClick={() => navigateToUsecase(item.id || "")}>
+                //           {item.name}
+                //         </Link>
+                //       </Typography>
+                //       <Typography variant="body2">
+                //         Created on: {item.createdDate}
+                //       </Typography>
+                //       <Typography variant="body2">
+                //         Number of use cases: 2 <br />
+                //         Number of test cases: 12
+                //       </Typography>
+                //     </CardContent>
+                //   </Card>
+                // </Grid>
               ))}
-            </Grid>
+              <div className="box dotted">
+                <h3>Add Project</h3>
+                <Button>
+                <FontAwesomeIcon color='white' icon={faPlus}/>
+                </Button>
+              </div>
           </div>
         </div>
       </div>
