@@ -1,11 +1,110 @@
 .main-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    text-align: center;
 }
 
 .left,
 .right {
     overflow-y: auto;
     max-height: 100vh;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+    width: 90%;
+    margin: 10vh auto;
+}
+
+.card {
+    border-radius: 16px;
+    box-shadow: 0 30px 30px -25px rgba(65, 51, 183, 0.25);
+}
+
+.information {
+    background-color: var(--theme-adaptive-300);
+    color: var(--theme-adaptive-300i);
+    padding: 1.5rem;
+}
+
+.information .tag {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.5em 0.75em;
+    line-height: 1;
+    border-radius: 6px;
+}
+
+.information .tag+* {
+    margin-top: 1rem;
+}
+
+.information .title {
+    font-size: 1.5rem;
+    color: var(--c-void);
+    line-height: 1.25;
+}
+
+.information .title+* {
+    margin-top: 1rem;
+}
+
+.information .info {
+    color: var(--c-charcoal);
+}
+
+.information .info+* {
+    margin-top: 1.25rem;
+}
+/* 
+.information .button {
+    font: inherit;
+    line-height: 1;
+    background-color: var(--c-white);
+    border: 2px solid var(--c-indigo);
+    color: var(--c-indigo);
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.information .button:hover,
+.information .button:focus {
+    background-color: var(--c-indigo);
+    color: var(--c-white);
+} */
+
+.information .details {
+    display: flex;
+    gap: 1rem;
+}
+
+.information .details div {
+    padding: 0.75em 1em;
+    background-color: var(--c-titan-white);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.125em;
+    flex-basis: 50%;
+}
+
+.information .details dt {
+    font-size: 0.875rem;
+    color: var(--c-cold-purple);
+}
+
+.information .details dd {
+    color: var(--c-indigo);
+    font-weight: 600;
+    font-size: 1.25rem;
 }
