@@ -15,7 +15,11 @@ import {
   usePathname,
 } from "next/navigation";
 import { Project } from "@/types/Project";
-import { getAllUseCases, getUseCaseById } from "../../list/service";
+import {
+  editUseCaseById,
+  getAllUseCases,
+  getUseCaseById,
+} from "../../list/service";
 import { getTestcases } from "./service";
 import { TestCase } from "@/types/TestCase";
 import {
@@ -28,6 +32,7 @@ import {
   ThemeType,
   IconButton,
 } from "basicui";
+import ContextBar from "@/components/ContextBar/index";
 
 const testcases = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
@@ -85,11 +90,37 @@ const testcases = () => {
     }
   };
 
+  const handleChange = (event: any) => {
+    setProjectData({
+      ...projectData,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
+
+  const updateUsecase = () => {
+    editUseCaseById(
+      searchParams.get("suiteId"),
+      searchParams.get("id"),
+      projectData,
+      authorization
+    ).then((response) => {
+      fetchTestCases();
+      setIsEditUsecaseDialogOpen(false)
+    });
+  };
+
   return (
-    <div className="page">
-      <div className="main-wrapper">
-        <div className="cards">
-          {/* <div className="information card">
+    <>
+      <div>
+        <ContextBar title="Testcases">
+          <Button onClick={() => setIsEditUsecaseDialogOpen(true)}>
+            Edit Usecase
+          </Button>
+        </ContextBar>
+        <div className="page">
+          <div className="main-wrapper">
+            <div className="cards">
+              {/* <div className="information card">
             <span className="tag">hello</span>
             <h2 className="title">testCase.description</h2>
             <p className="info">testCase.summary</p>
@@ -104,31 +135,59 @@ const testcases = () => {
               </div>
             </dl>
           </div> */}
-          {testCases.map((testCase) => (
-            <div key={testCase.id} className="information card">
-              <span className="tag">{testCase.priority}</span>
-              <h2 className="title">{testCase.description}</h2>
-              <p className="info">{testCase.summary}</p>
-              <span className="components">
-                {testCase.components}
-              </span>
-              <dl className="details">
-                <div>
-                  <dt>Labels</dt>
-                  <dd>{testCase.labels}</dd>
+              {testCases.map((testCase) => (
+                <div key={testCase.id} className="information card">
+                  <span className="tag">{testCase.priority}</span>
+                  <h2 className="title">{testCase.description}</h2>
+                  <p className="info">{testCase.summary}</p>
+                  <span className="components">{testCase.components}</span>
+                  <dl className="details">
+                    <div>
+                      <dt>Labels</dt>
+                      <dd>{testCase.labels}</dd>
+                    </div>
+                    <div>
+                      <dt>Comments</dt>
+                      <dd>{testCase.comments}</dd>
+                    </div>
+                  </dl>
                 </div>
-                <div>
-                  <dt>Comments</dt>
-                  <dd>{testCase.comments}</dd>
-                </div>
-              </dl>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
-            
-      </div>
-    
+      <Modal
+        isOpen={isEditUsecaseDialogOpen}
+        onClose={() => setIsEditUsecaseDialogOpen(false)}
+      >
+        <ModalHeader
+          onClose={() => setIsEditUsecaseDialogOpen(false)}
+          heading="Edit usecase"
+        />
+
+        <ModalBody>
+          <div className="new-project-dialog">
+            <form className="project-detail-form">
+              <Input
+                label="Usecase"
+                name="description"
+                value={projectData?.description}
+                onInput={handleChange}
+              />
+            </form>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button theme={ThemeType.primary} onClick={updateUsecase}>
+            Save
+          </Button>
+          <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   );
 };
 

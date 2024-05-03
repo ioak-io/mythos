@@ -36,7 +36,7 @@ export const saveUseCase = (suiteid:string, payload: Project, authorization?: an
     });
 };
 
-export const editUseCase = (suiteid:string, usecaseid:string, payload: Project, authorization?: any) => {
+export const editUseCaseById = (suiteid:string, usecaseid:string, payload: Project, authorization?: any) => {
   return httpPut(`/suite/${suiteid}/usecase/${usecaseid} `, payload, {
     headers: {
       Authorization: authorization?.access_token,
