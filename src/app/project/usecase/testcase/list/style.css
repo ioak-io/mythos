@@ -127,3 +127,13 @@
     font-size: 1rem;
     margin: 0;
 }
+
+.information .components {
+    align-items: center;
+    margin: 0 0 1rem 0;
+    display: inline-flex;
+    padding: 0.25rem;
+    border: 1px dashed var(--theme-primary-500);
+    font-size: 0.75rem;
+    color: var(--theme-primary-500);
+}

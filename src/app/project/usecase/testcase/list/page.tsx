@@ -77,29 +77,33 @@ const testcases = () => {
     <div className="page">
       <div className="main-wrapper">
         <div className="cards">
-          <div className="information card">
+          {/* <div className="information card">
             <span className="tag">hello</span>
             <h2 className="title">testCase.description</h2>
             <p className="info">testCase.summary</p>
             <dl className="details">
               <div>
-                  <dt>Priority</dt>
-                  <dd>testCase.priority</dd>
-                </div>
+                <dt>Priority</dt>
+                <dd>testCase.priority</dd>
+              </div>
               <div>
                 <dt>Comments</dt>
                 <dd>testCase.comments</dd>
               </div>
             </dl>
-          </div>
+          </div> */}
           {testCases.map((testCase) => (
             <div key={testCase.id} className="information card">
+              <span className="tag">{testCase.priority}</span>
               <h2 className="title">{testCase.description}</h2>
               <p className="info">{testCase.summary}</p>
+              <span className="components">
+                {testCase.components}
+              </span>
               <dl className="details">
                 <div>
-                  <dt>Priority</dt>
-                  <dd>{testCase.priority}</dd>
+                  <dt>Labels</dt>
+                  <dd>{testCase.labels}</dd>
                 </div>
                 <div>
                   <dt>Comments</dt>
