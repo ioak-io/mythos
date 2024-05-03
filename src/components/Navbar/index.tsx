@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import "./style.css";
-import { Button } from "basicui";
+import { Button, IconButton } from "basicui";
 import { DarkModeState } from "@/store/ProfileStore";
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -27,8 +29,16 @@ const Navbar = () => {
         </li>
       </ul>
       <div>
-        {darkMode && <Button onClick={toggleDarkMode}>Light</Button>}
-        {!darkMode && <Button onClick={toggleDarkMode}>Dark</Button>}
+        {darkMode && (
+          <IconButton onClick={toggleDarkMode} circle={true}>
+          <FontAwesomeIcon icon={faSun} size="xs" />
+          </IconButton>
+        )}
+        {!darkMode && (
+          <IconButton onClick={toggleDarkMode} circle={true}>
+          <FontAwesomeIcon icon={faMoon} size="xs" />
+          </IconButton>
+        )}
       </div>
     </nav>
   );
