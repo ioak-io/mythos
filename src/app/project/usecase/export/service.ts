@@ -1,9 +1,9 @@
 import { httpDelete, httpGet, httpPost, httpPut } from "@/lib/RestTemplate";
 import { Project } from "@/types/Project";
 
-export const exportData = (authorization: any, suiteId: string) => {
+export const exportData = (authorization: any, suiteId: string,type:string) => {
     console.log(authorization, suiteId)
-    return httpGet(`/export-suite/${suiteId}?type=CSV`, {
+    return httpGet(`/export-suite/${suiteId}?type=${type}`, {
       headers: {
         Authorization: authorization?.access_token,
       },

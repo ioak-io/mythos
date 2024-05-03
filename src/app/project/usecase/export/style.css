@@ -2,4 +2,18 @@
     display: flex;
     justify-content: end;
     padding-bottom: 5px;
+    position: relative;
+}
+
+.dropdown-content{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    position: absolute;
+    top: 35px;
+    right: 10px;
+}
+
+.dropdown-content button{
+    padding: 10px;
 }
