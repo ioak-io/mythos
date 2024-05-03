@@ -36,7 +36,7 @@
 }
 
 .information {
-    background-color: var(--theme-adaptive-300);
+    background-color: var(--theme-adaptive-100);
     color: var(--theme-adaptive-300i);
     width: 100%;
     padding: 2rem;
@@ -104,7 +104,7 @@
 
 .information .details div {
     padding: 0.75em 1em;
-    background-color: var(--theme-adaptive-100);
+    background-color: var(--theme-adaptive-300);
     /* border-radius: 8px; */
     display: flex;
     flex-direction: column;
