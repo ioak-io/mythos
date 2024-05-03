@@ -91,7 +91,7 @@ h1:last-of-type {
 
 .box {
   border-radius: 5px;
-  box-shadow: 0px 30px 40px -20px var(--theme-adaptive-50);
+  /* box-shadow: 0px 30px 40px -20px var(--theme-adaptive-50); */
   padding: 40px;
   margin: 25px;
   width: 300px;
@@ -103,19 +103,6 @@ h1:last-of-type {
 
 img {
   float: right;
-}
-
-@media (max-width: 450px) {
-  .box {
-    height: 200px;
-  }
-}
-
-@media (max-width: 950px) and (min-width: 450px) {
-  .box {
-    text-align: center;
-    height: 180px;
-  }
 }
 
 .cyan {
@@ -151,11 +138,14 @@ h3 {
 
 .card-footer {
   margin-top: 1.25rem;
-  border-top: 1px solid var(--theme-adaptive-800);
   padding-top: 1.25rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.card-footer:last-child {
+  border-top: 1px solid var(--theme-adaptive-800);
 }
 
 .card-meta {

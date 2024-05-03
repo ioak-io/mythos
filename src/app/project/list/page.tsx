@@ -34,6 +34,7 @@ import {
   faTrash,
   faEye,
   faPlus,
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardContent, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/material";
@@ -181,6 +182,7 @@ const ListProjectPage = () => {
                 <h3 onClick={() => navigateToUsecase(item.id || "")}>
                   {item.name}
                 </h3>
+                <p>test description of the project</p>
                 <IconButton
                   className="icon_button"
                   circle={true}
@@ -189,49 +191,21 @@ const ListProjectPage = () => {
                     setProjectData(item);
                   }}
                 >
-                  <FontAwesomeIcon icon={faPen} size="0.1x" />
+                  <FontAwesomeIcon icon={faPen} size="sm" />
                 </IconButton>
                 <div className="card-footer">
                   <div className="card-meta">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      display="block"
-                      id="EyeOpen"
-                    >
-                      <path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19c-4.182 0-7.764-4.013-9.257-5.962a1.692 1.692 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5c4.182 0 7.764 4.013 9.257 5.962z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
+                    <FontAwesomeIcon icon={faEye} />
                     23
                   </div>
                   <div className="card-meta">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      display="block"
-                      id="Calendar"
-                    >
-                      <rect x="2" y="4" width="20" height="18" rx="4"></rect>
-                      <path d="M8 2v4"></path>
-                      <path d="M16 2v4"></path>
-                      <path d="M2 10h20"></path>
-                    </svg>
+                    <FontAwesomeIcon icon={faCalendar} />
                     {item.createdDate}
                   </div>
+                </div>
+                <div className="card-footer">
+                  <span className="card-meta">Creation of</span>
+                  {item.createdBy}
                 </div>
               </div>
               // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
