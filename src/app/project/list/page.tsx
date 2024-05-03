@@ -199,11 +199,13 @@ const ListProjectPage = () => {
                     23
                   </div>
                   <div className="card-meta">
-                  <FontAwesomeIcon
-                      icon={faCalendar}
-                    />
+                    <FontAwesomeIcon icon={faCalendar} />
                     {item.createdDate}
                   </div>
+                </div>
+                <div className="card-footer">
+                  <span className="card-meta">Creation of</span>
+                  {item.createdBy}
                 </div>
               </div>
               // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>

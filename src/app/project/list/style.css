@@ -138,11 +138,14 @@ h3 {
 
 .card-footer {
   margin-top: 1.25rem;
-  border-top: 1px solid var(--theme-adaptive-800);
   padding-top: 1.25rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.card-footer:last-child {
+  border-top: 1px solid var(--theme-adaptive-800);
 }
 
 .card-meta {
