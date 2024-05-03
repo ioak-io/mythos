@@ -30,8 +30,8 @@
 }
 
 .card {
-    border-radius: 16px;
-    box-shadow: 0 30px 30px -25px rgba(65, 51, 183, 0.25);
+    /* border-radius: 16px; */
+    /* box-shadow: 0 30px 30px -25px rgba(65, 51, 183, 0.25); */
 }
 
 .information {
@@ -47,7 +47,7 @@
     font-size: 0.875rem;
     padding: 0.5em 0.75em;
     line-height: 1;
-    border-radius: 6px;
+    /* border-radius: 6px; */
 }
 
 .information .tag+* {
@@ -103,7 +103,7 @@
 .information .details div {
     padding: 0.75em 1em;
     background-color: var(--theme-adaptive-100);
-    border-radius: 8px;
+    /* border-radius: 8px; */
     display: flex;
     flex-direction: column;
     gap: 0.125em;

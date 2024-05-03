@@ -76,7 +76,6 @@ const testcases = () => {
   return (
     <div className="page">
       <div className="main-wrapper">
-        <h4>Testcases</h4>
         <div className="cards">
         <div className="information card">
               <h2 className="title">testCase.description</h2>
