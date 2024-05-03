@@ -30,24 +30,26 @@
 }
 
 .card {
-    border-radius: 16px;
-    box-shadow: 0 30px 30px -25px rgba(65, 51, 183, 0.25);
+    /* border-radius: 16px; */
+    /* box-shadow: 0 30px 30px -25px rgba(65, 51, 183, 0.25); */
+    border-bottom: 3px solid var(--theme-primary-500);
 }
 
 .information {
-    background-color: var(--theme-adaptive-300);
+    background-color: var(--theme-adaptive-100);
     color: var(--theme-adaptive-300i);
-    padding: 1.5rem;
     width: 100%;
+    padding: 2rem;
 }
 
 .information .tag {
     display: inline-block;
-    font-weight: 600;
     font-size: 0.875rem;
-    padding: 0.5em 0.75em;
+    padding: 0.5em;
     line-height: 1;
-    border-radius: 6px;
+    /* border-radius: 6px; */
+    background-color: var(--theme-adaptive-800);
+    color: var(--c-charcoal);
 }
 
 .information .tag+* {
@@ -102,12 +104,16 @@
 
 .information .details div {
     padding: 0.75em 1em;
-    background-color: var(--theme-adaptive-100);
-    border-radius: 8px;
+    background-color: var(--theme-adaptive-300);
+    /* border-radius: 8px; */
     display: flex;
     flex-direction: column;
     gap: 0.125em;
     flex-basis: 50%;
+}
+
+.information dl {
+    margin: 0;
 }
 
 .information .details dt {
@@ -120,4 +126,14 @@
     font-weight: 600;
     font-size: 1rem;
     margin: 0;
+}
+
+.information .components {
+    align-items: center;
+    margin: 0 0 1rem 0;
+    display: inline-flex;
+    padding: 0.25rem;
+    border: 1px dashed var(--theme-primary-500);
+    font-size: 0.75rem;
+    color: var(--theme-primary-500);
 }

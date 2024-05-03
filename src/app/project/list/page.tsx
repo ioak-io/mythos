@@ -35,6 +35,7 @@ import {
   faEye,
   faPlus,
   faCalendar,
+  faDiagramProject,
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardContent, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/material";
@@ -199,13 +200,16 @@ const ListProjectPage = () => {
                     23
                   </div>
                   <div className="card-meta">
-                    <FontAwesomeIcon icon={faCalendar} />
-                    {item.createdDate}
+                    <FontAwesomeIcon icon={faDiagramProject} />
+                    50
                   </div>
                 </div>
                 <div className="card-footer">
-                  <span className="card-meta">Creation of</span>
-                  {item.createdBy}
+                  <div className="card-meta">{item.createdBy}</div>
+                  <div className="card-meta">
+                    <FontAwesomeIcon icon={faCalendar} />
+                    {item.createdDate}
+                  </div>
                 </div>
               </div>
               // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
