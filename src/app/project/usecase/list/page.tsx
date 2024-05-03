@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useLayoutEffect, useState } from "react";
+import ContextBar from "@/components/ContextBar";
 import {
   Button,
   Input,
@@ -8,8 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton,
-  ContextBar
+  IconButton
 } from "basicui";
 import { redirect, useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Project } from "@/types/Project";
