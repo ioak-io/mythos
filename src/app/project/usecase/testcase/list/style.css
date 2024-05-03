@@ -95,13 +95,14 @@
 } */
 
 .information .details {
-    display: flex;
+    display: grid;
     gap: 1rem;
+    grid-template-columns: 20% auto;
 }
 
 .information .details div {
     padding: 0.75em 1em;
-    background-color: var(--c-titan-white);
+    background-color: var(--theme-adaptive-100);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -115,8 +116,8 @@
 }
 
 .information .details dd {
-    color: var(--c-indigo);
+    color: var(--theme-adaptive-200i);
     font-weight: 600;
-    font-size: 1.25rem;
+    font-size: 1rem;
     margin: 0;
 }
