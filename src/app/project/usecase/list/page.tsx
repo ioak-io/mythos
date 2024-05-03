@@ -8,7 +8,8 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton
+  IconButton,
+  ContextBar
 } from "basicui";
 import { redirect, useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Project } from "@/types/Project";
@@ -18,7 +19,7 @@ import {
   faPen,
   faTrash,faEye
 } from "@fortawesome/free-solid-svg-icons";
-import { deleteUseCase, getAllUseCases } from "./service";
+import { deleteUseCase, getAllUseCases, saveUseCase } from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
@@ -35,7 +36,11 @@ const Usecases = () => {
   const [data, setData] = useState<Project[]>();
   const [authorization, setAuthorization] = useState<Authorization>({});
   const [isDeleteUsecaseDialogOpen, setIsDeleteUsecaseDialogOpen] = useState(false);
+  const [isNewUsecaseDialogOpen, setIsNewUsecaseDialogOpen] = useState(false);
   const [toDeleteUsecaseId, setToDeleteUsecaseId] = useState("");
+  const [newUsecaseForm, setNewUsecaseForm] = useState<any>({
+    description: "",
+});
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -91,6 +96,20 @@ const Usecases = () => {
     setToDeleteUsecaseId(useCaseId);
   }
 
+  const handleChange = (event: any) => {
+    setNewUsecaseForm({
+      ...newUsecaseForm,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
+
+  const handleSaveNewUsecase = () => {
+    saveUseCase(suiteId,newUsecaseForm, authorization).then((response: any) => {
+      setIsNewUsecaseDialogOpen(false);
+      fetchUseCases();
+    });
+  };
+
   if (!isRouteAuthorized) {
     return <></>;
   }
@@ -98,7 +117,11 @@ const Usecases = () => {
   return (
     <>
       <div>
-        
+      <ContextBar title="Usecase list">
+          <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
+            New Usecase
+          </Button>
+        </ContextBar>
         <div className="page">
           <ExportDropdown suiteId={suiteId}></ExportDropdown>
           <table className="basicui-table theme-default table-hover">
@@ -163,6 +186,36 @@ const Usecases = () => {
           </Button>
           <Button onClick={() => setIsDeleteUsecaseDialogOpen(false)}>
             Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal
+        isOpen={isNewUsecaseDialogOpen}
+        onClose={() => setIsNewUsecaseDialogOpen(false)}
+      >
+        <ModalHeader
+          onClose={() => setIsNewUsecaseDialogOpen(false)}
+          heading="Create new usecase"
+        />
+
+        <ModalBody>
+          <div className="new-project-dialog">
+            <Input
+              name="description"
+              value={newUsecaseForm.description}
+              label="usecase name"
+              onInput={handleChange}
+              autoFocus
+            />
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button theme={ThemeType.primary} onClick={handleSaveNewUsecase}>
+            Save
+          </Button>
+          <Button onClick={() => setIsNewUsecaseDialogOpen(false)}>
+            Close
           </Button>
         </ModalFooter>
       </Modal>

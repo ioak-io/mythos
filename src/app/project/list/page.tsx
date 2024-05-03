@@ -265,7 +265,7 @@ const ListProjectPage = () => {
             ))}
             <div className="box dotted">
               <h3>Add Project</h3>
-              <Button>
+              <Button onClick={() => setIsNewProjectDialogOpen(true)}>
                 <FontAwesomeIcon icon={faPlus} />
               </Button>
             </div>

@@ -19,7 +19,7 @@ import { Authorization } from "@/types/Authorization";
 import { editUseCase, getUseCaseById } from "./list/service";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
 
-const usecase = () => {
+const EditUsecase = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
   useLayoutEffect(() => {
     hasPermissions([PermissionType.USER]);
@@ -112,4 +112,4 @@ const usecase = () => {
   );
 };
 
-export default usecase;
+export default EditUsecase;
