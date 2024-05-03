@@ -39,16 +39,17 @@
     background-color: var(--theme-adaptive-300);
     color: var(--theme-adaptive-300i);
     width: 100%;
+    padding: 2rem;
 }
 
 .information .tag {
     display: inline-block;
-    font-weight: 600;
     font-size: 0.875rem;
-    padding: 0.5em 0.75em;
+    padding: 0.5em;
     line-height: 1;
     /* border-radius: 6px; */
     background-color: var(--theme-adaptive-800);
+    color: var(--c-charcoal);
 }
 
 .information .tag+* {
@@ -59,12 +60,10 @@
     font-size: 1.5rem;
     color: var(--c-void);
     line-height: 1.25;
-    padding-left: 1rem;
 }
 
 .information .title+* {
     margin-top: 1rem;
-    padding-left: 1rem;
 }
 
 .information .info {
