@@ -19,7 +19,7 @@ import {
   faPen,
   faTrash,faEye
 } from "@fortawesome/free-solid-svg-icons";
-import { deleteUseCase, getAllUseCases, saveUseCase } from "./service";
+import { deleteUseCase, editUseCaseById, getAllUseCases, getUseCaseById, saveUseCase } from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
@@ -37,6 +37,11 @@ const Usecases = () => {
   const [authorization, setAuthorization] = useState<Authorization>({});
   const [isDeleteUsecaseDialogOpen, setIsDeleteUsecaseDialogOpen] = useState(false);
   const [isNewUsecaseDialogOpen, setIsNewUsecaseDialogOpen] = useState(false);
+  const [isEditUsecaseDialogOpen,setIsEditUsecaseDialogOpen] =useState(false);
+  const [useCaseToEdit, setUseCaseToEdit] = useState<Project>({
+    description:"",
+    id:""
+  });
   const [toDeleteUsecaseId, setToDeleteUsecaseId] = useState("");
   const [newUsecaseForm, setNewUsecaseForm] = useState<any>({
     description: "",
@@ -80,8 +85,12 @@ const Usecases = () => {
     router.push(`testcase/list?id=${id}&suiteId=${suiteId}`);
   }
 
-  const manageUseCase = (id:string) => {
-    router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
+  const manageUseCase = (item:any) => {
+    // router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
+    setIsEditUsecaseDialogOpen(true)
+    console.log(item)
+    fetchUseCaseById(item.id)
+    // setUseCaseToEdit(item?.description);
   }
 
   const handleDelete = () => {
@@ -107,6 +116,37 @@ const Usecases = () => {
     saveUseCase(suiteId,newUsecaseForm, authorization).then((response: any) => {
       setIsNewUsecaseDialogOpen(false);
       fetchUseCases();
+    });
+  };
+
+  const handleUsecaseChange = (event: any) => {
+    setUseCaseToEdit({
+      ...useCaseToEdit,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
+
+  const fetchUseCaseById = (id:string) => {
+    if (authorization.isAuth) {
+      getUseCaseById(
+        suiteId,
+        id,
+        authorization
+      ).then((response) => {
+        setUseCaseToEdit(response);
+      });
+    }
+  };
+
+  const updateUsecase = () => {
+    editUseCaseById(
+      suiteId,
+      useCaseToEdit?.id,
+      useCaseToEdit,
+      authorization
+    ).then((response) => {
+      fetchUseCases();
+      setIsEditUsecaseDialogOpen(false)
     });
   };
 
@@ -147,7 +187,7 @@ const Usecases = () => {
                       icon={faEye}
                     />
                     </IconButton>
-                    <IconButton circle={true} onClick={() => manageUseCase(item.id || "")}>
+                    <IconButton circle={true} onClick={() => manageUseCase(item || "")}>
                     <FontAwesomeIcon
                       icon={faPen} 
                     />
@@ -215,6 +255,37 @@ const Usecases = () => {
             Save
           </Button>
           <Button onClick={() => setIsNewUsecaseDialogOpen(false)}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal
+        isOpen={isEditUsecaseDialogOpen}
+        onClose={() => setIsEditUsecaseDialogOpen(false)}
+      >
+        <ModalHeader
+          onClose={() => setIsEditUsecaseDialogOpen(false)}
+          heading="Edit usecase"
+        />
+
+        <ModalBody>
+          <div className="new-project-dialog">
+            <form className="project-detail-form">
+              <Input
+                label="Usecase"
+                name="description"
+                value={useCaseToEdit?.description}
+                onInput={handleUsecaseChange}
+              />
+            </form>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button theme={ThemeType.primary} onClick={updateUsecase}>
+            Save
+          </Button>
+          <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
             Close
           </Button>
         </ModalFooter>
