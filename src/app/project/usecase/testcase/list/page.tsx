@@ -31,6 +31,7 @@ import {
   ModalHeader,
   ThemeType,
   IconButton,
+  Textarea
 } from "basicui";
 import ContextBar from "@/components/ContextBar/index";
 
@@ -169,7 +170,7 @@ const testcases = () => {
         <ModalBody>
           <div className="new-project-dialog">
             <form className="project-detail-form">
-              <Input
+              <Textarea
                 label="Usecase"
                 name="description"
                 value={projectData?.description}

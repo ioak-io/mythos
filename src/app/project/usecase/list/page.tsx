@@ -4,6 +4,7 @@ import ContextBar from "@/components/ContextBar";
 import {
   Button,
   Input,
+  Textarea,
   Modal,
   ModalBody,
   ModalFooter,
@@ -88,9 +89,7 @@ const Usecases = () => {
   const manageUseCase = (item:any) => {
     // router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
     setIsEditUsecaseDialogOpen(true)
-    console.log(item)
     fetchUseCaseById(item.id)
-    // setUseCaseToEdit(item?.description);
   }
 
   const handleDelete = () => {
@@ -272,7 +271,7 @@ const Usecases = () => {
         <ModalBody>
           <div className="new-project-dialog">
             <form className="project-detail-form">
-              <Input
+              <Textarea
                 label="Usecase"
                 name="description"
                 value={useCaseToEdit?.description}

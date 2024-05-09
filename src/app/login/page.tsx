@@ -63,7 +63,7 @@ const LoginPage = (props: Props) => {
             payload.email
           );
           AuthorizationState.next({ ...response.data, isAuth: true });
-          router.push(searchParams.get("from") || "/projects");
+          router.push(searchParams.get("from") || "/project/list");
         }
       }
     );
