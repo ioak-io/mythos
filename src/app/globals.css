@@ -31,7 +31,11 @@ body {
   color: var(--theme-white-100i);
 }
 body.basicui-dark {
-  background-color: var(--theme-black-200);
+  background-color: var(--theme-adaptive-100);
+  color: var(--theme-black-200i);
+}
+body.basicui-light {
+  background-color: var(--theme-adaptive-100);
   color: var(--theme-black-200i);
 }
 body.oak-dialog-open {
@@ -196,6 +200,13 @@ code {
     width: 350px;
   }
 }
+.basicui-dark .basicui-table{
+  color:  var(--theme-white-400);
+}
+
+.basicui-light .basicui-table{
+  color:  var(--theme-black-400);
+}
 .basicui-table th,
 .basicui-table td {
   border-color: var(--theme-white-400);
@@ -203,4 +214,16 @@ code {
 
 .basicui-textarea textarea {
   height: 80px;
+}
+
+.basicui-modal-header{
+  color:var(--theme-adaptive-50i);
+}
+
+.basicui-modal-body{
+  color:var(--theme-adaptive-50i);
+}
+
+.context-bar{
+  color:var(--theme-adaptive-50i);
 }

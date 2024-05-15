@@ -10,7 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton
+  IconButton,Table
 } from "basicui";
 import { redirect, useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Project } from "@/types/Project";
@@ -18,13 +18,14 @@ import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
-  faTrash,faEye
+  faTrash,faEye,faPlus,faPenToSquare,faCircleCheck
 } from "@fortawesome/free-solid-svg-icons";
 import { deleteUseCase, editUseCaseById, getAllUseCases, getUseCaseById, saveUseCase } from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
 import ExportDropdown from "../export/page";
+import { deleteProject, editProject, getProjects } from "../../list/service";
 
 const Usecases = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
@@ -39,6 +40,7 @@ const Usecases = () => {
   const [isDeleteUsecaseDialogOpen, setIsDeleteUsecaseDialogOpen] = useState(false);
   const [isNewUsecaseDialogOpen, setIsNewUsecaseDialogOpen] = useState(false);
   const [isEditUsecaseDialogOpen,setIsEditUsecaseDialogOpen] =useState(false);
+  const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false);
   const [useCaseToEdit, setUseCaseToEdit] = useState<Project>({
     description:"",
     id:""
@@ -46,7 +48,12 @@ const Usecases = () => {
   const [toDeleteUsecaseId, setToDeleteUsecaseId] = useState("");
   const [newUsecaseForm, setNewUsecaseForm] = useState<any>({
     description: "",
-});
+  });
+  const [projectData, setProjectData] = useState<Project>({
+    name: "",
+  });
+  const [projects, setProjects] = useState<Project[]>();
+  const classNameTable = data?.length === 0 ? "empty-table" : "data-table";
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -149,6 +156,49 @@ const Usecases = () => {
     });
   };
 
+  useEffect(() => {
+    if (authorization.isAuth) {
+      fetchProjects();
+    }
+  }, [authorization]);
+
+  const fetchProjects = () => {
+    getProjects(authorization).then((response: any) => {
+      console.log(response);
+      setProjects(response);
+    });
+  };
+
+  const handleProjectDataChange = (event: any) => {
+    setProjectData({
+      ...projectData,
+      [event.currentTarget.name]: event.currentTarget.value,
+    });
+  };
+
+  const updateProject = () => {
+    const payload = {
+      name: projectData.name,
+    };
+    editProject(payload, projectData?.id, authorization).then((response) => {
+      console.log(response);
+      setIsEditProjectDialogOpen(false);
+    });
+  };
+
+  const getProjectData = () =>{
+    setProjectData(projects?.find(project => project.id === suiteId));
+    console.log(projectData)
+    setIsEditProjectDialogOpen(true);
+  }
+
+  const handleProjectDelete = () => {
+    deleteProject(projectData.id, authorization).then((response) => {
+      setIsEditProjectDialogOpen(false);
+       router.back();
+    });
+  };
+
   if (!isRouteAuthorized) {
     return <></>;
   }
@@ -157,17 +207,24 @@ const Usecases = () => {
     <>
       <div>
       <ContextBar title="Usecase list">
-          <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
-            New Usecase
+      <ExportDropdown suiteId={suiteId}></ExportDropdown>
+          <Button onClick={getProjectData} >
+            Edit Project
           </Button>
         </ContextBar>
         <div className="page">
-          <ExportDropdown suiteId={suiteId}></ExportDropdown>
-          <table className="basicui-table theme-default table-hover">
+          {(data?.length != 0) &&<div className="usecase_action">
+          <Button theme={ThemeType.primary} onClick={() => setIsNewUsecaseDialogOpen(true)} >
+          <FontAwesomeIcon icon={faPlus} /> Add Usecase
+          </Button>
+          {/* <ExportDropdown suiteId={suiteId}></ExportDropdown> */}
+          </div>}
+          <table className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}>
             <thead>
               <tr>
                 <th>Usecase name</th>
                 <th>Created on</th>
+                <th>Status</th>
                <th></th>
               </tr>
             </thead>
@@ -179,23 +236,26 @@ const Usecases = () => {
                 >
                   <td>{item.description}</td>
                   <td>{item.createdDate}</td>
+                  <td><div className="check_icon"><FontAwesomeIcon icon={faCircleCheck} size="sm" /></div></td>
                   <td>
                     <div className="action_icons">
-                  <IconButton circle={true} onClick={() => navigateToTestcase(item.id || "")}>
+                    <Button  variant="outline" size="large" onClick={() => navigateToTestcase(item.id || "")}>
+              <FontAwesomeIcon icon={faEye} size="sm" /> View</Button>
+                  {/* <IconButton circle={true} variant="outline" onClick={() => navigateToTestcase(item.id || "")}>
                     <FontAwesomeIcon
                       icon={faEye}
                     />
-                    </IconButton>
-                    <IconButton circle={true} onClick={() => manageUseCase(item || "")}>
-                    <FontAwesomeIcon
-                      icon={faPen} 
+                    </IconButton> */}
+                    {/* <IconButton circle={true} variant="fill" onClick={() => manageUseCase(item || "")}>
+                    <FontAwesomeIcon className='edit_icon'
+                      icon={faPenToSquare} 
                     />
-                    </IconButton>
-                    <IconButton circle={true} onClick={() => confirmDelete(item.id || "")}>
+                    </IconButton> */}
+                    {/* <IconButton circle={true} variant="outline" onClick={() => confirmDelete(item.id || "")}>
                     <FontAwesomeIcon
                       icon={faTrash} 
                     />
-                    </IconButton>
+                    </IconButton> */}
                     
                     </div>
                   </td>
@@ -203,6 +263,14 @@ const Usecases = () => {
               ))}
             </tbody>
           </table>
+         {(data?.length===0) &&
+          <div className="no_table_data">
+            <h2>No Data Available </h2>
+            <p>Please add usecases for the project</p>
+            <Button theme={ThemeType.primary} onClick={() => setIsNewUsecaseDialogOpen(true)} >
+              <FontAwesomeIcon icon={faPlus} /> Add Usecase
+            </Button>
+            </div>}
         </div>
       </div>
       <Modal
@@ -240,7 +308,7 @@ const Usecases = () => {
 
         <ModalBody>
           <div className="new-project-dialog">
-            <Input
+            <Textarea
               name="description"
               value={newUsecaseForm.description}
               label="usecase name"
@@ -260,6 +328,48 @@ const Usecases = () => {
       </Modal>
 
       <Modal
+        isOpen={isEditProjectDialogOpen}
+        onClose={() => setIsEditProjectDialogOpen(false)}
+      >
+        <ModalHeader
+          onClose={() => setIsEditProjectDialogOpen(false)}
+          heading="Edit project"
+        />
+
+        <ModalBody>
+          <div className="new-project-dialog">
+            <form className="project-detail-form">
+              <Input
+                label="Project name"
+                name="name"
+                value={projectData?.name}
+                onInput={handleProjectDataChange}
+              />
+            </form>
+          </div>
+        </ModalBody>
+        <div className="editor_footer_container">
+          <ModalFooter>
+            <div className="editor_footer">
+              <div className="footer_delete">
+                <Button theme={ThemeType.danger} onClick={handleProjectDelete}>
+                  Delete
+                </Button>
+              </div>
+              <div className="footer_save">
+                <Button theme={ThemeType.primary} onClick={updateProject}>
+                  Save
+                </Button>
+                <Button onClick={() => setIsEditProjectDialogOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </ModalFooter>
+        </div>
+      </Modal>
+
+      <Modal
         isOpen={isEditUsecaseDialogOpen}
         onClose={() => setIsEditUsecaseDialogOpen(false)}
       >
@@ -271,6 +381,10 @@ const Usecases = () => {
         <ModalBody>
           <div className="new-project-dialog">
             <form className="project-detail-form">
+            {/* <Input
+                label="Project"
+                name="name"
+              /> */}
               <Textarea
                 label="Usecase"
                 name="description"
@@ -280,14 +394,31 @@ const Usecases = () => {
             </form>
           </div>
         </ModalBody>
+        <div className="editor_footer_container">
         <ModalFooter>
-          <Button theme={ThemeType.primary} onClick={updateUsecase}>
+          {/* <Button theme={ThemeType.primary} onClick={updateUsecase}>
             Save
           </Button>
           <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
             Close
-          </Button>
+          </Button> */}
+          <div className="editor_footer">
+              <div className="footer_delete">
+                <Button theme={ThemeType.danger} onClick={handleDelete}>
+                  Delete
+                </Button>
+              </div>
+              <div className="footer_save">
+                <Button theme={ThemeType.primary} onClick={updateUsecase}>
+                  Save
+                </Button>
+                <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
         </ModalFooter>
+        </div>
       </Modal>
       </>
   );

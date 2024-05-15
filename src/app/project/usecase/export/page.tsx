@@ -59,9 +59,12 @@ const ExportDropdown = ({ suiteId }) => {
 
   return (
     <div className="export_option">
-      <IconButton circle={true} onClick={toggleDropdown}>
+      {/* <IconButton circle={true} onClick={toggleDropdown}>
         <FontAwesomeIcon icon={faDownload} size="1x" />
-      </IconButton>
+      </IconButton> */}
+      <Button  onClick={toggleDropdown} >
+          <FontAwesomeIcon icon={faDownload} /> Export
+          </Button>
 
       {isOpen && (
         <div className="dropdown-content">

@@ -36,6 +36,8 @@ import {
   faPlus,
   faCalendar,
   faDiagramProject,
+  faSearch,
+  faPenToSquare
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardContent, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/material";
@@ -62,6 +64,10 @@ const ListProjectPage = () => {
     createdBy: "",
   });
   const editProjectRef = useRef();
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredData = data?.filter(item =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -124,7 +130,8 @@ const ListProjectPage = () => {
       const convertedData = response.map(
         (item: { createdDate: string | number | Date }) => {
           const createdDate = new Date(item.createdDate);
-          const formattedDate = createdDate.toLocaleDateString("en-GB");
+          // const formattedDate = createdDate.toLocaleDateString("en-GB");
+          const formattedDate=calculateTimeAgo(item.createdDate);
           return {
             ...item,
             createdDate: formattedDate,
@@ -164,6 +171,22 @@ const ListProjectPage = () => {
     });
   };
 
+  
+  const calculateTimeAgo = (createdDate) => {
+    const currentDate = new Date();
+    const pastDate = new Date(createdDate);
+    const millisecondsAgo= currentDate - pastDate;
+    const daysAgo = Math.floor(millisecondsAgo / (1000 * 60 * 60 * 24));
+    
+    if (daysAgo >= 7) {
+        const weeksAgo = Math.floor(daysAgo / 7);
+        return "Created "+weeksAgo + " weeks ago";
+    } else if(daysAgo == 0){
+        return "New";
+    } else 
+        return daysAgo + " days ago";
+}
+
   if (!isRouteAuthorized) {
     return <></>;
   }
@@ -172,19 +195,56 @@ const ListProjectPage = () => {
     <>
       <div>
         <ContextBar title="Projects list">
-          <Button onClick={() => setIsNewProjectDialogOpen(true)}>
+          {/* <Button onClick={() => setIsNewProjectDialogOpen(true)}>
             New project
-          </Button>
+          </Button> */}
         </ContextBar>
         <div className="page">
-          <div className="listing_page">
-            {data?.map((item, index) => (
-              <div className="box cyan" key={index}>
-                <h3 onClick={() => navigateToUsecase(item.id || "")}>
+        <div className="header_action">
+          <h2>Projects</h2>
+          <div className="input_search">
+          <div className="search">
+          <FontAwesomeIcon icon={faSearch} />
+          <Input type="text" placeholder="Search" value={searchQuery}
+             onChange={(e:any) => setSearchQuery(e.target.value)}/>
+          </div>
+          <div>
+          <Button onClick={() => setIsNewProjectDialogOpen(true)}>
+          <FontAwesomeIcon icon={faPlus} /> New project
+          </Button>
+          </div>
+          </div>
+          
+          </div>
+          <div className="listing_pages">
+          {/* <div className="details_list"  >
+                <h6>
+                PROJECT NAME
+                </h6>
+                <div className="action_buttons">
+                <h6>
+                ACTION
+                </h6>
+                </div>
+            </div> */}
+          {filteredData?.map((item, index) => (
+            <div className="details_list"  key={index}>
+              <div className="details">
+                <h5>
                   {item.name}
-                </h3>
-                <p>test description of the project</p>
-                <IconButton
+                </h5>
+                <p className={item.createdDate === "New" ? "new_item" : "old_item"}>{item.createdDate}</p>
+                </div>
+                <div className="action_buttons">
+              <Button  variant="outline" size="large" onClick={() => navigateToUsecase(item.id || "")}>
+              <FontAwesomeIcon icon={faEye} size="sm" /> Usecases</Button>
+                {/* <Button  size="large" onClick={() => {
+                    setIsEditProjectDialogOpen(true);
+                    setProjectData(item);
+                  }}>
+                <FontAwesomeIcon icon={faPenToSquare} size="sm" /> Edit
+                 </Button> */}
+              {/* <IconButton
                   className="icon_button"
                   circle={true}
                   onClick={() => {
@@ -193,7 +253,19 @@ const ListProjectPage = () => {
                   }}
                 >
                   <FontAwesomeIcon icon={faPen} size="sm" />
-                </IconButton>
+                </IconButton> */}
+                </div>
+            </div>
+          ))}
+          </div>
+          {/* <div className="listing_page">
+            {data?.map((item, index) => (
+              <div className="box cyan" key={index}>
+                <h3>
+                  {item.name}
+                </h3>
+                <p>test description of the project</p>
+                
                 <div className="card-footer">
                   <div className="card-meta">
                     <FontAwesomeIcon icon={faEye} />
@@ -211,35 +283,21 @@ const ListProjectPage = () => {
                     {item.createdDate}
                   </div>
                 </div>
+                <div className="action_buttons">
+              <Button  size="large" onClick={() => navigateToUsecase(item.id || "")}>
+                Usecases</Button>
+              <IconButton
+                  className="icon_button"
+                  circle={true}
+                  onClick={() => {
+                    setIsEditProjectDialogOpen(true);
+                    setProjectData(item);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPen} size="sm" />
+                </IconButton>
+                </div>
               </div>
-              // <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-              //   <Card variant="outlined">
-              //   <CardContent>
-              //   <IconButton
-              //           className="icon_button"
-              //           circle={true}
-              //           onClick={() => {
-              //             setIsEditProjectDialogOpen(true);
-              //             setProjectData(item)
-              //           }}
-              //         >
-              //           <FontAwesomeIcon color='white' icon={faPen} size="0.1x"/>
-              //         </IconButton>
-              //       <Typography variant="h6" component="div" className="project_title">
-              //         <Link theme={ThemeType.primary} onClick={() => navigateToUsecase(item.id || "")}>
-              //           {item.name}
-              //         </Link>
-              //       </Typography>
-              //       <Typography variant="body2">
-              //         Created on: {item.createdDate}
-              //       </Typography>
-              //       <Typography variant="body2">
-              //         Number of use cases: 2 <br />
-              //         Number of test cases: 12
-              //       </Typography>
-              //     </CardContent>
-              //   </Card>
-              // </Grid>
             ))}
             <div className="box dotted">
               <h3>Add Project</h3>
@@ -247,7 +305,7 @@ const ListProjectPage = () => {
                 <FontAwesomeIcon icon={faPlus} />
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <Modal
@@ -291,7 +349,6 @@ const ListProjectPage = () => {
 
         <ModalBody>
           <div className="new-project-dialog">
-            {/* <EditProjectPage ref={editProjectRef} data={isEditProjectId} auth={authorization}></EditProjectPage> */}
             <form className="project-detail-form">
               <Input
                 label="Project name"
