@@ -199,6 +199,10 @@ const Usecases = () => {
     });
   };
 
+  const navigateToFeedback = () => {
+    router.push(`../feedbackForm`);
+  }
+
   if (!isRouteAuthorized) {
     return <></>;
   }
@@ -224,7 +228,7 @@ const Usecases = () => {
               <tr>
                 <th>Usecase name</th>
                 <th>Created on</th>
-                <th>Status</th>
+                <th style={{ textAlign: 'center' }}>Status</th>
                <th></th>
               </tr>
             </thead>

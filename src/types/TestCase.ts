@@ -2,7 +2,7 @@ export type  TestCase = {
     id: string;
     suiteId: string;
     useCaseId: string;
-    description: string;
+    description: any;
     summary: string;
     priority: string;
     comments: string;

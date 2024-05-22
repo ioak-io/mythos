@@ -34,6 +34,12 @@ import {
   Textarea
 } from "basicui";
 import ContextBar from "@/components/ContextBar/index";
+import ChipsInput from "../labels/page";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPen,
+  faTrash,faEye,faPlus,faPenToSquare,faCircleDot,faTurnUp,faStar
+} from "@fortawesome/free-solid-svg-icons";
 
 const testcases = () => {
   const { hasPermissions, isRouteAuthorized } = useRouteAuthorization("1");
@@ -138,19 +144,30 @@ const testcases = () => {
           </div> */}
               {testCases.map((testCase) => (
                 <div key={testCase.id} className="information card">
-                  <span className="tag">{testCase.priority}</span>
-                  <h2 className="title">{testCase.description}</h2>
+                  <div className="priority">
+                  <span className={`tag ${testCase.priority==='High'?'red':'yellow'}`}>
+                  <FontAwesomeIcon icon={faStar} size="sm" /></span><p>{testCase.priority}</p>
+                  </div>
+                  <h2 className="title">{testCase.description.overview}</h2>
                   <p className="info">{testCase.summary}</p>
                   <span className="components">{testCase.components}</span>
+                  {testCase.description.steps.map((step)=>(
+                    <p>{step}</p>
+                  ))}
+                  <span className="outcome">
+                  <p>Expected outcome:&nbsp; </p>
+                  <p>{testCase.description.expectedOutcome}</p>
+                  </span>
+                  
                   <dl className="details">
                     <div>
                       <dt>Labels</dt>
-                      <dd>{testCase.labels}</dd>
+                      <dd><ChipsInput labels={testCase.labels} /></dd>
                     </div>
-                    <div>
+                    {/* <div>
                       <dt>Comments</dt>
                       <dd>{testCase.comments}</dd>
-                    </div>
+                    </div> */}
                   </dl>
                 </div>
               ))}

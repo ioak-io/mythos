@@ -49,7 +49,7 @@
     line-height: 1;
     /* border-radius: 6px; */
     background-color: var(--theme-adaptive-800);
-    color: var(--c-charcoal);
+    color: var(--theme-white-100);
 }
 
 .information .tag+* {
@@ -97,19 +97,22 @@
 } */
 
 .information .details {
-    display: grid;
+    /* display: grid;
     gap: 1rem;
-    grid-template-columns: 20% auto;
+    grid-template-columns: 20% auto; */
+    display: flex;
+    justify-content: space-between;
+    /* background-color: var(--theme-adaptive-300); */
+    padding: 5px;
 }
 
 .information .details div {
-    padding: 0.75em 1em;
+    /* padding: 0.75em 1em;
     background-color: var(--theme-adaptive-300);
-    /* border-radius: 8px; */
     display: flex;
     flex-direction: column;
     gap: 0.125em;
-    flex-basis: 50%;
+    flex-basis: 50%; */
 }
 
 .information dl {
@@ -123,7 +126,7 @@
 
 .information .details dd {
     color: var(--theme-adaptive-200i);
-    font-weight: 600;
+    font-weight: 400;
     font-size: 1rem;
     margin: 0;
 }
@@ -136,4 +139,35 @@
     border: 1px dashed var(--theme-primary-500);
     font-size: 0.75rem;
     color: var(--theme-primary-500);
+}
+
+.css-gavykb-MuiChip-root{
+    background-color: var(--theme-adaptive-800) !important;
+    color: var(--theme-adaptive-100i) !important;
+    height: unset !important;
+}
+
+.information .red {
+    background-color: red;
+}
+
+.information .yellow{
+    background-color:orange;
+}
+
+.outcome{
+    display: flex;
+}
+
+.priority{
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    justify-content: flex-start;
+    padding: 3px;
+}
+
+.priority p{
+    font-weight: 600;
+    margin: 0;
 }
