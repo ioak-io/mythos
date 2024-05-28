@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { exportData } from "./service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { IconButton, Button } from "basicui";
+import { IconButton, Button,Modal,ModalHeader,ModalBody,ModalFooter } from "basicui";
 import "./style.css";
 // import { Select, MenuItem, ListItemIcon,InboxIcon,ListItemText } from "@mui/material";
 
@@ -59,19 +59,37 @@ const ExportDropdown = ({ suiteId }) => {
 
   return (
     <div className="export_option">
-      {/* <IconButton circle={true} onClick={toggleDropdown}>
-        <FontAwesomeIcon icon={faDownload} size="1x" />
-      </IconButton> */}
       <Button  onClick={toggleDropdown} >
           <FontAwesomeIcon icon={faDownload} /> Export
           </Button>
 
-      {isOpen && (
+      {/* {isOpen && (
         <div className="dropdown-content">
           <Button onClick={() => downloadData("CSV")}>CSV</Button>
           <Button onClick={() => downloadData("JSON")}>JSON</Button>
-        </div>
-      )}
+        </div> */}
+        <Modal isOpen={isOpen}
+        onClose={() => setIsOpen(false)}>
+        <ModalHeader
+        onClose={() => setIsOpen(false)}
+          heading="Export as"
+        />
+
+        {/* <ModalBody>
+          <div className="new-project-dialog">
+           
+          </div>
+        </ModalBody> */}
+        <ModalFooter>
+          <Button onClick={() => downloadData("CSV")}>
+            CSV
+          </Button>
+          <Button onClick={() => downloadData("JSON")}>
+            JSON
+          </Button>
+        </ModalFooter>
+      </Modal>
+      {/*  )} */}
     </div>
   );
 };

@@ -38,7 +38,7 @@ import ChipsInput from "../labels/page";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
-  faTrash,faEye,faPlus,faPenToSquare,faCircleDot,faTurnUp,faStar
+  faTrash,faEye,faPlus,faPenToSquare,faCircleDot,faTurnUp,faStar, faAnglesUp
 } from "@fortawesome/free-solid-svg-icons";
 
 const testcases = () => {
@@ -57,6 +57,7 @@ const testcases = () => {
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [isEditUsecaseDialogOpen, setIsEditUsecaseDialogOpen] =
     useState<any>(false);
+    const classNameTable = data?.length === 0 ? "empty-table" : "data-table";
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -125,23 +126,8 @@ const testcases = () => {
           </Button>
         </ContextBar>
         <div className="page">
-          <div className="main-wrapper">
+          {/* <div className="main-wrapper">
             <div className="cards">
-              {/* <div className="information card">
-            <span className="tag">hello</span>
-            <h2 className="title">testCase.description</h2>
-            <p className="info">testCase.summary</p>
-            <dl className="details">
-              <div>
-                <dt>Priority</dt>
-                <dd>testCase.priority</dd>
-              </div>
-              <div>
-                <dt>Comments</dt>
-                <dd>testCase.comments</dd>
-              </div>
-            </dl>
-          </div> */}
               {testCases.map((testCase) => (
                 <div key={testCase.id} className="information card">
                   <div className="priority">
@@ -164,15 +150,56 @@ const testcases = () => {
                       <dt>Labels</dt>
                       <dd><ChipsInput labels={testCase.labels} /></dd>
                     </div>
-                    {/* <div>
-                      <dt>Comments</dt>
-                      <dd>{testCase.comments}</dd>
-                    </div> */}
+                    { <div>
+                    //   <dt>Comments</dt>
+                    //   <dd>{testCase.comments}</dd>
+                    // </div> }
                   </dl>
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
+          <table className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}>
+            <thead>
+              <tr>
+                <th>Priority</th>
+                <th>Overview</th>
+                <th>Summary</th>
+                <th>Components</th>
+                <th>Steps</th>
+                <th>Expected Outcome</th>
+                <th>Labels</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {testCases?.map((testCase, index) => (
+                <tr
+                  key={index}
+                  tabIndex={0}
+                >
+                  <td><div className="priority">
+                  <span className={`tag ${testCase.priority==='High'?'red':'yellow'}`}>
+                  <FontAwesomeIcon icon={faAnglesUp} size="sm" /></span><p>{testCase.priority}</p>
+                  </div></td>
+                  <td>{testCase.description.overview}</td>
+                  <td>{testCase.summary}</td>
+                  <td><span className="components">{testCase.components}</span></td>
+                  <td>
+                  <ul>
+
+                  
+                  {testCase.description.steps.map((step)=>(
+                    <li><p>{step}</p></li>
+                  ))}
+                  </ul>
+                  </td>
+                  <td>{testCase.description.expectedOutcome}</td>
+                  <td><ChipsInput labels={testCase.labels} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
       <Modal

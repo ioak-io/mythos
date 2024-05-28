@@ -211,24 +211,27 @@ const Usecases = () => {
     <>
       <div>
       <ContextBar title="Usecase list">
-      <ExportDropdown suiteId={suiteId}></ExportDropdown>
-          <Button onClick={getProjectData} >
-            Edit Project
-          </Button>
+      {(data?.length != 0) &&
+      <><ExportDropdown suiteId={suiteId}></ExportDropdown><Button onClick={getProjectData}>
+              Edit Project
+            </Button><div className="usecase_action">
+                <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
+                  <FontAwesomeIcon icon={faPlus} /> Add Usecase
+                </Button>
+              </div></>}
         </ContextBar>
         <div className="page">
-          {(data?.length != 0) &&<div className="usecase_action">
+          {/* {(data?.length != 0) &&<div className="usecase_action">
           <Button theme={ThemeType.primary} onClick={() => setIsNewUsecaseDialogOpen(true)} >
           <FontAwesomeIcon icon={faPlus} /> Add Usecase
           </Button>
-          {/* <ExportDropdown suiteId={suiteId}></ExportDropdown> */}
-          </div>}
+          </div>} */}
           <table className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}>
             <thead>
               <tr>
                 <th>Usecase name</th>
                 <th>Created on</th>
-                <th style={{ textAlign: 'center' }}>Status</th>
+                <th style={{ textAlign: 'center' }}>Testcases</th>
                <th></th>
               </tr>
             </thead>
@@ -240,11 +243,11 @@ const Usecases = () => {
                 >
                   <td>{item.description}</td>
                   <td>{item.createdDate}</td>
-                  <td><div className="check_icon"><FontAwesomeIcon icon={faCircleCheck} size="sm" /></div></td>
+                  <td className="count"><div className="count_icon">5</div></td>
                   <td>
                     <div className="action_icons">
                     <Button  variant="outline" size="large" onClick={() => navigateToTestcase(item.id || "")}>
-              <FontAwesomeIcon icon={faEye} size="sm" /> View</Button>
+              <FontAwesomeIcon icon={faEye} size="sm" /> Testcases</Button>
                   {/* <IconButton circle={true} variant="outline" onClick={() => navigateToTestcase(item.id || "")}>
                     <FontAwesomeIcon
                       icon={faEye}

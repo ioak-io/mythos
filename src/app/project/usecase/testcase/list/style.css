@@ -142,17 +142,17 @@
 }
 
 .css-gavykb-MuiChip-root{
-    background-color: var(--theme-adaptive-800) !important;
+    background-color: var(--theme-adaptive-600) !important;
     color: var(--theme-adaptive-100i) !important;
     height: unset !important;
 }
 
-.information .red {
-    background-color: red;
+.priority .red {
+    color: var(--theme-danger-500);
 }
 
-.information .yellow{
-    background-color:orange;
+.priority .yellow{
+    color:var(--theme-warning-500);
 }
 
 .outcome{
@@ -171,3 +171,21 @@
     font-weight: 600;
     margin: 0;
 }
+
+.basicui-table {
+    background-color: var(--theme-adaptive-300);
+  }
+  
+  .usecase-table thead {
+    background-color: var(--theme-adaptive-600);
+  }
+  
+  .basicui-dark .basicui-table thead tr th {
+    border-bottom: 0px;
+  }
+  
+  .basicui-dark .basicui-table tbody tr td {
+    border-top: 0px;
+    border-bottom: 1px solid var(--theme-adaptive-600);
+    height: 80px;
+  }
