@@ -163,13 +163,9 @@ const testcases = () => {
             <thead>
               <tr>
                 <th>Priority</th>
-                <th>Overview</th>
+                <th>Description</th>
                 <th>Summary</th>
-                <th>Components</th>
-                <th>Steps</th>
-                <th>Expected Outcome</th>
-                <th>Labels</th>
-                
+                <th>Components</th> 
               </tr>
             </thead>
             <tbody>
@@ -182,20 +178,9 @@ const testcases = () => {
                   <span className={`tag ${testCase.priority==='High'?'red':'yellow'}`}>
                   <FontAwesomeIcon icon={faAnglesUp} size="sm" /></span><p>{testCase.priority}</p>
                   </div></td>
-                  <td>{testCase.description.overview}</td>
-                  <td>{testCase.summary}</td>
+                  <td><pre>{testCase.serializedDescription}</pre></td>
+                  <td><div className="summary">{testCase.summary} <ChipsInput labels={testCase.labels} /></div></td>
                   <td><span className="components">{testCase.components}</span></td>
-                  <td>
-                  <ul>
-
-                  
-                  {testCase.description.steps.map((step)=>(
-                    <li><p>{step}</p></li>
-                  ))}
-                  </ul>
-                  </td>
-                  <td>{testCase.description.expectedOutcome}</td>
-                  <td><ChipsInput labels={testCase.labels} /></td>
                 </tr>
               ))}
             </tbody>

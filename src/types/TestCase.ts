@@ -12,5 +12,6 @@ export type  TestCase = {
     createdDate: string;
     lastModifiedBy: string | null;
     lastModifiedDate: string;
+    serializedDescription:string;
   }
   

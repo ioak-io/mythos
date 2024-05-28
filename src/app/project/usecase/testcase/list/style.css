@@ -172,6 +172,12 @@
     margin: 0;
 }
 
+.summary{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .basicui-table {
     background-color: var(--theme-adaptive-300);
   }
