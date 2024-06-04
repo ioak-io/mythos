@@ -40,9 +40,7 @@ const LoginPage = (props: Props) => {
     useState<AuthliteTypes.SignupFormErrorMessages>({});
 
   useEffect(() => {
-    AuthorizationState.subscribe((message) => {
-      setAuthorization(message);
-    });
+    AuthorizationState.next({});
   }, []);
 
   const onSignin = (payload: AuthliteTypes.SigninRequest) => {
