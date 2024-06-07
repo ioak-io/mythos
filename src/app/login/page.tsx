@@ -131,7 +131,7 @@ const LoginPage = (props: Props) => {
       view={view}
       changeView={setView}
     >
-      <AuthliteComponents.Logo>Talent Probe</AuthliteComponents.Logo>
+      <AuthliteComponents.Logo>Test Genie</AuthliteComponents.Logo>
       <AuthliteComponents.Placeholder>
         {successPage === "signin" && (
           <AuthliteComponents.InfoPage heading="Authentication successful!">

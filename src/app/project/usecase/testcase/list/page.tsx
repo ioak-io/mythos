@@ -178,7 +178,7 @@ const testcases = () => {
                   <span className={`tag ${testCase.priority==='High'?'red':'yellow'}`}>
                   <FontAwesomeIcon icon={faAnglesUp} size="sm" /></span><p>{testCase.priority}</p>
                   </div></td>
-                  <td><pre>{testCase.serializedDescription}</pre></td>
+                  <td><pre className="description">{testCase.serializedDescription}</pre></td>
                   <td><div className="summary">{testCase.summary} <ChipsInput labels={testCase.labels} /></div></td>
                   <td><span className="components">{testCase.components}</span></td>
                 </tr>

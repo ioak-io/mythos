@@ -194,4 +194,14 @@
     border-top: 0px;
     border-bottom: 1px solid var(--theme-adaptive-600);
     height: 80px;
+    vertical-align: top;
+  }
+
+  .basicui-dark .basicui-table tbody tr td pre{
+    margin:0;
+  }
+
+  .description{
+    white-space: break-spaces;
+    vertical-align: top;
   }

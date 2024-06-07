@@ -56,32 +56,31 @@ const Navbar = () => {
   return (
     <>
       <nav className="navbar">
-        <ul>
-          <li>
-            <Link href="/project/list">All projects</Link>
-          </li>
-        </ul>
-        <div className="navbar_right">
-          <div>
-            {darkMode && (
-              <IconButton onClick={toggleDarkMode} circle={true}>
-                <FontAwesomeIcon icon={faSun} size="xs" />
-              </IconButton>
-            )}
-            {!darkMode && (
-              <IconButton onClick={toggleDarkMode} circle={true}>
-                <FontAwesomeIcon icon={faMoon} size="xs" />
-              </IconButton>
-            )}
-          </div>
-          {authorization?.isAuth && (
-          <div className="logout">
-              <IconButton onClick={() => setIsLogoutDialogOpen(true)} circle={true}>
-                <FontAwesomeIcon icon={faPowerOff} size="xs" />
-              </IconButton>
-            </div>
-            )}
-        </div>
+      {authorization?.isAuth && (
+        <><ul>
+            <li>
+              <Link href="/project/list">All projects</Link>
+            </li>
+          </ul><div className="navbar_right">
+              <div>
+                {darkMode && (
+                  <IconButton onClick={toggleDarkMode} circle={true}>
+                    <FontAwesomeIcon icon={faSun} size="xs" />
+                  </IconButton>
+                )}
+                {!darkMode && (
+                  <IconButton onClick={toggleDarkMode} circle={true}>
+                    <FontAwesomeIcon icon={faMoon} size="xs" />
+                  </IconButton>
+                )}
+              </div>
+              <div className="logout">
+                <IconButton onClick={() => setIsLogoutDialogOpen(true)} circle={true}>
+                  <FontAwesomeIcon icon={faPowerOff} size="xs" />
+                </IconButton>
+              </div>
+            </div></>
+         )}
       </nav>
       <Modal
         isOpen={isLogoutDialogOpen}
@@ -94,7 +93,7 @@ const Navbar = () => {
 
         <ModalBody>
           <div className="new-project-dialog">
-            <p>Are you sure to logout?</p>
+            <p>Are you sure you want to log out?</p>
           </div>
         </ModalBody>
         <ModalFooter>
