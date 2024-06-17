@@ -199,10 +199,6 @@ const Usecases = () => {
     });
   };
 
-  const navigateToFeedback = () => {
-    router.push(`../feedbackForm`);
-  }
-
   if (!isRouteAuthorized) {
     return <></>;
   }
@@ -291,7 +287,7 @@ const Usecases = () => {
 
         <ModalBody>
           <div className="new-project-dialog">
-            <p>Are you sure to delete this usecase?</p>
+            <p>Are you sure you want to delete this usecase?</p>
           </div>
         </ModalBody>
         <ModalFooter>

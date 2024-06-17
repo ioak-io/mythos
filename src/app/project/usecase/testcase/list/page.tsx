@@ -16,6 +16,7 @@ import {
 } from "next/navigation";
 import { Project } from "@/types/Project";
 import {
+  deleteUseCase,
   editUseCaseById,
   getAllUseCases,
   getUseCaseById,
@@ -57,7 +58,7 @@ const testcases = () => {
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [isEditUsecaseDialogOpen, setIsEditUsecaseDialogOpen] =
     useState<any>(false);
-    const classNameTable = data?.length === 0 ? "empty-table" : "data-table";
+  const classNameTable = data?.length === 0 ? "empty-table" : "data-table";
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -116,6 +117,13 @@ const testcases = () => {
       setIsEditUsecaseDialogOpen(false)
     });
   };
+
+  const handleDelete = () => {
+    deleteUseCase(searchParams.get("suiteId"),
+    searchParams.get("id"), authorization).then((response) => {
+      router.back();
+    });
+  }
 
   return (
     <>
@@ -208,14 +216,25 @@ const testcases = () => {
             </form>
           </div>
         </ModalBody>
-        <ModalFooter>
-          <Button theme={ThemeType.primary} onClick={updateUsecase}>
-            Save
-          </Button>
-          <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
-            Close
-          </Button>
-        </ModalFooter>
+        <div className="editor_footer_container">
+          <ModalFooter>
+            <div className="editor_footer">
+              <div className="footer_delete">
+                <Button theme={ThemeType.danger}  onClick={handleDelete}>
+                  Delete
+                </Button>
+              </div>
+              <div className="footer_save">
+                <Button theme={ThemeType.primary} onClick={updateUsecase}>
+                  Save
+                </Button>
+                <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          </ModalFooter>
+        </div>
       </Modal>
     </>
   );
