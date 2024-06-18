@@ -19,6 +19,7 @@ import {
   saveProject,
   deleteProject,
   editProject,
+  suiteTestcaseGeneration,
 } from "./service";
 import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
@@ -37,7 +38,7 @@ import {
   faCalendar,
   faDiagramProject,
   faSearch,
-  faPenToSquare
+  faPenToSquare,faMagicWandSparkles
 } from "@fortawesome/free-solid-svg-icons";
 import { Card, CardContent, Typography } from "@mui/material";
 import { Box, Grid } from "@mui/material";
@@ -117,6 +118,12 @@ const ListProjectPage = () => {
   const navigateToUsecase = (suiteId: string) => {
     router.push(`/project/usecase/list/?suiteId=${suiteId}`);
   };
+
+  const generateTestcaseForSuite = (item:any) => {
+    suiteTestcaseGeneration(item.id,authorization).then((response: any) => {
+      console.log(response)
+    });
+  }
 
   useEffect(() => {
     if (authorization.isAuth) {
@@ -236,6 +243,8 @@ const ListProjectPage = () => {
                 <p className={item.createdDate === "New" ? "new_item" : "old_item"}>{item.createdDate}</p>
                 </div>
                 <div className="action_buttons">
+                <Button  variant="outline" size="large" onClick={() => generateTestcaseForSuite(item|| "")}>
+              <FontAwesomeIcon icon={faMagicWandSparkles} size="sm" /> Generate Tescases</Button>
               <Button  variant="outline" size="large" onClick={() => navigateToUsecase(item.id || "")}>
               <FontAwesomeIcon icon={faEye} size="sm" /> Usecases</Button>
                 {/* <Button  size="large" onClick={() => {
