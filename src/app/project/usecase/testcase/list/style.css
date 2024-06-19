@@ -205,3 +205,17 @@
     white-space: break-spaces;
     vertical-align: top;
   }
+
+  .editor_footer_container .basicui-modal-footer {
+    display: block;
+  }
+  
+  .editor_footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .footer_save {
+    display: flex;
+  }

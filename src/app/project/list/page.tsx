@@ -19,7 +19,7 @@ import {
   saveProject,
   deleteProject,
   editProject,
-  suiteTestcaseGeneration,
+  generateConsolidatedTestcase,
 } from "./service";
 import { Project } from "@/types/Project";
 import { Authorization } from "@/types/Authorization";
@@ -120,7 +120,7 @@ const ListProjectPage = () => {
   };
 
   const generateTestcaseForSuite = (item:any) => {
-    suiteTestcaseGeneration(item.id,authorization).then((response: any) => {
+    generateConsolidatedTestcase(item.id,authorization).then((response: any) => {
       console.log(response)
     });
   }
@@ -216,24 +216,24 @@ const ListProjectPage = () => {
              onChange={(e:any) => setSearchQuery(e.target.value)}/>
           </div>
           <div>
+          {(filteredData?.length!==0) &&
           <Button onClick={() => setIsNewProjectDialogOpen(true)}>
           <FontAwesomeIcon icon={faPlus} /> New project
           </Button>
+          }
           </div>
           </div>
           
           </div>
           <div className="listing_pages">
-          {/* <div className="details_list"  >
-                <h6>
-                PROJECT NAME
-                </h6>
-                <div className="action_buttons">
-                <h6>
-                ACTION
-                </h6>
-                </div>
-            </div> */}
+          {(filteredData?.length===0) &&
+          <div className="no_table_data">
+            <h2>No Projects Available </h2>
+            <p>Please add projects</p>
+            <Button theme={ThemeType.primary} onClick={() => setIsNewProjectDialogOpen(true)}>
+              <FontAwesomeIcon icon={faPlus} /> Add new project
+            </Button>
+            </div>}
           {filteredData?.map((item, index) => (
             <div className="details_list"  key={index}>
               <div className="details">
@@ -243,8 +243,8 @@ const ListProjectPage = () => {
                 <p className={item.createdDate === "New" ? "new_item" : "old_item"}>{item.createdDate}</p>
                 </div>
                 <div className="action_buttons">
-                <Button  variant="outline" size="large" onClick={() => generateTestcaseForSuite(item|| "")}>
-              <FontAwesomeIcon icon={faMagicWandSparkles} size="sm" /> Generate Tescases</Button>
+                {/* <Button  variant="outline" size="large" onClick={() => generateTestcaseForSuite(item|| "")}>
+              <FontAwesomeIcon icon={faMagicWandSparkles} size="sm" /> Generate Tescases</Button> */}
               <Button  variant="outline" size="large" onClick={() => navigateToUsecase(item.id || "")}>
               <FontAwesomeIcon icon={faEye} size="sm" /> Usecases</Button>
                 {/* <Button  size="large" onClick={() => {

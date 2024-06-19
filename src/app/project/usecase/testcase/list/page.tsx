@@ -130,7 +130,7 @@ const testcases = () => {
       <div>
         <ContextBar title="Testcases">
           <Button onClick={() => setIsEditUsecaseDialogOpen(true)}>
-            Edit Usecase
+          <FontAwesomeIcon icon={faPen}/>Edit Usecase
           </Button>
         </ContextBar>
         <div className="page">

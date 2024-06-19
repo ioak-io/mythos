@@ -18,9 +18,9 @@ import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
-  faTrash,faEye,faPlus,faPenToSquare,faCircleCheck
+  faEye,faPlus,faCircleCheck,faMagicWandSparkles
 } from "@fortawesome/free-solid-svg-icons";
-import { deleteUseCase, editUseCaseById, getAllUseCases, getUseCaseById, saveUseCase } from "./service";
+import { deleteUseCase, editUseCaseById, generateConsolidatedTestcase, getAllUseCases, getConsolidatedTestcases, getUseCaseById, saveUseCase } from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
@@ -93,6 +93,10 @@ const Usecases = () => {
     router.push(`testcase/list?id=${id}&suiteId=${suiteId}`);
   }
 
+  const navigateToConsolidatedTestcase = () => {
+    router.push(`testcase/consolidatedlist?suiteId=${suiteId}`);
+  }
+
   const manageUseCase = (item:any) => {
     // router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
     setIsEditUsecaseDialogOpen(true)
@@ -122,6 +126,7 @@ const Usecases = () => {
     saveUseCase(suiteId,newUsecaseForm, authorization).then((response: any) => {
       setIsNewUsecaseDialogOpen(false);
       fetchUseCases();
+      setNewUsecaseForm({description:''});
     });
   };
 
@@ -199,6 +204,12 @@ const Usecases = () => {
     });
   };
 
+  const generateTestcaseForSuite = (suiteId:any) => {
+    generateConsolidatedTestcase(suiteId,authorization).then((response: any) => {
+      console.log(response)
+    });
+  }
+
   if (!isRouteAuthorized) {
     return <></>;
   }
@@ -209,7 +220,7 @@ const Usecases = () => {
       <ContextBar title="Usecase list">
       {(data?.length != 0) &&
       <><ExportDropdown suiteId={suiteId}></ExportDropdown><Button onClick={getProjectData}>
-              Edit Project
+             <FontAwesomeIcon icon={faPen} /> Edit Project
             </Button><div className="usecase_action">
                 <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
                   <FontAwesomeIcon icon={faPlus} /> Add Usecase
@@ -217,11 +228,14 @@ const Usecases = () => {
               </div></>}
         </ContextBar>
         <div className="page">
-          {/* {(data?.length != 0) &&<div className="usecase_action">
-          <Button theme={ThemeType.primary} onClick={() => setIsNewUsecaseDialogOpen(true)} >
-          <FontAwesomeIcon icon={faPlus} /> Add Usecase
+          {(data?.length != 0) &&<div className="usecase_action">
+          {/* <Button variant="outline" size="large" onClick={() => generateTestcaseForSuite(suiteId)} >
+          <FontAwesomeIcon icon={faMagicWandSparkles} /> Generate Testcases
+          </Button> */}
+          <Button variant="outline" size="medium" onClick={() => navigateToConsolidatedTestcase()} >
+          <FontAwesomeIcon icon={faEye} /> View All Testcases
           </Button>
-          </div>} */}
+          </div>}
           <table className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}>
             <thead>
               <tr>

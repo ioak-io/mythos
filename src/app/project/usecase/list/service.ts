@@ -87,3 +87,39 @@ export const deleteUseCase = (suiteid:string, usecaseid:string, authorization?: 
       return Promise.resolve({});
     });
 };
+
+
+export const generateConsolidatedTestcase = (suiteId:string, authorization?: any) => {
+  return httpPost(`/suite/${suiteId}/usecase/testcase`,null, {
+    headers: {
+      Authorization: authorization?.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+      return Promise.resolve({});
+    })
+    .catch((error) => {
+      return Promise.resolve({});
+    });
+};
+
+export const getConsolidatedTestcases = (suiteId:string, authorization?: any) => {
+  console.log(authorization?.access_token)
+  return httpGet(`/suite/${suiteId}/usecase/testcase`, {
+    headers: {
+      Authorization: authorization?.access_token,
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return Promise.resolve(response.data);
+      }
+      return Promise.resolve({});
+    })
+    .catch((error) => {
+      return Promise.resolve({});
+    });
+};

@@ -1,0 +1,161 @@
+:root {
+    --c-white: #fff;
+    --c-black: #000;
+    --c-ash: #eaeef6;
+    --c-charcoal: #a0a0a0;
+    --c-fair-pink: #FFEDEC;
+    --c-apricot: #FBC8BE;
+    --c-coffee: #754D42;
+    --c-del-rio: #917072;
+    --c-java: #1FCAC5;
+    --c-titan-white: #f1eeff;
+    --c-cold-purple: #a69fd6;
+    --c-indigo: #6558d3;
+    --c-governor: #4133B7;
+}
+
+.main-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+
+
+.css-gavykb-MuiChip-root{
+    background-color: var(--theme-adaptive-600) !important;
+    color: var(--theme-adaptive-100i) !important;
+    height: unset !important;
+}
+
+.priority .red {
+    color: var(--theme-danger-500);
+}
+
+.priority .yellow{
+    color:var(--theme-warning-500);
+}
+
+.outcome{
+    display: flex;
+}
+
+.priority{
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    justify-content: flex-start;
+    padding: 3px;
+}
+
+.priority p{
+    font-weight: 600;
+    margin: 0;
+}
+
+.summary{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.basicui-table {
+    background-color: var(--theme-adaptive-300);
+  }
+  
+  .usecase-table thead {
+    background-color: var(--theme-adaptive-600);
+  }
+  
+  .basicui-dark .basicui-table thead tr th {
+    border-bottom: 0px;
+  }
+  
+  .basicui-dark .basicui-table tbody tr td {
+    border-top: 0px;
+    border-bottom: 1px solid var(--theme-adaptive-600);
+    height: 80px;
+    vertical-align: top;
+  }
+
+  .basicui-dark .basicui-table tbody tr td pre{
+    margin:0;
+  }
+
+  .description{
+    white-space: break-spaces;
+    vertical-align: top;
+  }
+
+  .editor_footer_container .basicui-modal-footer {
+    display: block;
+  }
+  
+  .editor_footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .footer_save {
+    display: flex;
+  }
+
+  .no_table_data {
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Loader styles */
+ 
+  @keyframes pulse {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: .25;
+      transform: scale(.75);
+    }
+  }
+  
+  
+  .spinner-box {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  
+  /* PULSE BUBBLES */
+  
+  .pulse-container {
+    width: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pulse-bubble {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--theme-primary-500);
+  }
+  
+  .pulse-bubble-1 {
+      animation: pulse .4s ease 0s infinite alternate;
+  }
+  .pulse-bubble-2 {
+      animation: pulse .4s ease .2s infinite alternate;
+  }
+  .pulse-bubble-3 {
+      animation: pulse .4s ease .4s infinite alternate;
+  }
+  
