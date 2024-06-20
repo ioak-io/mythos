@@ -77,6 +77,7 @@ const Usecases = () => {
     name: "",
   });
   const [projects, setProjects] = useState<Project[]>();
+  const [isLoad, setIsLoad] = useState(false);
   const classNameTable = data?.length === 0 ? "empty-table" : "data-table";
 
   useEffect(() => {
@@ -150,9 +151,11 @@ const Usecases = () => {
   };
 
   const handleSaveNewUsecase = () => {
+    setIsNewUsecaseDialogOpen(false);
+    setIsLoad(true);
     saveUseCase(suiteId, newUsecaseForm, authorization).then(
       (response: any) => {
-        setIsNewUsecaseDialogOpen(false);
+        setIsLoad(false);
         fetchUseCases();
         setNewUsecaseForm({ description: "" });
       }
@@ -260,11 +263,20 @@ const Usecases = () => {
           )}
         </ContextBar>
         <div className="page">
+        {isLoad && (
+            <div className="loader-container">
+              <div className="spinner-box">
+                <div className="pulse-container">  
+                <div className="pulse-bubble pulse-bubble-1"></div>
+                <div className="pulse-bubble pulse-bubble-2"></div>
+                <div className="pulse-bubble pulse-bubble-3"></div>
+                </div>
+                <p>Adding usecase, please hold on....</p>
+               </div>
+            </div>
+          )}
           {data?.length != 0 && (
-            <div className="usecase_action">
-              {/* <Button variant="outline" size="large" onClick={() => generateTestcaseForSuite(suiteId)} >
-          <FontAwesomeIcon icon={faMagicWandSparkles} /> Generate Testcases
-          </Button> */}
+            <div className="all_test_button">
               <Button
                 variant="outline"
                 size="medium"
@@ -319,7 +331,7 @@ const Usecases = () => {
               ))}
             </tbody>
           </table>
-          {data?.length === 0 && (
+          {data?.length === 0 && !isLoad && (
             <div className="no_table_data">
               <h2>No Data Available </h2>
               <p>Please add usecases for the project</p>
@@ -371,7 +383,7 @@ const Usecases = () => {
             <Textarea
               name="description"
               value={newUsecaseForm.description}
-              label="usecase name"
+              label="usecase description"
               onInput={handleChange}
               autoFocus
             />

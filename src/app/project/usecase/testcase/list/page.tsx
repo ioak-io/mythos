@@ -39,7 +39,7 @@ import ChipsInput from "../labels/page";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
-  faTrash,faEye,faPlus,faPenToSquare,faCircleDot,faTurnUp,faStar, faAnglesUp
+  faTrash,faEye,faPlus,faPenToSquare,faCircleDot,faTurnUp,faStar, faAnglesUp,faXmark
 } from "@fortawesome/free-solid-svg-icons";
 
 const testcases = () => {
@@ -125,10 +125,17 @@ const testcases = () => {
     });
   }
 
+  const closeTestcases = () => {
+    router.back();
+  }
+
   return (
     <>
       <div>
         <ContextBar title="Testcases">
+        <Button onClick={closeTestcases}>
+          <FontAwesomeIcon icon={faXmark}/>Close
+          </Button>
           <Button onClick={() => setIsEditUsecaseDialogOpen(true)}>
           <FontAwesomeIcon icon={faPen}/>Edit Usecase
           </Button>
@@ -170,6 +177,7 @@ const testcases = () => {
           <table className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}>
             <thead>
               <tr>
+                <th>S.No</th>
                 <th>Priority</th>
                 <th>Description</th>
                 <th>Summary</th>
@@ -182,6 +190,7 @@ const testcases = () => {
                   key={index}
                   tabIndex={0}
                 >
+                  <td>{index +1}.</td>
                   <td><div className="priority">
                   <span className={`tag ${testCase.priority==='High'?'red':'yellow'}`}>
                   <FontAwesomeIcon icon={faAnglesUp} size="sm" /></span><p>{testCase.priority}</p>

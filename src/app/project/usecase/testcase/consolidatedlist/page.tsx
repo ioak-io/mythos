@@ -29,7 +29,7 @@ import ChipsInput from "../labels/page";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAnglesUp,
-  faMagicWandSparkles,faRepeat
+  faMagicWandSparkles,faRepeat,faXmark
 } from "@fortawesome/free-solid-svg-icons";
 
 const testcases = () => {
@@ -86,6 +86,10 @@ const testcases = () => {
   };
 
 
+  const closeTestcases = () => {
+    router.back();
+  }
+
 
 
   return (
@@ -93,13 +97,15 @@ const testcases = () => {
       <div>
         <ContextBar title="Testcases">
         {testCases?.length !== 0 &&
-        <Button
-                theme={ThemeType.primary}
-                onClick={() => generateTestcaseForSuite()}
-              >
+        <><Button onClick={closeTestcases}>
+              <FontAwesomeIcon icon={faXmark} />Close
+            </Button><Button
+              theme={ThemeType.primary}
+              onClick={() => generateTestcaseForSuite()}
+            >
                 <FontAwesomeIcon icon={faRepeat} /> Regenerate
                 Testcases
-              </Button>
+              </Button></>
         }
         </ContextBar>
         <div className="page">
@@ -109,6 +115,7 @@ const testcases = () => {
             >
               <thead>
                 <tr>
+                  <th>S.No</th>
                   <th>Priority</th>
                   <th>Description</th>
                   <th>Summary</th>
@@ -118,6 +125,7 @@ const testcases = () => {
               <tbody>
                 {testCases?.map((testCase, index) => (
                   <tr key={index} tabIndex={0}>
+                    <td>{index+1}.</td>
                     <td>
                       <div className="priority">
                         <span
