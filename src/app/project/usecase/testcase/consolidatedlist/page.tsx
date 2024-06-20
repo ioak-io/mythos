@@ -29,7 +29,7 @@ import ChipsInput from "../labels/page";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAnglesUp,
-  faMagicWandSparkles,
+  faMagicWandSparkles,faRepeat
 } from "@fortawesome/free-solid-svg-icons";
 
 const testcases = () => {
@@ -92,9 +92,18 @@ const testcases = () => {
     <>
       <div>
         <ContextBar title="Testcases">
+        {testCases?.length !== 0 &&
+        <Button
+                theme={ThemeType.primary}
+                onClick={() => generateTestcaseForSuite()}
+              >
+                <FontAwesomeIcon icon={faRepeat} /> Regenerate
+                Testcases
+              </Button>
+        }
         </ContextBar>
         <div className="page">
-          {testCases?.length !== 0 && (
+          {testCases?.length !== 0 && !isLoad &&(
             <table
               className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}
             >
