@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { setSessionValue } from "@/lib/SessionUtils";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { Authorization } from "@/types/Authorization";
+import Logo from "@/components/Logo";
 
 interface Props {}
 
@@ -131,7 +132,9 @@ const LoginPage = (props: Props) => {
       view={view}
       changeView={setView}
     >
-      <AuthliteComponents.Logo>Test Genie</AuthliteComponents.Logo>
+      <AuthliteComponents.Logo>
+        <Logo black />
+      </AuthliteComponents.Logo>
       <AuthliteComponents.Placeholder>
         {successPage === "signin" && (
           <AuthliteComponents.InfoPage heading="Authentication successful!">

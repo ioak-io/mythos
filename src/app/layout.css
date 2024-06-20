@@ -16,3 +16,20 @@ main {
   height: 16px;
   width: 16px;
 }
+
+
+.large-search-bar {
+  margin-bottom: 24px;
+}
+.large-search-bar input {
+  height: 52px;
+  font-size: 24px;
+  background-color: var(--theme-white-100);
+  border-color: var(--theme-white-700);
+  border-radius: 6px;
+  padding: 0 12px;
+}
+.basicui-dark .large-search-bar input {
+  background-color: var(--theme-black-50);
+  border-color: var(--theme-black-extended-600);
+}

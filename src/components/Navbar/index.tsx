@@ -22,6 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { Authorization } from "@/types/Authorization";
+import Logo from "../Logo";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -56,6 +57,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="navbar">
+      <Logo />
       {authorization?.isAuth && (
         <><ul>
             <li>

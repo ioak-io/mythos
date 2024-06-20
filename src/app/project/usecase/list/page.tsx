@@ -10,20 +10,43 @@ import {
   ModalFooter,
   ModalHeader,
   ThemeType,
-  IconButton,Table
+  IconButton,
+  Table,
 } from "basicui";
-import { redirect, useRouter, useSearchParams, usePathname } from "next/navigation";
+import {
+  redirect,
+  useRouter,
+  useSearchParams,
+  usePathname,
+} from "next/navigation";
 import { Project } from "@/types/Project";
 import "./style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPen,
-  faEye,faPlus,faCircleCheck,faMagicWandSparkles
+  faEye,
+  faPlus,
+  faCircleCheck,
+  faMagicWandSparkles,
+  faBug,
+  faBugs,
+  faSpider,
 } from "@fortawesome/free-solid-svg-icons";
-import { deleteUseCase, editUseCaseById, generateConsolidatedTestcase, getAllUseCases, getConsolidatedTestcases, getUseCaseById, saveUseCase } from "./service";
+import {
+  deleteUseCase,
+  editUseCaseById,
+  generateConsolidatedTestcase,
+  getAllUseCases,
+  getConsolidatedTestcases,
+  getUseCaseById,
+  saveUseCase,
+} from "./service";
 import { Authorization } from "@/types/Authorization";
 import { AuthorizationState } from "@/store/AuthorizationStore";
-import { PermissionType, useRouteAuthorization } from "@/lib/RouteAuthorizationHook";
+import {
+  PermissionType,
+  useRouteAuthorization,
+} from "@/lib/RouteAuthorizationHook";
 import ExportDropdown from "../export/page";
 import { deleteProject, editProject, getProjects } from "../../list/service";
 
@@ -37,13 +60,14 @@ const Usecases = () => {
   const [suiteId, setSuiteId] = useState<any>();
   const [data, setData] = useState<Project[]>();
   const [authorization, setAuthorization] = useState<Authorization>({});
-  const [isDeleteUsecaseDialogOpen, setIsDeleteUsecaseDialogOpen] = useState(false);
+  const [isDeleteUsecaseDialogOpen, setIsDeleteUsecaseDialogOpen] =
+    useState(false);
   const [isNewUsecaseDialogOpen, setIsNewUsecaseDialogOpen] = useState(false);
-  const [isEditUsecaseDialogOpen,setIsEditUsecaseDialogOpen] =useState(false);
+  const [isEditUsecaseDialogOpen, setIsEditUsecaseDialogOpen] = useState(false);
   const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false);
   const [useCaseToEdit, setUseCaseToEdit] = useState<Project>({
-    description:"",
-    id:""
+    description: "",
+    id: "",
   });
   const [toDeleteUsecaseId, setToDeleteUsecaseId] = useState("");
   const [newUsecaseForm, setNewUsecaseForm] = useState<any>({
@@ -57,63 +81,66 @@ const Usecases = () => {
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
-      console.log(message)
+      console.log(message);
       setAuthorization(message);
     });
   }, []);
 
-
   useEffect(() => {
-    setSuiteId(searchParams.get('suiteId'))
-    if (searchParams.get('suiteId')) {
+    setSuiteId(searchParams.get("suiteId"));
+    if (searchParams.get("suiteId")) {
       fetchUseCases();
     }
-  }, [authorization,searchParams]);
-
+  }, [authorization, searchParams]);
 
   const fetchUseCases = () => {
     if (authorization.isAuth) {
-    getAllUseCases(searchParams.get('suiteId'),authorization).then((response: any) => {
-      console.log(response);
-      const convertedData = response.map((item: { createdDate: string | number | Date; }) => {
-        const createdDate = new Date(item.createdDate);
-        const formattedDate = createdDate.toLocaleDateString('en-GB');
-        return {
-            ...item,
-            createdDate: formattedDate
-        };
-    });
-      setData(convertedData);
-    });
+      getAllUseCases(searchParams.get("suiteId"), authorization).then(
+        (response: any) => {
+          console.log(response);
+          const convertedData = response.map(
+            (item: { createdDate: string | number | Date }) => {
+              const createdDate = new Date(item.createdDate);
+              const formattedDate = createdDate.toLocaleDateString("en-GB");
+              return {
+                ...item,
+                createdDate: formattedDate,
+              };
+            }
+          );
+          setData(convertedData);
+        }
+      );
     }
   };
 
-
-  const navigateToTestcase = (id:string) => {
+  const navigateToTestcase = (id: string) => {
     router.push(`testcase/list?id=${id}&suiteId=${suiteId}`);
-  }
+  };
 
   const navigateToConsolidatedTestcase = () => {
     router.push(`testcase/consolidatedlist?suiteId=${suiteId}`);
-  }
+  };
 
-  const manageUseCase = (item:any) => {
+  const manageUseCase = (item: any) => {
     // router.push(`/project/usecase?id=${id}&suiteId=${suiteId}`);
-    setIsEditUsecaseDialogOpen(true)
-    fetchUseCaseById(item.id)
-  }
+    setIsEditUsecaseDialogOpen(true);
+    fetchUseCaseById(item.id);
+  };
 
   const handleDelete = () => {
-    deleteUseCase(suiteId, toDeleteUsecaseId, authorization).then((response) => {
-      fetchUseCases();
-      setIsDeleteUsecaseDialogOpen(false)
-    });
-  }
+    deleteUseCase(suiteId, toDeleteUsecaseId, authorization).then(
+      (response) => {
+        fetchUseCases();
+        setIsDeleteUsecaseDialogOpen(false);
+      }
+    );
+  };
 
-  const confirmDelete = (useCaseId:string) => {
-    setIsDeleteUsecaseDialogOpen(true)
+  const confirmDelete = (useCaseId: string) => {
+    setIsDeleteUsecaseDialogOpen(true);
     setToDeleteUsecaseId(useCaseId);
-  }
+  };
 
   const handleChange = (event: any) => {
     setNewUsecaseForm({
@@ -123,11 +150,13 @@ const Usecases = () => {
   };
 
   const handleSaveNewUsecase = () => {
-    saveUseCase(suiteId,newUsecaseForm, authorization).then((response: any) => {
-      setIsNewUsecaseDialogOpen(false);
-      fetchUseCases();
-      setNewUsecaseForm({description:''});
-    });
+    saveUseCase(suiteId, newUsecaseForm, authorization).then(
+      (response: any) => {
+        setIsNewUsecaseDialogOpen(false);
+        fetchUseCases();
+        setNewUsecaseForm({ description: "" });
+      }
+    );
   };
 
   const handleUsecaseChange = (event: any) => {
@@ -137,13 +166,9 @@ const Usecases = () => {
     });
   };
 
-  const fetchUseCaseById = (id:string) => {
+  const fetchUseCaseById = (id: string) => {
     if (authorization.isAuth) {
-      getUseCaseById(
-        suiteId,
-        id,
-        authorization
-      ).then((response) => {
+      getUseCaseById(suiteId, id, authorization).then((response) => {
         setUseCaseToEdit(response);
       });
     }
@@ -157,7 +182,7 @@ const Usecases = () => {
       authorization
     ).then((response) => {
       fetchUseCases();
-      setIsEditUsecaseDialogOpen(false)
+      setIsEditUsecaseDialogOpen(false);
     });
   };
 
@@ -191,103 +216,121 @@ const Usecases = () => {
     });
   };
 
-  const getProjectData = () =>{
-    setProjectData(projects?.find(project => project.id === suiteId));
-    console.log(projectData)
+  const getProjectData = () => {
+    setProjectData(projects?.find((project) => project.id === suiteId));
+    console.log(projectData);
     setIsEditProjectDialogOpen(true);
-  }
+  };
 
   const handleProjectDelete = () => {
     deleteProject(projectData.id, authorization).then((response) => {
       setIsEditProjectDialogOpen(false);
-       router.back();
+      router.back();
     });
   };
 
-  const generateTestcaseForSuite = (suiteId:any) => {
-    generateConsolidatedTestcase(suiteId,authorization).then((response: any) => {
-      console.log(response)
-    });
-  }
+  const generateTestcaseForSuite = (suiteId: any) => {
+    generateConsolidatedTestcase(suiteId, authorization).then(
+      (response: any) => {
+        console.log(response);
+      }
+    );
+  };
 
   if (!isRouteAuthorized) {
     return <></>;
   }
-  
+
   return (
     <>
       <div>
-      <ContextBar title="Usecase list">
-      {(data?.length != 0) &&
-      <><ExportDropdown suiteId={suiteId}></ExportDropdown><Button onClick={getProjectData}>
-             <FontAwesomeIcon icon={faPen} /> Edit Project
-            </Button><div className="usecase_action">
+        <ContextBar title="Usecase list">
+          {data?.length != 0 && (
+            <>
+              <ExportDropdown suiteId={suiteId}></ExportDropdown>
+              <Button onClick={getProjectData}>
+                <FontAwesomeIcon icon={faPen} /> Edit Project
+              </Button>
+              <div className="usecase_action">
                 <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
                   <FontAwesomeIcon icon={faPlus} /> Add Usecase
                 </Button>
-              </div></>}
+              </div>
+            </>
+          )}
         </ContextBar>
         <div className="page">
-          {(data?.length != 0) &&<div className="usecase_action">
-          {/* <Button variant="outline" size="large" onClick={() => generateTestcaseForSuite(suiteId)} >
+          {data?.length != 0 && (
+            <div className="usecase_action">
+              {/* <Button variant="outline" size="large" onClick={() => generateTestcaseForSuite(suiteId)} >
           <FontAwesomeIcon icon={faMagicWandSparkles} /> Generate Testcases
           </Button> */}
-          <Button variant="outline" size="medium" onClick={() => navigateToConsolidatedTestcase()} >
-          <FontAwesomeIcon icon={faEye} /> View All Testcases
-          </Button>
-          </div>}
-          <table className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}>
+              <Button
+                variant="outline"
+                size="medium"
+                onClick={() => navigateToConsolidatedTestcase()}
+              >
+                <FontAwesomeIcon icon={faSpider} /> All Tests
+              </Button>
+            </div>
+          )}
+          <table
+            className={`basicui-table theme-default table-hover usecase-table ${classNameTable}`}
+          >
             <thead>
               <tr>
-                <th>Usecase name</th>
+                <th>Usecase</th>
                 <th>Created on</th>
-                <th style={{ textAlign: 'center' }}>Testcases</th>
-               <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {data?.map((item, index) => (
-                <tr
-                  key={index}
-                  tabIndex={0}
-                >
+                <tr key={index} tabIndex={0}>
                   <td>{item.description}</td>
                   <td>{item.createdDate}</td>
-                  <td className="count"><div className="count_icon">5</div></td>
                   <td>
                     <div className="action_icons">
-                    <Button  variant="outline" size="large" onClick={() => navigateToTestcase(item.id || "")}>
-              <FontAwesomeIcon icon={faEye} size="sm" /> Testcases</Button>
-                  {/* <IconButton circle={true} variant="outline" onClick={() => navigateToTestcase(item.id || "")}>
+                      <Button
+                        variant="outline"
+                        size="large"
+                        onClick={() => navigateToTestcase(item.id || "")}
+                      >
+                        <FontAwesomeIcon icon={faBug} size="sm" /> Tests
+                      </Button>
+                      {/* <IconButton circle={true} variant="outline" onClick={() => navigateToTestcase(item.id || "")}>
                     <FontAwesomeIcon
                       icon={faEye}
                     />
                     </IconButton> */}
-                    {/* <IconButton circle={true} variant="fill" onClick={() => manageUseCase(item || "")}>
+                      {/* <IconButton circle={true} variant="fill" onClick={() => manageUseCase(item || "")}>
                     <FontAwesomeIcon className='edit_icon'
                       icon={faPenToSquare} 
                     />
                     </IconButton> */}
-                    {/* <IconButton circle={true} variant="outline" onClick={() => confirmDelete(item.id || "")}>
+                      {/* <IconButton circle={true} variant="outline" onClick={() => confirmDelete(item.id || "")}>
                     <FontAwesomeIcon
                       icon={faTrash} 
                     />
                     </IconButton> */}
-                    
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-         {(data?.length===0) &&
-          <div className="no_table_data">
-            <h2>No Data Available </h2>
-            <p>Please add usecases for the project</p>
-            <Button theme={ThemeType.primary} onClick={() => setIsNewUsecaseDialogOpen(true)} >
-              <FontAwesomeIcon icon={faPlus} /> Add Usecase
-            </Button>
-            </div>}
+          {data?.length === 0 && (
+            <div className="no_table_data">
+              <h2>No Data Available </h2>
+              <p>Please add usecases for the project</p>
+              <Button
+                theme={ThemeType.primary}
+                onClick={() => setIsNewUsecaseDialogOpen(true)}
+              >
+                <FontAwesomeIcon icon={faPlus} /> Add Usecase
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <Modal
@@ -398,7 +441,7 @@ const Usecases = () => {
         <ModalBody>
           <div className="new-project-dialog">
             <form className="project-detail-form">
-            {/* <Input
+              {/* <Input
                 label="Project"
                 name="name"
               /> */}
@@ -412,14 +455,14 @@ const Usecases = () => {
           </div>
         </ModalBody>
         <div className="editor_footer_container">
-        <ModalFooter>
-          {/* <Button theme={ThemeType.primary} onClick={updateUsecase}>
+          <ModalFooter>
+            {/* <Button theme={ThemeType.primary} onClick={updateUsecase}>
             Save
           </Button>
           <Button onClick={() => setIsEditUsecaseDialogOpen(false)}>
             Close
           </Button> */}
-          <div className="editor_footer">
+            <div className="editor_footer">
               <div className="footer_delete">
                 <Button theme={ThemeType.danger} onClick={handleDelete}>
                   Delete
@@ -434,10 +477,10 @@ const Usecases = () => {
                 </Button>
               </div>
             </div>
-        </ModalFooter>
+          </ModalFooter>
         </div>
       </Modal>
-      </>
+    </>
   );
 };
 

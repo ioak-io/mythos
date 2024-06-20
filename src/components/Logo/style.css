@@ -1,0 +1,22 @@
+.logo {
+  display: grid;
+  grid-auto-flow: column;
+}
+.logo .logo--image, .logo .logo--text {
+  display: flex;
+  align-items: center;
+}
+.logo .logo--image img, .logo .logo--text img {
+  height: 20px;
+}
+.logo--text {
+  width: auto;
+}
+.logo--text img {
+  height: 70% !important;
+}
+.logo--image {
+  /* width: 60px; */
+  display: flex;
+  justify-content: center;
+}
