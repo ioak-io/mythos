@@ -60,9 +60,6 @@ const Navbar = () => {
       <Logo />
       {authorization?.isAuth && (
         <><ul>
-            <li>
-              <Link href="/project/list">All projects</Link>
-            </li>
           </ul><div className="navbar_right">
               <div>
                 {darkMode && (
