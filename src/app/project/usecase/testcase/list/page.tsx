@@ -59,6 +59,7 @@ const testcases = () => {
   const [isEditUsecaseDialogOpen, setIsEditUsecaseDialogOpen] =
     useState<any>(false);
   const classNameTable = data?.length === 0 ? "empty-table" : "data-table";
+  const [isLoad, setIsLoad] = useState(false);
 
   useEffect(() => {
     AuthorizationState.subscribe((message) => {
@@ -107,6 +108,8 @@ const testcases = () => {
   };
 
   const updateUsecase = () => {
+    setIsEditUsecaseDialogOpen(false);
+    setIsLoad(true);
     editUseCaseById(
       searchParams.get("suiteId"),
       searchParams.get("id"),
@@ -114,7 +117,7 @@ const testcases = () => {
       authorization
     ).then((response) => {
       fetchTestCases();
-      setIsEditUsecaseDialogOpen(false)
+      setIsLoad(false);
     });
   };
 
@@ -141,6 +144,18 @@ const testcases = () => {
           </Button>
         </ContextBar>
         <div className="page">
+        {isLoad && (
+            <div className="loader-container">
+              <div className="spinner-box">
+                <div className="pulse-container">
+                  <div className="pulse-bubble pulse-bubble-1"></div>
+                  <div className="pulse-bubble pulse-bubble-2"></div>
+                  <div className="pulse-bubble pulse-bubble-3"></div>
+                </div>
+                <p>Adding usecase, please hold on....</p>
+              </div>
+            </div>
+          )}
           {/* <div className="main-wrapper">
             <div className="cards">
               {testCases.map((testCase) => (
