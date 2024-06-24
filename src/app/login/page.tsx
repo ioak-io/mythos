@@ -49,20 +49,14 @@ const LoginPage = (props: Props) => {
       (response: AuthliteTypes.SigninResponse) => {
         setSigninFormErrorMessages(response.errorMessages);
         if (response.outcome === "SUCCESS") {
-          setSessionValue(
-            `testgenie-access_token`,
-            response.data.access_token
-          );
+          setSessionValue(`testgenie-access_token`, response.data.access_token);
           setSessionValue(
             `testgenie-refresh_token`,
             response.data.refresh_token
           );
-          setSessionValue(
-            `email`,
-            payload.email
-          );
+          setSessionValue(`email`, payload.email);
           AuthorizationState.next({ ...response.data, isAuth: true });
-          router.push(searchParams.get("from") || "/project/list");
+          router.push(searchParams.get("from") || "/home");
         }
       }
     );

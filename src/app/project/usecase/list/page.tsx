@@ -247,32 +247,32 @@ const Usecases = () => {
   return (
     <>
       <div>
-        <ContextBar title="Usecase list">
+        <ContextBar title={projectData.name}>
           {data?.length != 0 && (
             <>
               <ExportDropdown suiteId={suiteId}></ExportDropdown>
               <Button onClick={getProjectData}>
                 <FontAwesomeIcon icon={faPen} /> Edit Project
               </Button>
-              <div className="usecase_action">
-                <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
-                  <FontAwesomeIcon icon={faPlus} /> Add Usecase
-                </Button>
-              </div>
             </>
           )}
+          <div className="usecase_action">
+            <Button onClick={() => setIsNewUsecaseDialogOpen(true)}>
+              <FontAwesomeIcon icon={faPlus} /> Usecase
+            </Button>
+          </div>
         </ContextBar>
         <div className="page">
-        {isLoad && (
+          {isLoad && (
             <div className="loader-container">
               <div className="spinner-box">
-                <div className="pulse-container">  
-                <div className="pulse-bubble pulse-bubble-1"></div>
-                <div className="pulse-bubble pulse-bubble-2"></div>
-                <div className="pulse-bubble pulse-bubble-3"></div>
+                <div className="pulse-container">
+                  <div className="pulse-bubble pulse-bubble-1"></div>
+                  <div className="pulse-bubble pulse-bubble-2"></div>
+                  <div className="pulse-bubble pulse-bubble-3"></div>
                 </div>
                 <p>Adding usecase, please hold on....</p>
-               </div>
+              </div>
             </div>
           )}
           {data?.length != 0 && (
@@ -333,14 +333,7 @@ const Usecases = () => {
           </table>
           {data?.length === 0 && !isLoad && (
             <div className="no_table_data">
-              <h2>No Data Available </h2>
-              <p>Please add usecases for the project</p>
-              <Button
-                theme={ThemeType.primary}
-                onClick={() => setIsNewUsecaseDialogOpen(true)}
-              >
-                <FontAwesomeIcon icon={faPlus} /> Add Usecase
-              </Button>
+              <h2>No use cases available</h2>
             </div>
           )}
         </div>

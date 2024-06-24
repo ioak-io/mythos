@@ -11,6 +11,7 @@ import {
   ThemeType,
   IconButton,
   Link,
+  ButtonVariantType,
 } from "basicui";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -203,34 +204,26 @@ const ListProjectPage = () => {
   return (
     <>
       <div>
-        <ContextBar title="Projects list">
-          {/* <Button onClick={() => setIsNewProjectDialogOpen(true)}>
-            New project
-          </Button> */}
+        <ContextBar>
           <Button onClick={() => setIsNewProjectDialogOpen(true)}>
-            <FontAwesomeIcon icon={faPlus} /> Project
+            <FontAwesomeIcon icon={faPlus} /> Test suite
           </Button>
         </ContextBar>
         <div className="page">
-          <div className="large-search-bar">
-            <Input
-              placeholder="Type to search"
-              value={searchQuery}
-              name="searchText"
-              onInput={(e: any) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          {filteredData?.length !== 0 && (
+            <div className="large-search-bar">
+              <Input
+                placeholder="Type to search"
+                value={searchQuery}
+                name="searchText"
+                onInput={(e: any) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          )}
           <div className="listing_pages">
             {filteredData?.length === 0 && (
               <div className="no_table_data">
-                <h2>No Projects Available </h2>
-                <p>Please add projects</p>
-                <Button
-                  theme={ThemeType.primary}
-                  onClick={() => setIsNewProjectDialogOpen(true)}
-                >
-                  <FontAwesomeIcon icon={faPlus} /> Add new project
-                </Button>
+                <h2>No test suites present</h2>
               </div>
             )}
             {filteredData?.map((item, index) => (
@@ -246,14 +239,13 @@ const ListProjectPage = () => {
                   </p>
                 </div>
                 <div className="action_buttons">
-                  {/* <Button  variant="outline" size="large" onClick={() => generateTestcaseForSuite(item|| "")}>
-              <FontAwesomeIcon icon={faMagicWandSparkles} size="sm" /> Generate Tescases</Button> */}
                   <Button
-                    variant="outline"
+                    variant={ButtonVariantType.outline}
                     size="large"
                     onClick={() => navigateToUsecase(item.id || "")}
                   >
-                    <FontAwesomeIcon icon={faChalkboardUser} size="sm" /> Usecases
+                    <FontAwesomeIcon icon={faChalkboardUser} size="sm" />
+                    Usecases
                   </Button>
                   {/* <Button  size="large" onClick={() => {
                     setIsEditProjectDialogOpen(true);
@@ -331,7 +323,7 @@ const ListProjectPage = () => {
       >
         <ModalHeader
           onClose={() => setIsNewProjectDialogOpen(false)}
-          heading="Create new project"
+          heading="New test suite"
         />
 
         <ModalBody>
@@ -339,7 +331,7 @@ const ListProjectPage = () => {
             <Input
               name="name"
               value={newAssignmentForm.name}
-              label="Project name"
+              label="Name"
               onInput={handleChange}
               autoFocus
             />

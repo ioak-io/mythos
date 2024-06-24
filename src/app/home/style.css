@@ -1,0 +1,39 @@
+.module_list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.home-tile {
+  padding: 12px 12px;
+  /* border-radius: 4px; */
+  color: inherit;
+  background-color: var(--theme-white-200);
+  color: var(--theme-white-200i);
+  border: 1px solid var(--theme-white-600);
+  /* height: 180px; */
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  align-items: flex-end;
+}
+
+.basicui-dark .home-tile {
+  background-color: var(--theme-black-extended-800);
+  color: var(--theme-black-extended-800i);
+  border-color: var(--theme-black-extended-500);
+}
+
+.button-heading {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.button-description {
+  font-size: 12px;
+  font-weight: 300;
+}

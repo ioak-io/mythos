@@ -13,7 +13,7 @@ const Logo = (props: Props) => {
   const router = useRouter();
 
   const navigateToHome = () => {
-    router.push("/project/list");
+    router.push("/home");
   };
 
   return (
