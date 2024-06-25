@@ -24,18 +24,24 @@
 }
 
 .basicui-table {
-  background-color: var(--theme-adaptive-300);
+  background-color: var(--theme-white-100);
+  color: var(--theme-white-100i);
 }
 
 .usecase-table thead {
   background-color: var(--theme-adaptive-600);
 }
 
-.basicui-dark .basicui-table thead tr th {
+.basicui-dark .basicui-table {
+  background-color: var(--theme-black-extended-900);
+  color: var(--theme-black-extended-900i);
+}
+
+.basicui-table thead tr th {
   border-bottom: 0px;
 }
 
-.basicui-dark .basicui-table tbody tr td {
+.basicui-table tbody tr td {
   border-top: 0px;
   border-bottom: 1px solid var(--theme-adaptive-600);
   height: 80px;

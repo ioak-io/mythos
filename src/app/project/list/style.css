@@ -223,13 +223,19 @@ h3 {
 .details_list {
   padding: 20px;
   margin: 10px;
-  background-color: var(--theme-adaptive-300);
-  color: var(--theme-adaptive-300i);
+  background-color: var(--theme-white-100);
+  color: var(--theme-white-100i);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   transition: all ease 0.5s;
+}
+
+.basicui-dark .details_list {
+  
+  background-color: var(--theme-black-extended-900);
+  color: var(--theme-black-extended-900i);
 }
 
 /* .details_list:hover {

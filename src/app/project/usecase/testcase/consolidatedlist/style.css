@@ -59,25 +59,31 @@
 }
 
 .basicui-table {
-    background-color: var(--theme-adaptive-300);
+  background-color: var(--theme-white-100);
+  color: var(--theme-white-100i);
   }
   
   .usecase-table thead {
     background-color: var(--theme-adaptive-600);
   }
+
+  .basicui-dark .basicui-table {
+    background-color: var(--theme-black-extended-900);
+    color: var(--theme-black-extended-900i);
+  }
   
-  .basicui-dark .basicui-table thead tr th {
+  .basicui-table thead tr th {
     border-bottom: 0px;
   }
   
-  .basicui-dark .basicui-table tbody tr td {
+  .basicui-table tbody tr td {
     border-top: 0px;
     border-bottom: 1px solid var(--theme-adaptive-600);
     height: 80px;
     vertical-align: top;
   }
 
-  .basicui-dark .basicui-table tbody tr td pre{
+  .basicui-table tbody tr td pre{
     margin:0;
   }
 
