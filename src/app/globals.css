@@ -28,14 +28,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   background-color: var(--theme-white-300);
-  color: var(--theme-white-100i);
+  color: var(--theme-white-300i);
 }
 body.basicui-dark {
-  background-color: var(--theme-adaptive-100);
-  color: var(--theme-black-200i);
-}
-body.basicui-light {
-  background-color: var(--theme-adaptive-100);
+  background-color: var(--theme-black-200);
   color: var(--theme-black-200i);
 }
 body.oak-dialog-open {
