@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { AuthorizationState } from "@/store/AuthorizationStore";
 import { Authorization } from "@/types/Authorization";
 import Logo from "../Logo";
+import Timer from "./Timer";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -61,6 +62,7 @@ const Navbar = () => {
       {authorization?.isAuth && (
         <><ul>
           </ul><div className="navbar_right">
+              <Timer />
               <div>
                 {darkMode && (
                   <IconButton onClick={toggleDarkMode} circle={true}>
