@@ -41,7 +41,7 @@ const LandingPage = (props: Props) => {
   };
 
   const goToCompanyPage = (companyReference: number) => {
-    navigate(`/${companyReference}/browse`);
+    navigate(`/${companyReference}/applications`);
   };
 
   return (
