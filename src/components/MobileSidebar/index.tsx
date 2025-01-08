@@ -74,89 +74,28 @@ const MobileSidebar = (props: MobileSidebarProps) => {
     <div className="side-content__menu">
       {props.space && (
         <>
-          <SideNavSubHeading short="Notes" long="Notes" />
-          <SideNavLink
-            link={`/${props.space}/new-note`}
-            icon={faPlus}
-            label="New note"
-          />
-          <SideNavLink
-            link={`/${props.space}/browse`}
-            icon={faFolderOpen}
-            label="Browse"
-          />
-          <SideNavLink
-            link={`/${props.space}/search`}
-            icon={faSearch}
-            label="Search"
-          />
-          <SideNavLink
-            link={`/${props.space}/graph`}
-            icon={faCircleNodes}
-            label="Graph"
-          />
-          <SideNavLink
-            link={`/${props.space}/index`}
-            icon={faListUl}
-            label="Index"
-          />
-          <SideNavSubHeading short="Library" long="Library" />
-          <SideNavLink
-            link={`/${props.space}/library`}
-            icon={faPlus}
-            label="New chapter"
-          />
-          <SideNavLink
-            link={`/${props.space}/library`}
-            icon={faBook}
-            label="Books"
-          />
-          <SideNavLink
-            link={`/${props.space}/library`}
-            icon={faSearch}
-            label="Search"
-          />
-          <SideNavLink
-            link={`/${props.space}/library`}
-            icon={faListUl}
-            label="Index"
-          />
-          <SideNavSubHeading short="System" long="System" />
-          <SideNavLink
-            link={`/${props.space}/color-filter`}
-            icon={faPalette}
-            label="Color filter"
-          />
-          <SideNavLink
-            link={`/${props.space}/metadata-definition`}
-            icon={faListUl}
-            label="Metadata"
-          />
-          <SideNavLink
-            link={`/${props.space}/stopwords`}
-            icon={faStrikethrough}
-            label="Stopwords"
-          />
-          <SideNavLink
-            link={`/${props.space}/settings/company`}
-            icon={faCogs}
-            label="Company setting"
-          />
-          <SideNavLink
-            link={`/${props.space}/settings/user`}
-            icon={faUserShield}
-            label="User"
-          />
-          <SideNavLink
-            link={`/${props.space}/settings/backup`}
-            icon={faDatabase}
-            label="Backup and restore"
-          />
-          {/* <SideNavLink
-              link={`/${props.space}/settings?link=backup`}
-              icon={faFileImport}
-              label="Export and import"
-            /> */}
+          <SideNavSubHeading short="Main" long="Main" />
+              <SideNavLink
+                link={`/${props.space}/applications`}
+                icon={faFolderOpen}
+                label="Applications"
+              />
+              <SideNavSubHeading short="System" long="System" />
+              <SideNavLink
+                link={`/${props.space}/settings/company`}
+                icon={faCogs}
+                label="Company setting"
+              />
+              <SideNavLink
+                link={`/${props.space}/settings/user`}
+                icon={faUserShield}
+                label="User"
+              />
+              <SideNavLink
+                link={`/${props.space}/settings/backup`}
+                icon={faDatabase}
+                label="Backup and restore"
+              />
         </>
       )}
     </div>

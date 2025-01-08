@@ -91,10 +91,10 @@ const MainContent = (props: Props) => {
       onSignin={login}
       onSignout={logout}
       onDarkModeToggle={toggleMode}
-      logoIconBlack={logoIconBlack}
-      logoIconWhite={logoIconWhite}
-      logoTextBlack={logoTextBlack}
-      logoTextWhite={logoTextWhite}
+      // logoIconBlack={logoIconBlack}
+      // logoIconWhite={logoIconWhite}
+      // logoTextBlack={logoTextBlack}
+      // logoTextWhite={logoTextWhite}
       hideNavbar={
         location.pathname === "/login" ||
         location.pathname.startsWith("/confirm-email") ||
