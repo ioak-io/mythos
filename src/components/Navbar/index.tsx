@@ -1,110 +1,100 @@
-"use client";
+import React, { useEffect, useState } from 'react';
+import { useSelector, connect, useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faHamburger } from '@fortawesome/free-solid-svg-icons';
 
-import Link from "next/link";
-import "./style.css";
-import {
-  Button,
-  IconButton,
-  Modal,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ThemeType,
-} from "basicui";
-import { DarkModeState } from "@/store/ProfileStore";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMoon,
-  faSun,
-  faRightFromBracket, faPowerOff,
-} from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
-import { AuthorizationState } from "@/store/AuthorizationStore";
-import { Authorization } from "@/types/Authorization";
-import Logo from "../Logo";
-import Timer from "./Timer";
+import './style.scss';
 
-const Navbar = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-  const [authorization, setAuthorization] = useState<Authorization>({});
-  const router = useRouter();
+import Logo from '../Logo';
+import RightNav from './RightNav';
+import { setProfile } from '../../store/actions/ProfileActions';
+// import RightNav from '../Topbar/RightNav';
+
+interface Props {
+  space: string;
+  cookies: any;
+  //   location: any;
+  //   match: any;
+  hideSidebarOnDesktop?: boolean;
+}
+
+const Navbar = (props: Props) => {
+  const navigate = useNavigate();
+  const authorization = useSelector((state: any) => state.authorization);
+
+  const profile = useSelector((state: any) => state.profile);
+
+  const dispatch = useDispatch();
+
+  const [currentpath, setCurrentpath] = useState('');
 
   useEffect(() => {
-    DarkModeState.subscribe((message) => {
-      setDarkMode(message);
+    history.listen((_history: any) => {
+      if (_history?.location?.pathname) {
+        setCurrentpath(_history.location.pathname);
+      }
     });
   }, []);
 
-  useEffect(() => {
-    AuthorizationState.subscribe((message) => {
-      console.log(message)
-      setAuthorization(message);
-    });
-  }, []);
-
-  const toggleDarkMode = () => {
-    DarkModeState.next(!DarkModeState.value);
-  };
-
-  const logout = () => {
-    sessionStorage.clear();
-    AuthorizationState.next({});
-    router.push("/login");
-    setIsLogoutDialogOpen(false)
+  const toggleSidebar = () => {
+    dispatch(setProfile({ ...profile, sidebar: !profile.sidebar }));
   };
 
   return (
-    <>
-      <nav className="navbar">
-      <Logo />
-      {authorization?.isAuth && (
-        <><ul>
-          </ul><div className="navbar_right">
-              <Timer />
-              <div>
-                {darkMode && (
-                  <IconButton onClick={toggleDarkMode} circle={true}>
-                    <FontAwesomeIcon icon={faSun} size="xs" />
-                  </IconButton>
-                )}
-                {!darkMode && (
-                  <IconButton onClick={toggleDarkMode} circle={true}>
-                    <FontAwesomeIcon icon={faMoon} size="xs" />
-                  </IconButton>
-                )}
-              </div>
-              <div className="logout">
-                <IconButton onClick={() => setIsLogoutDialogOpen(true)} circle={true}>
-                  <FontAwesomeIcon icon={faPowerOff} size="xs" />
-                </IconButton>
-              </div>
-            </div></>
-         )}
-      </nav>
-      <Modal
-        isOpen={isLogoutDialogOpen}
-        onClose={() => setIsLogoutDialogOpen(false)}
-      >
-        <ModalHeader
-          onClose={() => setIsLogoutDialogOpen(false)}
-          heading="Confirm Logout"
-        />
+    <div className="navbar">
+      <div className="navbar__left">
+        <div>
+          <button className="button" onClick={toggleSidebar}>
+            <FontAwesomeIcon icon={faBars} />
+          </button>
+        </div>
+        {/* <div>
+          <Logo />
+        </div> */}
 
-        <ModalBody>
-          <div className="new-project-dialog">
-            <p>Are you sure you want to log out?</p>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button theme={ThemeType.primary} onClick={logout}>
-            Confirm
-          </Button>
-          <Button onClick={() => setIsLogoutDialogOpen(false)}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </>
+        <div className="navbar__left__links">
+          {props.space && (
+            <>
+              <NavLink
+                to={`/${props.space}/home`}
+                className="navlink"
+              >
+                Home
+              </NavLink>
+              <NavLink
+                to={`/${props.space}/expense`}
+                className="navlink"
+              >
+                Expense
+              </NavLink>
+              <NavLink
+                to={`/${props.space}/category`}
+                className="navlink"
+              >
+                Category
+              </NavLink>
+              <NavLink
+                to={`/${props.space}/report`}
+                className="navlink"
+              >
+                Report
+              </NavLink>
+              <NavLink
+                to={`/${props.space}/settings?link=general`}
+                className="navlink"
+              >
+                Settings
+              </NavLink>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="navbar--right">
+        <RightNav cookies={props.cookies} />
+      </div>
+    </div>
   );
 };
 

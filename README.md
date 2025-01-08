@@ -1,38 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Testgenie - Zettelkasten-inspired Note-Taking Platform
 
-## Getting Started
+A dynamic note-taking system designed to foster idea connections through clusters. It harnesses artificial intelligence to intuitively link related notes, transforming information into a coherent network of interconnected ideas.
 
-First, run the development server:
+## Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+AI-driven Linking: Seamlessly connects related notes, leveraging advanced AI algorithms for effortless idea association.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Network Visualization: Offers a visually captivating experience by representing notes as nodes in a network graph, enabling users to grasp intricate relationships effortlessly.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Custom Metadata: Flexibility to incorporate custom metadata attributes, allowing users to personalize their organizational structure.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Robust Search: Empowers users with a powerful search function to swiftly navigate through their notes and clusters.
 
-## Learn More
+## Objective
 
-To learn more about Next.js, take a look at the following resources:
+The primary goal of this application is to serve as a personalized 'second brain,' visually mapping and organizing users' ideas in a spatial coordinate system. By sidestepping the limitations of the brain's temporal representation, our platform constructs a spatial representation based on idea relatedness. This fosters a more intuitive and interconnected approach to idea management.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Vision
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Our platform aims to revolutionize the way individuals manage and interact with their ideas, providing a digital landscape that mirrors the complexity and connectivity of the human thought process.
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Supported Node.js and npm Versions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-username: jane.doe@ioak.org
-password: suddenlylastsummer
+This project is developed and tested with the following versions:
+
+- Node.js: v20.0.0 or higher
+- npm: v10.0.0 or higher
+
+## Prerequisites and dependencies
+- Testgenie REST API service module (https://github.com/ioak-io/testgenie-service)
+
+## Installation
+
+1. Clone the repository: `git clone https://github.com/ioak-io/testgenie.git`
+2. Navigate to the project directory: `cd testgenie`
+3. Install dependencies: `npm install`
+
+## Usage
+
+1. Run the development server: `npm start`
+2. Open your browser and go to `http://localhost:3000` to view the app.
+3. To simplify local development, the application is by default configured to connect to remote Authlite server for authentication. You may use below shared user credentials to sign in to the app. You can also choose to setup your own local version of Authlite by changing the configuration in .env files (but usually an overkill and unneccesary setup, if you are not making any changes to the authentication layer)
+    - username: jane.doe@ioak.org
+    - password: suddenlylastsummer
+4. Create a new company to get started
+
+## Dependency Updates
+
+The dependencies in this project are regularly reviewed and updated. The last check for updated versions was performed on 29th Dec 2023.
+
+To check for updates and update the dependencies, run the following command: `npm outdated`
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+The MIT License is a permissive open-source license that allows you to use, modify, and distribute the code, even for commercial purposes, provided you include the original copyright notice and the disclaimer of warranty.
+
+For more information, see the [MIT License](LICENSE) file.
