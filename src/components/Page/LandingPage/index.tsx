@@ -29,6 +29,7 @@ interface Props {
   space: string;
   location: any;
 }
+export let space: Number | null = null;
 
 const LandingPage = (props: Props) => {
   const navigate = useNavigate();
@@ -36,12 +37,14 @@ const LandingPage = (props: Props) => {
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
 
+
   const goToCreateCompanyPage = () => {
     navigate('/company/edit');
   };
 
   const goToCompanyPage = (companyReference: number) => {
-    navigate(`/${companyReference}/applications`);
+    space = companyReference;
+    navigate(`/${companyReference}/application`);
   };
 
   return (

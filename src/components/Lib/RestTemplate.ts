@@ -26,6 +26,15 @@ export function httpPost(
   // )
 }
 
+export function httpPostGenerate(
+  endpoint: string,
+  headers: any,
+  payload?: any,
+  url?: string
+) {
+  return axiosInstance.post((url || baseUrl) + endpoint, headers, payload);
+}
+
 export function httpPut(
   endpoint: string,
   payload: any,

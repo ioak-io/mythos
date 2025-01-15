@@ -8,7 +8,7 @@ import Topbar from '../../../components/Topbar';
 import './style.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
-import { updateCompany } from './service';
+import { updateCompany, createCompany } from './service';
 
 interface Props {
   history: any;
@@ -37,10 +37,21 @@ const EditCompanyPage = (props: Props) => {
   };
 
   const save = () => {
-    updateCompany(state, authorization).then((response: any) => {
-      goBack();
-    });
+    if (searchParams.get('id')) {
+      updateCompany(state, authorization).then((response: any) => {
+        goBack();
+      }).catch((error: any) => {
+        console.error("Failed to update company:", error);
+      });
+    } else {
+      createCompany(state, authorization).then((response: any) => {
+        goBack();
+      }).catch((error: any) => {
+        console.error("Failed to create company:", error);
+      });
+    }
   };
+  
 
   const goBack = () => {
     navigate(-1);

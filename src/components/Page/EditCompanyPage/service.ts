@@ -2,6 +2,7 @@
 import { httpGet, httpPost, httpPut } from '../../Lib/RestTemplate';
 
 export const updateCompany = (payload: any, authorization: any) => {
+  
   return httpPut(`/company/${payload._id}`, payload, {
     headers: {
       Authorization: authorization.access_token,
@@ -18,6 +19,7 @@ export const updateCompany = (payload: any, authorization: any) => {
 };
 
 export const createCompany = (payload: any, authorization: any) => {
+
   return httpPost('/company', payload, {
     headers: {
       Authorization: authorization.access_token,
