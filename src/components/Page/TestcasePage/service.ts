@@ -7,7 +7,7 @@ import { space } from "../LandingPage";
 export const fetchTestcases = async(): Promise<TestCase[]> =>{
     try {
             const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, {});
-            return response.data; 
+            return response?.data; 
         } catch (error) {
             console.error("Error fetching data:", error);
             throw error;

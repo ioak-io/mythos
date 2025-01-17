@@ -6,7 +6,7 @@ import { reqId } from "../RequirementsPage";
 export const fetchUsecases = async(): Promise<Usecases[]> =>{
     try {
             const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase`, {});
-            return response.data; 
+            return response?.data; 
         } catch (error) {
             console.error("Error fetching data:", error);
             throw error;

@@ -1,12 +1,26 @@
 import axios from 'axios';
 
+import { getSessionValue } from '../../utils/SessionUtils';
+
 export const axiosInstance = axios.create();
 export const axiosManualInstance = axios.create();
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
 export function httpGet(endpoint: string, headers: any, url?: string) {
-  return axiosInstance.get((url || baseUrl) + endpoint, headers);
+  try {
+    const token = getSessionValue('testgenie-access_token');
+    console.log("TOKEN:...........", token)
+    if (token) {
+      headers["Authorization"] = token || "";
+    }
+    return axiosInstance.get((url || baseUrl) + endpoint, { headers });
+
+  } catch (error) {
+    console.error("Get Api Error: ");
+    
+  }
+
   // .then(function(response) {
   //     return Promise.resolve(response);
   // }
@@ -19,7 +33,12 @@ export function httpPost(
   headers: any,
   url?: string
 ) {
-  return axiosInstance.post((url || baseUrl) + endpoint, payload, headers);
+  const token = getSessionValue('testgenie-access_token');
+  // if (token) {
+  //   headers["Authorization"] = token;
+  // }
+  headers["Authorization"] = token;
+  return axiosInstance.post((url || baseUrl) + endpoint, payload, { headers });
   //     .then(function(response) {
   //         return Promise.resolve(response);
   //     }
@@ -32,7 +51,11 @@ export function httpPostGenerate(
   payload?: any,
   url?: string
 ) {
-  return axiosInstance.post((url || baseUrl) + endpoint, headers, payload);
+  const token = getSessionValue('testgenie-access_token');
+  if (token) {
+    headers["Authorization"] = token || "";
+  }
+  return axiosInstance.post((url || baseUrl) + endpoint, payload, { headers });
 }
 
 export function httpPut(
@@ -41,7 +64,11 @@ export function httpPut(
   headers: any,
   url?: string
 ) {
-  return axiosInstance.put((url || baseUrl) + endpoint, payload, headers);
+  const token = getSessionValue('testgenie-access_token');
+  if (token) {
+    headers["Authorization"] = token;
+  }
+  return axiosInstance.put((url || baseUrl) + endpoint, payload, { headers });
   //     .then(function(response) {
   //         return Promise.resolve(response);
   //     }
@@ -53,7 +80,11 @@ export function httpDelete(
   headers: any,
   url?: string
 ) {
-  return axiosInstance.delete((url || baseUrl) + endpoint, headers);
+  const token = getSessionValue('testgenie-access_token');
+  if (token) {
+    headers["Authorization"] = token;
+  }
+  return axiosInstance.delete((url || baseUrl) + endpoint, { headers });
   // return axiosInstance.delete((url || baseUrl) + endpoint, {
   //   headers,
   //   data: payload,
@@ -65,7 +96,11 @@ export function httpDelete(
 }
 
 export function httpGetManual(endpoint: string, headers: any, url?: string) {
-  return axiosManualInstance.get((url || baseUrl) + endpoint, headers);
+  const token = getSessionValue('testgenie-access_token');
+  if (token) {
+    headers["Authorization"] = token;
+  }
+  return axiosManualInstance.get((url || baseUrl) + endpoint, { headers });
   // .then(function(response) {
   //     return Promise.resolve(response);
   // }
@@ -78,10 +113,14 @@ export function httpPostManual(
   headers: any,
   url?: string
 ) {
+  const token = getSessionValue('testgenie-access_token');
+  if (token) {
+    headers["Authorization"] = token;
+  }
   return axiosManualInstance.post(
     (url || baseUrl) + endpoint,
     payload,
-    headers
+    { headers }
   );
   //     .then(function(response) {
   //         return Promise.resolve(response);
@@ -95,7 +134,11 @@ export function httpPutManual(
   headers: any,
   url?: string
 ) {
-  return axiosManualInstance.put((url || baseUrl) + endpoint, payload, headers);
+  const token = getSessionValue('testgenie-access_token');
+  if (token) {
+    headers["Authorization"] = token;
+  }
+  return axiosManualInstance.put((url || baseUrl) + endpoint, payload, { headers });
   //     .then(function(response) {
   //         return Promise.resolve(response);
   //     }
