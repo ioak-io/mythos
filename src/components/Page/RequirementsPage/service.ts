@@ -1,6 +1,6 @@
 import { space } from "../LandingPage";
 import { appId } from "../ApplicationsPage";
-import { httpGet, httpPost } from "../../../../src/components/Lib/RestTemplate";
+import { httpDelete, httpGet, httpPost, httpPut } from "../../../../src/components/Lib/RestTemplate";
 
 export const fetchRequirements = async (): Promise<Requirement[]> => {
     try {
@@ -14,4 +14,14 @@ export const fetchRequirements = async (): Promise<Requirement[]> => {
 
 export const postRequirements = async(reqCreatePayload: any)=>{
   await httpPost(`/${space}/application/${appId}/requirement`, reqCreatePayload, {} );
-}
+};
+
+export const deleteSingle = async(id:any) =>{
+  await httpDelete(`/${space}/application/${appId}/requirement/${id}`, {})
+};
+
+export const updateRequirement = async(id:any, data:any) =>{
+  const response = await httpPut(`/${space}/application/${appId}/requirement/${id}`, data ,{})
+  return response.data;
+};
+

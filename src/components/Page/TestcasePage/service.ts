@@ -16,8 +16,17 @@ export const fetchTestcases = async(): Promise<TestCase[]> =>{
 
 export const postTestcases = async(testcaseCreatePayload: any)=>{
   await httpPost(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, testcaseCreatePayload, {} );
-}
+};
 
 export const generateTestcases = async()=>{
   await httpPostGenerate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/generate`,  {} );
-}
+};
+
+export const deleteSingle = async(id:string)=>{
+  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, {})
+};
+
+export const updateTestcase = async(id:string, data: any)=>{
+  const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`,data, {})
+  return response.data;
+};

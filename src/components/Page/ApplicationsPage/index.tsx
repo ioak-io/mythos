@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 import "./style.scss";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Topbar from "../../../components/Topbar";
-import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "basicui";
+import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faArrowRight, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
-import { fetchData, postData } from "./service";
+import { deleteSingle, fetchData, postData, updateApp } from "./service";
 import { space } from "../LandingPage";
+import Table from "@tiptap/extension-table";
 
 interface Props {
   location: any;
@@ -26,9 +27,16 @@ const ApplicationsPage = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalClose = () => setIsModalOpen(false);
   const handleModalOpen = () => setIsModalOpen(true);
   const [formData, setFormData] = useState({ appName: "", });
+  const [currentAppId, setCurrentAppId] = useState<string | null>(null); 
+
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setFormData({ appName: "" }); 
+    setCurrentAppId(null); 
+  };
 
   useEffect(() => {
     const loadApplications = async () => {
@@ -58,20 +66,46 @@ const ApplicationsPage = (props: Props) => {
     }));
   };
 
-  const handleSubmit = async() => {
-    const appNamePayload = {name: formData.appName};
+  const handleSubmit = async () => {
+    const appNamePayload = { name: formData.appName };
+    setLoading(true);
     try {
-      await postData(appNamePayload);
+      if (currentAppId) {
+        await updateApp(currentAppId, appNamePayload);
+        // alert("Application Updated!")
+      } else {
+        await postData(appNamePayload);
+        // alert("Application Created")
+      }
+
       const updatedApplications = await fetchData();
       setApplications(updatedApplications);
       handleModalClose();
     } catch (error) {
-      console.error("Error submitting Application Name:", error);
+      console.error("Error submitting Application:", error);
+    } finally{
+      setLoading(false);
     }
   };
 
-  if (loading) return <p>Loading applications...</p>;
-  if (error) return <p>{error}</p>;
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSingle(id);
+      const updated = await fetchData();
+      setApplications(updated);
+    } catch (error) {
+      console.error("Error Deleting Application:", error);
+    }
+  };
+
+  const handleUpdate = (id: string) => {
+    const appToEdit = applications.find((app) => app._id === id);
+    if (!appToEdit) return;
+
+    setFormData({ appName: appToEdit.name });
+    setCurrentAppId(id); 
+    handleModalOpen();
+  };
 
   return (
     <>
@@ -82,18 +116,23 @@ const ApplicationsPage = (props: Props) => {
             New app
           </Button>
           <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-            <ModalHeader onClose={handleModalClose} heading="New Application"></ModalHeader>
+            <ModalHeader border={true} onClose={handleModalClose} heading={currentAppId ? "Update Application" : "New Application"}></ModalHeader>
             <ModalBody>
-              <label>
-                Application Name:{" "}
-                <input name="appName" value={formData.appName} onChange={handleChange} />
-              </label>
+              <Input 
+              id="application"
+              type="text"
+              name="appName"
+              label="Application Name"
+              value={formData.appName}
+              placeholder="Type your application name"
+              onChange={handleChange}
+              ></Input>
             </ModalBody>
             <ModalFooter>
-              <Button onClick={handleModalClose} variant="danger">
+              <Button onClick={handleModalClose}  theme={ThemeType.danger}>
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} variant="success">
+              <Button onClick={handleSubmit} theme={ThemeType.success} loading={loading}>
                 Save
               </Button>
             </ModalFooter>
@@ -101,25 +140,27 @@ const ApplicationsPage = (props: Props) => {
         </div>
       </Topbar>
       <MainSection>
-        <table className="basicui-table">
+        <table className="basicui-table table-hover">
           <thead>
             <tr>
               <th>Name</th>
               <th>Created Date</th>
               <th>Updated Date</th>
               <th>Status</th>
-              <th>Options</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {applications.map((app) => (
-              <tr key={app._id} onClick={() => handleApplicationClick(app._id)}>
+              <tr key={app._id} >
                 <td>{app.name}</td>
                 <td>{app.createdDate.slice(0, 10)}</td>
                 <td>{app.lastModifiedDate.slice(0, 10)}</td>
                 <td>Active</td>
-                <td>Available Options
-                  <FontAwesomeIcon icon={faArrowRight} className="arrow-icon" />
+                <td>
+                  <FontAwesomeIcon icon={faTrash} className='arrow-icon' onClick={() => handleDelete(app._id)} />
+                  <FontAwesomeIcon icon={faEdit} className="arrow-icon" onClick={() => handleUpdate(app._id)} />
+                  <FontAwesomeIcon icon={faArrowRight} className="arrow-icon" onClick={() => handleApplicationClick(app._id)} />
                 </td>
               </tr>
             ))}

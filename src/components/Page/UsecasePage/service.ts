@@ -15,8 +15,17 @@ export const fetchUsecases = async(): Promise<Usecases[]> =>{
 
 export const postUsecases = async(usecaseCreatePayload: any)=>{
   await httpPost(`/${space}/application/${appId}/requirement/${reqId}/usecase`, usecaseCreatePayload, {} );
-}
+};
 
 export const generateUsecases = async()=>{
   await httpPostGenerate(`/${space}/application/${appId}/requirement/${reqId}/usecase/generate`, {} );
-}
+};
+
+export const deleteSingle = async(id:string)=>{
+  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${id}`, {})
+};
+
+export const updateUsecase = async(id:string, data:any)=>{
+  const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${id}`,data,  {})
+  return response.data;
+};

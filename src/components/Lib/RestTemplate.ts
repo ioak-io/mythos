@@ -10,7 +10,6 @@ const baseUrl = process.env.REACT_APP_API_URL;
 export function httpGet(endpoint: string, headers: any, url?: string) {
   try {
     const token = getSessionValue('testgenie-access_token');
-    console.log("TOKEN:...........", token)
     if (token) {
       headers["Authorization"] = token || "";
     }
