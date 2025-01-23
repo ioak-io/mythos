@@ -91,10 +91,10 @@ const MainContent = (props: Props) => {
       onSignin={login}
       onSignout={logout}
       onDarkModeToggle={toggleMode}
-      // logoIconBlack={logoIconBlack}
-      // logoIconWhite={logoIconWhite}
-      // logoTextBlack={logoTextBlack}
-      // logoTextWhite={logoTextWhite}
+      logoIconBlack={logoIconBlack}
+      logoIconWhite={logoIconWhite}
+      logoTextBlack={logoTextBlack}
+      logoTextWhite={logoTextWhite}
       hideNavbar={
         location.pathname === "/login" ||
         location.pathname.startsWith("/confirm-email") ||
@@ -116,7 +116,7 @@ const MainContent = (props: Props) => {
             <>
               <SideNavSubHeading short="Main" long="Main" />
               <SideNavLink
-                link={`/${props.space}/applications`}
+                link={`/${props.space}/application`}
                 icon={faFolderOpen}
                 label="Applications"
               />
