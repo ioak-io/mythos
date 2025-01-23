@@ -9,7 +9,6 @@ import { faPlus, faArrowRight, faTrash, faEdit } from "@fortawesome/free-solid-s
 import MainSection from "../../../components/MainSection";
 import { deleteSingle, fetchData, postData, updateApp } from "./service";
 import { space } from "../LandingPage";
-import Table from "@tiptap/extension-table";
 
 interface Props {
   location: any;
@@ -72,10 +71,8 @@ const ApplicationsPage = (props: Props) => {
     try {
       if (currentAppId) {
         await updateApp(currentAppId, appNamePayload);
-        // alert("Application Updated!")
       } else {
         await postData(appNamePayload);
-        // alert("Application Created")
       }
 
       const updatedApplications = await fetchData();

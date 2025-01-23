@@ -143,14 +143,6 @@ const TestcasesPage = () => {
         handleModalOpen();
     };
 
-    const handleSelectChange = (selected: any) => {
-        const value = selected ? selected[0]?.value : "";
-        setFormData((prevData) => ({
-            ...prevData,
-            testcaseLabel: value,
-        }));
-    };
-
     return (
         <div className="testcases-page">
             <Topbar title="Testcase">
@@ -162,55 +154,6 @@ const TestcasesPage = () => {
                     <Modal isOpen={isModalOpen} onClose={handleModalClose}>
                         <ModalHeader onClose={handleModalClose} heading={currentTestcaseId ? "Update Testcase" : "New Testcase"}></ModalHeader>
                         <ModalBody>
-                            {/* <label>
-                                Overview:{" "}
-                                <input name="testcaseOverview" value={formData.testcaseOverview} onChange={handleChange} />
-                            </label>
-                            <label>
-                                Steps Separated by Full Stop (.):
-                                <input
-                                    name="testcaseSteps"
-                                    value={formData.testcaseSteps}
-                                    onChange={(e) => {
-                                        const stepsString = e.target.value;
-                                        const stepsArray = stepsString.split('.').filter((step) => step.trim() !== "");
-                                        setFormData((prevData) => ({
-                                            ...prevData,
-                                            testcaseSteps: stepsString,
-                                            stepsArray,
-                                        }));
-                                    }}
-                                />
-                            </label>
-                            <label>
-                                Expected Outcome:{" "}
-                                <input name="testcaseOutcome" value={formData.testcaseOutcome} onChange={handleChange} />
-                            </label>
-                            <label>
-                                Label:{" "}
-                                <select
-                                    name="testcaseLabel"
-                                    value={formData.testcaseLabel}
-                                    onChange={handleChange}
-                                >
-                                    <option value="positive">Positive Testcase</option>
-                                    <option value="negative">Negative Testcase</option>
-                                    <option value="edge case">Edge case Testcase</option>
-                                    <option value="alternative flow">Alternative Flow Testcase</option>
-                                </select>
-                            </label>
-                            <label>
-                                Priority Level:{" "}
-                                <select
-                                    name="testcasePriority"
-                                    value={formData.testcasePriority}
-                                    onChange={handleChange}
-                                >
-                                    <option value="high">High</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="low">Low</option>
-                                </select>
-                            </label> */}
                             <label>
                                 Overview:{" "}
                                 <Input
@@ -265,6 +208,7 @@ const TestcasesPage = () => {
                                             testcaseLabel: selected.currentTarget.value,
                                         }));
                                     }}
+                                    
                                 />
                             </label>
                             <label >
