@@ -12,7 +12,7 @@ import {
   faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import './style.scss';
 import ReceiptModel from '../../../model/ReceiptModel';
 import ExpenseModel from '../../../model/ExpenseModel';
@@ -28,7 +28,6 @@ interface Props {
 }
 
 const SettingsPage = (props: Props) => {
-  const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const [searchParams, setSearchParams] = useSearchParams();
 

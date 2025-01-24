@@ -23,8 +23,8 @@ interface FormData {
     stepsArray: string[];
     testcaseOutcome: string;
     testcaseLabel: string;
-    testcasePriority: string ;
-}
+    testcasePriority: string;
+};
 
 const labelOptions: OptionsObjectType[] = [
     { name: "Positive Testcase", value: "positive" },
@@ -202,30 +202,31 @@ const TestcasesPage = () => {
                                     options={labelOptions}
                                     value={formData.testcaseLabel ? [formData.testcaseLabel] : []}
                                     placeholder="Select a label"
-                                    onChange={(selected:any) => {
+                                    onChange={(selected: any) => {
                                         setFormData((prevData) => ({
                                             ...prevData,
                                             testcaseLabel: selected.currentTarget.value,
                                         }));
                                     }}
-                                    
                                 />
                             </label>
-                            <label >
-                                Priority Level:{" "}
-                                <Select
-                                    name="testcasePriority"
-                                    options={priorityOptions}
-                                    value={formData.testcasePriority ? [formData.testcasePriority] : []}
-                                    placeholder="Select priority level"
-                                    onChange={(selected:any) => {
-                                        setFormData((prevData) => ({
-                                            ...prevData,
-                                            testcasePriority: selected.currentTarget.value,
-                                        }));
-                                    }}
-                                />
-                            </label>
+                            <div style={{ margin: "10px 0" }}>
+                                <label >
+                                    Priority Level:{" "}
+                                    <Select
+                                        name="testcasePriority"
+                                        options={priorityOptions}
+                                        value={formData.testcasePriority ? [formData.testcasePriority] : []}
+                                        placeholder="Select priority level"
+                                        onChange={(selected: any) => {
+                                            setFormData((prevData) => ({
+                                                ...prevData,
+                                                testcasePriority: selected.currentTarget.value,
+                                            }));
+                                        }}
+                                    />
+                                </label>
+                            </div>
                         </ModalBody>
                         <ModalFooter>
                             <Button onClick={handleModalClose} theme={ThemeType.danger}>
