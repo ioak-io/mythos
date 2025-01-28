@@ -1,57 +1,40 @@
 import React from "react";
 import {
-    Button, Modal, ModalBody, ModalFooter, ModalHeader, Input,
-    Select,
-    ThemeType
+    Button, Modal, ModalBody, ModalFooter, ModalHeader, ThemeType
 } from "basicui";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+    faCheck,
+    faClose,
     faEdit,
+    faMagicWandSparkles,
     faPlus,
     faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
-import { deleteSingle, fetchTestcases, generateTestcases, postTestcases, updateTestcase } from "./service";
+import { deleteSingleTestcase, deleteTestcases, fetchTestcases, generateTestcases} from "./service";
 import Topbar from "../../Topbar";
 import MainSection from "../../MainSection";
-import { OptionsObjectType } from "basicui/components/shared/OptionsList";
+import { useNavigate } from "react-router-dom";
+import { space } from "../LandingPage";
+import { appId } from "../ApplicationsPage";
+import { reqId } from "../RequirementsPage";
+import { useId } from "../UsecasePage";
 
-interface FormData {
-    testcaseOverview: string;
-    testcaseSteps: string;
-    stepsArray: string[];
-    testcaseOutcome: string;
-    testcaseLabel: string;
-    testcasePriority: string;
-};
-
-const labelOptions: OptionsObjectType[] = [
-    { name: "Positive Testcase", value: "positive" },
-    { name: "Negative Testcase", value: "negative" },
-    { name: "Edge Case Testcase", value: "edge case" },
-    { name: "Alternative Flow Testcase", value: "alternative flow" },
-];
-
-const priorityOptions: OptionsObjectType[] = [
-    { name: "High", value: "high" },
-    { name: "Medium", value: "medium" },
-    { name: "Low", value: "low" },
-];
+export let testId: string | null = null;
 
 const TestcasesPage = () => {
     const [testcases, setTestcases] = useState<TestCase[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleModalOpen = () => setIsModalOpen(true);
-    const [formData, setFormData] = useState<FormData>({ testcaseOverview: "", testcaseSteps: "", stepsArray: [], testcaseOutcome: "", testcaseLabel: "", testcasePriority: "" });
-    const [currentTestcaseId, setCurrentTestcaseId] = useState<string | null>(null);
+    const navigate = useNavigate();
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [testcaseToDelete, setTestcaseToDelete] = useState<string | null>(null);
 
-    const handleModalClose = () => {
-        setIsModalOpen(false);
-        setFormData({ testcaseOverview: "", testcaseSteps: "", stepsArray: [], testcaseOutcome: "", testcaseLabel: "", testcasePriority: "" });
-        setCurrentTestcaseId(null);
+    const handleDeleteModalClose = () => {
+        setIsDeleteModalOpen(false);
+        setTestcaseToDelete(null);
     };
 
     useEffect(() => {
@@ -69,43 +52,9 @@ const TestcasesPage = () => {
         loadTestcases();
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = async () => {
-        const testcaseCreatePayload = {
-            description: {
-                overview: formData.testcaseOverview,
-                steps: formData.stepsArray,
-                expectedOutcome: formData.testcaseOutcome
-            },
-            comments: formData.testcaseLabel,
-            priority: formData.testcasePriority
-        };
-        setLoading(true);
-        try {
-            if (currentTestcaseId) {
-                await updateTestcase(currentTestcaseId, testcaseCreatePayload);
-            } else {
-                await postTestcases(testcaseCreatePayload);
-            };
-            const newTestcases = await fetchTestcases();
-            setTestcases(newTestcases);
-            handleModalClose();
-        } catch (error) {
-            console.error("Error submitting Requirement:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const handleGenerateTestcase = async () => {
         setLoading(true);
+        await deleteTestcases();
         try {
             await generateTestcases();
             const newtestcase = await fetchTestcases();
@@ -117,127 +66,41 @@ const TestcasesPage = () => {
         }
     };
 
-    const handleDelete = async (id: string) => {
+    const confirmDelete = (id: string) => {
+        setTestcaseToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDelete = async () => {
+        if (!testcaseToDelete) return;
+        setLoading(true);
         try {
-            await deleteSingle(id);
+            await deleteSingleTestcase(testcaseToDelete);
             const updated = await fetchTestcases();
             setTestcases(updated);
         } catch (error) {
-            console.error("Error Deleting Testcase:");
+            console.error("Error Deleting Usecase:", error);
+        } finally {
+            setLoading(false);
+            handleDeleteModalClose();
         }
     };
 
-    const handleUpdate = (id: string) => {
-        const testcaseToEdit = testcases.find((testcase) => testcase._id === id);
-        if (!testcaseToEdit) return;
-
-        setFormData({
-            testcaseOverview: testcaseToEdit.description?.overview || "",
-            testcaseSteps: testcaseToEdit.description?.steps.join(". ") || "",
-            stepsArray: testcaseToEdit.description?.steps || [],
-            testcaseOutcome: testcaseToEdit.description?.expectedOutcome || "",
-            testcaseLabel: testcaseToEdit.comments || "",
-            testcasePriority: testcaseToEdit.priority || "",
-        });
-        setCurrentTestcaseId(id);
-        handleModalOpen();
+    const handleEditTestcaseClick = async (id: string | null) => {
+        testId = id;
+        navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/edit${id ? `/${id}` : ''}`)
     };
 
     return (
         <div className="testcases-page">
             <Topbar title="Testcase">
                 <div className="topbar-actions">
-                    <Button onClick={handleModalOpen}>
+                    <Button onClick={()=>handleEditTestcaseClick(null)}>
                         <FontAwesomeIcon icon={faPlus} />
                         New Testcase
                     </Button>
-                    <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-                        <ModalHeader onClose={handleModalClose} heading={currentTestcaseId ? "Update Testcase" : "New Testcase"}></ModalHeader>
-                        <ModalBody>
-                            <label>
-                                Overview:{" "}
-                                <Input
-                                    id="testcaseOverview"
-                                    name="testcaseOverview"
-                                    type="text"
-                                    value={formData.testcaseOverview}
-                                    placeholder="Enter the testcase overview"
-                                    onChange={handleChange}
-                                />
-                            </label>
-                            <label>
-                                Steps Separated by Full Stop (.):
-                                <Input
-                                    id="testcaseSteps"
-                                    name="testcaseSteps"
-                                    type="text"
-                                    value={formData.testcaseSteps}
-                                    placeholder="Enter steps separated by a full stop"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const stepsString = e.target.value;
-                                        const stepsArray = stepsString.split('.').filter((step) => step.trim() !== "");
-                                        setFormData((prevData) => ({
-                                            ...prevData,
-                                            testcaseSteps: stepsString,
-                                            stepsArray,
-                                        }));
-                                    }}
-                                />
-                            </label>
-                            <label>
-                                Expected Outcome:{" "}
-                                <Input
-                                    id="testcaseOutcome"
-                                    name="testcaseOutcome"
-                                    type="text"
-                                    value={formData.testcaseOutcome}
-                                    placeholder="Enter the expected outcome"
-                                    onChange={handleChange}
-                                />
-                            </label>
-                            <label>
-                                Label:{" "}
-                                <Select
-                                    name="testcaseLabel"
-                                    options={labelOptions}
-                                    value={formData.testcaseLabel ? [formData.testcaseLabel] : []}
-                                    placeholder="Select a label"
-                                    onChange={(selected: any) => {
-                                        setFormData((prevData) => ({
-                                            ...prevData,
-                                            testcaseLabel: selected.currentTarget.value,
-                                        }));
-                                    }}
-                                />
-                            </label>
-                            <div style={{ margin: "10px 0" }}>
-                                <label >
-                                    Priority Level:{" "}
-                                    <Select
-                                        name="testcasePriority"
-                                        options={priorityOptions}
-                                        value={formData.testcasePriority ? [formData.testcasePriority] : []}
-                                        placeholder="Select priority level"
-                                        onChange={(selected: any) => {
-                                            setFormData((prevData) => ({
-                                                ...prevData,
-                                                testcasePriority: selected.currentTarget.value,
-                                            }));
-                                        }}
-                                    />
-                                </label>
-                            </div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button onClick={handleModalClose} theme={ThemeType.danger}>
-                                Cancel
-                            </Button>
-                            <Button onClick={handleSubmit} theme={ThemeType.success} loading={loading}>
-                                Save
-                            </Button>
-                        </ModalFooter>
-                    </Modal>
                     <Button onClick={handleGenerateTestcase} loading={loading}>
+                        <FontAwesomeIcon icon={faMagicWandSparkles}></FontAwesomeIcon>
                         Generate Testcase
                     </Button>
                 </div>
@@ -256,7 +119,8 @@ const TestcasesPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {testcases.map((testcase) => (
+                    {testcases?.length > 0 ? (
+                        testcases.map((testcase) => (
                             <tr key={testcase._id}>
                                 <td className="text-column">{testcase.description.overview}</td>
                                 <td className="description-column">
@@ -271,14 +135,35 @@ const TestcasesPage = () => {
                                 <td>{testcase.priority}</td>
                                 <td>{new Date(testcase.createdDate).toLocaleDateString()}</td>
                                 <td className="options-column">
-                                    <FontAwesomeIcon icon={faTrash} className='arrow-icon' onClick={() => handleDelete(testcase._id)} />
-                                    <FontAwesomeIcon icon={faEdit} className="arrow-icon" onClick={() => handleUpdate(testcase._id)} />
+                                    <Button onClick={() => confirmDelete(testcase._id)}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </Button>
+                                    <Button onClick={() => handleEditTestcaseClick(testcase._id)} >
+                                        <FontAwesomeIcon icon={faEdit} />
+                                    </Button>
                                 </td>
-                            </tr>
-                        ))}
+                            </tr>))):(
+                                <tr>
+                                    <td colSpan={7}> No Testcases Found</td>
+                                </tr>
+                            )}
                     </tbody>
                 </table>
             </MainSection>
+            <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
+                <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
+                <ModalBody>
+                    Are you sure you want to delete this testcase? This action cannot be undone.
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
+                        <FontAwesomeIcon icon={faClose} />
+                    </Button>
+                    <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 };

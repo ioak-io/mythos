@@ -22,11 +22,19 @@ export const generateTestcases = async()=>{
   await httpPostGenerate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/generate`,  {} );
 };
 
-export const deleteSingle = async(id:string)=>{
+export const deleteSingleTestcase = async(id:string)=>{
   await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, {})
 };
 
 export const updateTestcase = async(id:string, data: any)=>{
   const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`,data, {})
   return response.data;
+};
+
+export const deleteTestcases = async() => {
+  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, {});
+};
+
+export const deleteTestcasesByUsecase = async (usecaseId: string) => {
+  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${usecaseId}/testcase`, {});
 };

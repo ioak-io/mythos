@@ -25,6 +25,10 @@ export const deleteSingle = async(id:string)=>{
   await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${id}`, {})
 };
 
+export const deleteUsecases = async()=>{
+  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase`, {})
+};
+
 export const updateUsecase = async(id:string, data:any)=>{
   const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${id}`,data,  {})
   return response.data;

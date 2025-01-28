@@ -1,20 +1,21 @@
 import React from 'react';
 import './style.scss';
-
 import {
     Button,
     Modal,
     ModalHeader,
     ModalBody,
     ModalFooter,
-    Input,
-    ThemeType
+    ThemeType,
+    Textarea
 } from "basicui";
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faArrowRight, faTrash, faEdit
+    faArrowRight, faTrash, faEdit,
+    faClose,
+    faCheck
 } from "@fortawesome/free-solid-svg-icons";
 import { deleteSingle, fetchRequirements, postRequirements, updateRequirement } from "./service";
 import { space } from '../LandingPage';
@@ -35,11 +36,18 @@ const RequirementsPage = () => {
     const handleModalOpen = () => setIsModalOpen(true);
     const [formData, setFormData] = useState({ reqDescription: "", });
     const [currentReqId, setCurrentReqId] = useState<string | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [reqToDelete, setReqToDelete] = useState<string | null>(null);
 
     const handleModalClose = () => {
         setIsModalOpen(false);
         setFormData({ reqDescription: "" });
         setCurrentReqId(null);
+    };
+
+    const handleDeleteModalClose = () => {
+        setIsDeleteModalOpen(false);
+        setReqToDelete(null);
     };
 
     useEffect(() => {
@@ -75,40 +83,48 @@ const RequirementsPage = () => {
         const reqCreatePayload = { description: formData.reqDescription };
         setLoading(true);
         try {
-          if (currentReqId) {
-            await updateRequirement(currentReqId, reqCreatePayload);
-          } else {
-            await postRequirements(reqCreatePayload);
-          }
-    
-          const updatedRequirements = await fetchRequirements();
-          setRequirements(updatedRequirements);
-          handleModalClose();
+            if (currentReqId) {
+                await updateRequirement(currentReqId, reqCreatePayload);
+            } else {
+                await postRequirements(reqCreatePayload);
+            }
+
+            const updatedRequirements = await fetchRequirements();
+            setRequirements(updatedRequirements);
+            handleModalClose();
         } catch (error) {
-          console.error("Error submitting Requirement:", error);
-        } finally{
+            console.error("Error submitting Requirement:", error);
+        } finally {
             setLoading(false);
         }
-      };
+    };
 
-    const handleDelete = async (id: string) => {
+    const confirmDelete = (id: string) => {
+        setReqToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDelete = async () => {
+        if (!reqToDelete) return;
         try {
-            await deleteSingle(id);
+            await deleteSingle(reqToDelete);
             const updated = await fetchRequirements();
             setRequirements(updated);
         } catch (error) {
             console.error("Error Deleting Requirement:", error);
+        } finally {
+            handleDeleteModalClose();
         }
     };
 
     const handleUpdate = (id: string) => {
         const reqToEdit = requirements.find((requ) => requ._id === id);
         if (!reqToEdit) return;
-    
+
         setFormData({ reqDescription: reqToEdit.description });
-        setCurrentReqId(id); 
+        setCurrentReqId(id);
         handleModalOpen();
-      };
+    };
 
     return (
         <>
@@ -120,24 +136,24 @@ const RequirementsPage = () => {
                             New Requirement
                         </Button>
                         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
-                            <ModalHeader onClose={handleModalClose} heading={currentReqId? "Update Requirement" : "New Requirement"}></ModalHeader>
+                            <ModalHeader onClose={handleModalClose} heading={currentReqId ? "Update Requirement" : "New Requirement"}></ModalHeader>
                             <ModalBody>
-                                <Input
-                                id="requirement"
-                                name="reqDescription"
-                                value={formData.reqDescription}
-                                onChange={handleChange}
-                                type='text'
-                                label='Requirement Description'
-                                placeholder='Type your requirement description'
+                                <Textarea
+                                    id="requirement"
+                                    name="reqDescription"
+                                    value={formData.reqDescription}
+                                    onChange={handleChange}
+                                    type='text'
+                                    label='Requirement Description'
+                                    placeholder='Type your requirement description'
                                 />
                             </ModalBody>
                             <ModalFooter>
-                                <Button onClick={handleModalClose} theme={ThemeType.danger}>
-                                    Cancel
+                                <Button onClick={handleModalClose} theme={ThemeType.default}>
+                                    <FontAwesomeIcon icon={faClose}></FontAwesomeIcon>
                                 </Button>
-                                <Button onClick={handleSubmit} theme={ThemeType.success} loading={loading}>
-                                    Save
+                                <Button onClick={handleSubmit} theme={ThemeType.default} loading={loading}>
+                                    <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
                                 </Button>
                             </ModalFooter>
                         </Modal>
@@ -149,6 +165,7 @@ const RequirementsPage = () => {
                             <tr>
                                 <th>Description</th>
                                 <th>Created Date</th>
+                                <th>Updated Date</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -160,26 +177,46 @@ const RequirementsPage = () => {
                                         <td className="description-column">{requ.description}
                                         </td>
                                         <td>{new Date(requ.createdDate).toLocaleDateString()}</td>
+                                        <td>{new Date(requ.lastModifiedDate).toLocaleDateString()}</td>
                                         <td>Active</td>
                                         <td>
-                                            <FontAwesomeIcon icon={faTrash} className='arrow-icon' onClick={() => handleDelete(requ._id)} />
-                                            <FontAwesomeIcon icon={faEdit} className="arrow-icon" onClick={() => handleUpdate(requ._id)} />
-                                            <FontAwesomeIcon icon={faArrowRight} className="arrow-icon" onClick={() => handleRequirementClick(requ._id)} />
+                                            <Button onClick={() => confirmDelete(requ._id)}>
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </Button>
+                                            <Button onClick={() => handleUpdate(requ._id)} >
+                                                <FontAwesomeIcon icon={faEdit} />
+                                            </Button>
+                                            <Button onClick={() => handleRequirementClick(requ._id)} >
+                                                <FontAwesomeIcon icon={faArrowRight} />
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={4}>No Requirements Found</td>
+                                    <td colSpan={5}>No Requirements Found</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </MainSection>
+                <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
+                    <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
+                    <ModalBody>
+                        Are you sure you want to delete this requirement? This action cannot be undone.
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
+                            <FontAwesomeIcon icon={faClose} />
+                        </Button>
+                        <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
+                            <FontAwesomeIcon icon={faCheck} />
+                        </Button>
+                    </ModalFooter>
+                </Modal>
             </div>
         </>
     );
-
 };
 
 export default RequirementsPage;

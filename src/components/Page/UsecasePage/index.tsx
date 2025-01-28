@@ -6,16 +6,20 @@ import {
     faArrowRight,
     faTrash,
     faEdit,
+    faClose,
+    faCheck,
+    faMagicWandSparkles,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
-import { deleteSingle, fetchUsecases, generateUsecases, postUsecases, updateUsecase } from "./service";
+import { deleteSingle, deleteUsecases, fetchUsecases, generateUsecases, postUsecases, updateUsecase } from "./service";
 import { useNavigate } from "react-router-dom";
 import { space } from "../LandingPage";
 import { appId } from "../ApplicationsPage";
 import { reqId } from "../RequirementsPage";
 import Topbar from "../../Topbar";
 import MainSection from "../../MainSection";
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter, Input, ThemeType } from "basicui";
+import { Button, Modal, ModalBody, ModalHeader, ModalFooter, Input, ThemeType, Textarea } from "basicui";
+import { deleteTestcases, deleteTestcasesByUsecase } from "../TestcasePage/service";
 
 export let useId: string | null = null;
 
@@ -28,11 +32,18 @@ const UsecasesPage = () => {
     const handleModalOpen = () => setIsModalOpen(true);
     const [formData, setFormData] = useState({ usecaseDescription: "", });
     const [currentUsecaseId, setCurrentUsecaseId] = useState<string | null>(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [usecaseToDelete, setUsecaseToDelete] = useState<string | null>(null);
 
     const handleModalClose = () => {
         setIsModalOpen(false);
         setFormData({ usecaseDescription: "" });
         setCurrentUsecaseId(null);
+    };
+
+    const handleDeleteModalClose = () => {
+        setIsDeleteModalOpen(false);
+        setUsecaseToDelete(null);
     };
 
     useEffect(() => {
@@ -78,7 +89,7 @@ const UsecasesPage = () => {
             handleModalClose();
         } catch (error) {
             console.error("Error submitting Requirement:", error);
-        } finally{
+        } finally {
             setLoading(false);
         }
     };
@@ -86,23 +97,42 @@ const UsecasesPage = () => {
     const handleGenerateUsecase = async () => {
         setLoading(true);
         try {
+            const usecases = await fetchUsecases();
+            const usecaseIds = usecases.map((usecase: { _id: string }) => usecase._id);
+
+            for (const id of usecaseIds) {
+                await deleteTestcasesByUsecase(id);
+            };
+
+            await deleteUsecases();
+
             await generateUsecases();
             const newData = await fetchUsecases();
             setUsecases(newData);
         } catch (error) {
             console.error("Error Generating Usecases: ");
-        } finally{
+        } finally {
             setLoading(false);
         }
     };
 
-    const handleDelete = async (id: string) => {
+    const confirmDelete = (id: string) => {
+        setUsecaseToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+
+
+    const handleDelete = async () => {
+        if (!usecaseToDelete) return;
         try {
-            await deleteSingle(id);
+            await deleteSingle(usecaseToDelete);
             const updated = await fetchUsecases();
             setUsecases(updated);
         } catch (error) {
-            console.error("Error Deleting Usecase:");
+            console.error("Error Deleting Usecase:", error);
+        } finally {
+            handleDeleteModalClose();
         }
     };
 
@@ -126,7 +156,7 @@ const UsecasesPage = () => {
                     <Modal isOpen={isModalOpen} onClose={handleModalClose}>
                         <ModalHeader onClose={handleModalClose} heading={currentUsecaseId ? "Update Usecase" : "New Usecase"}></ModalHeader>
                         <ModalBody>
-                            <Input
+                            <Textarea
                                 id="usecase"
                                 type="text"
                                 name="usecaseDescription"
@@ -137,15 +167,16 @@ const UsecasesPage = () => {
                             />
                         </ModalBody>
                         <ModalFooter>
-                            <Button onClick={handleModalClose} theme={ThemeType.danger}>
-                                Cancel
+                            <Button onClick={handleModalClose} theme={ThemeType.default}>
+                                <FontAwesomeIcon icon={faClose}></FontAwesomeIcon>
                             </Button>
-                            <Button onClick={handleSubmit} theme={ThemeType.success} loading={loading}>
-                                Save
+                            <Button onClick={handleSubmit} theme={ThemeType.default} loading={loading}>
+                                <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
                             </Button>
                         </ModalFooter>
                     </Modal>
                     <Button onClick={handleGenerateUsecase} loading={loading}>
+                        <FontAwesomeIcon icon={faMagicWandSparkles}></FontAwesomeIcon>
                         Generate Usecase
                     </Button>
                 </div>
@@ -162,22 +193,47 @@ const UsecasesPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {usecases.map((usecase) => (
-                            <tr key={usecase._id}>
-                                <td className="description-column">{usecase.description}</td>
-                                <td>{new Date(usecase.createdDate).toLocaleDateString()}</td>
-                                <td>{new Date(usecase.lastModifiedDate).toLocaleDateString()}</td>
-                                <td>Active</td>
-                                <td >
-                                    <FontAwesomeIcon icon={faTrash} className='arrow-icon' onClick={() => handleDelete(usecase._id)} />
-                                    <FontAwesomeIcon icon={faEdit} className="arrow-icon" onClick={() => handleUpdate(usecase._id)} />
-                                    <FontAwesomeIcon icon={faArrowRight} className="arrow-icon" onClick={() => handleUsecaseClick(usecase._id)} />
-                                </td>
+                        {usecases?.length > 0 ? (
+                            usecases.map((usecase) => (
+                                <tr key={usecase._id}>
+                                    <td className="description-column">{usecase.description}</td>
+                                    <td>{new Date(usecase.createdDate).toLocaleDateString()}</td>
+                                    <td>{new Date(usecase.lastModifiedDate).toLocaleDateString()}</td>
+                                    <td>Active</td>
+                                    <td>
+                                        <Button onClick={() => confirmDelete(usecase._id)}>
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </Button>
+                                        <Button onClick={() => handleUpdate(usecase._id)} >
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </Button>
+                                        <Button onClick={() => handleUsecaseClick(usecase._id)} >
+                                            <FontAwesomeIcon icon={faArrowRight} />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))) : (
+                            <tr>
+                                <td colSpan={5}>No Usecases Found</td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </MainSection>
+            <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
+                <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
+                <ModalBody>
+                    Are you sure you want to delete this usecase? This action cannot be undone.
+                </ModalBody>
+                <ModalFooter>
+                    <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
+                        <FontAwesomeIcon icon={faClose} />
+                    </Button>
+                    <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </div>
     )
 };

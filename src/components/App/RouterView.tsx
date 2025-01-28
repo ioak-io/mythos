@@ -17,6 +17,7 @@ import ApplicationsPage from "../Page/ApplicationsPage";
 import RequirementsPage from "../Page/RequirementsPage";
 import UsecasesPage from "../Page/UsecasePage";
 import TestcasesPage from "../Page/TestcasePage";
+import EditTestcasePage from "../Page/EditTestcasePage";
 
 interface Props {}
 
@@ -129,6 +130,24 @@ const RouterView = (props: Props) => {
             <ProtectedRouteApp
               middleware={["authenticate"]}
               component={TestcasesPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement/:id/usecase/:id/testcase/edit/:id"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={EditTestcasePage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement/:id/usecase/:id/testcase/edit"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={EditTestcasePage}
             />
           }
         />
