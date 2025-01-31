@@ -59,7 +59,7 @@ const EditCompany = (props: Props) => {
         console.log("company details updated");
       });
     }
-    navigate(`/${state.reference}/application`);
+    navigate(`/`, {state:{refresh:true}});
   };
 
   return (

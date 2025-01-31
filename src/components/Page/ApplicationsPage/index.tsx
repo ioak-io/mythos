@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./style.scss";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import Topbar from "../../../components/Topbar";
 import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowRight, faTrash, faEdit, faCross, faCheck, faCancel, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faArrowRight, faTrash, faEdit, faCheck, faClose } from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
 import { deleteSingle, fetchData, postData, updateApp } from "./service";
-import { space } from "../LandingPage";
 
 interface Props {
   location: any;
   space: string;
 }
 
-export let appId: string | null = null;
-
 const ApplicationsPage = (props: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const params = useParams();
   const navigate = useNavigate();
   const authorization = useSelector((state: any) => state.authorization);
   const [applications, setApplications] = useState<Application[]>([]);
@@ -31,6 +26,9 @@ const ApplicationsPage = (props: Props) => {
   const [currentAppId, setCurrentAppId] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [appToDelete, setAppToDelete] = useState<string | null>(null);
+  const location = useLocation();
+  const params = location.pathname.split('/');
+  const space = params[1];
 
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -46,7 +44,7 @@ const ApplicationsPage = (props: Props) => {
   useEffect(() => {
     const loadApplications = async () => {
       try {
-        const data = await fetchData();
+        const data = await fetchData(space);
         setApplications(data);
       } catch (err) {
         setError("Data Could Not Be Fetched");
@@ -58,8 +56,7 @@ const ApplicationsPage = (props: Props) => {
     loadApplications();
   }, []);
 
-  const handleApplicationClick = (id: any) => {
-    appId = id;
+  const handleApplicationClick = (appId: any) => {
     navigate(`/${space}/application/${appId}/requirement`)
   };
 
@@ -76,12 +73,12 @@ const ApplicationsPage = (props: Props) => {
     setLoading(true);
     try {
       if (currentAppId) {
-        await updateApp(currentAppId, appNamePayload);
+        await updateApp(space, currentAppId, appNamePayload);
       } else {
-        await postData(appNamePayload);
+        await postData(space, appNamePayload);
       }
 
-      const updatedApplications = await fetchData();
+      const updatedApplications = await fetchData(space);
       setApplications(updatedApplications);
       handleModalClose();
     } catch (error) {
@@ -99,8 +96,8 @@ const ApplicationsPage = (props: Props) => {
   const handleDelete = async () => {
     if (!appToDelete) return;
     try {
-      await deleteSingle(appToDelete);
-      const updated = await fetchData();
+      await deleteSingle(space, appToDelete);
+      const updated = await fetchData(space);
       setApplications(updated);
     } catch (error) {
       console.error("Error Deleting Application:", error);
@@ -162,28 +159,28 @@ const ApplicationsPage = (props: Props) => {
             </tr>
           </thead>
           <tbody>
-          {applications?.length > 0 ? (
-            applications.map((app) => (
-              <tr key={app._id} >
-                <td>{app.name}</td>
-                <td>{app.createdDate.slice(0, 10)}</td>
-                <td>{app.lastModifiedDate.slice(0, 10)}</td>
-                <td>Active</td>
-                <td>
-                  <Button onClick={() => confirmDelete(app._id)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
-                  <Button onClick={() => handleUpdate(app._id)} >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
-                  <Button onClick={() => handleApplicationClick(app._id)} >
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </Button>
-                </td>
-              </tr>
-            ))):(
+            {applications?.length > 0 ? (
+              applications.map((app) => (
+                <tr key={app._id} >
+                  <td>{app.name}</td>
+                  <td>{app.createdDate.slice(0, 10)}</td>
+                  <td>{app.lastModifiedDate.slice(0, 10)}</td>
+                  <td>Active</td>
+                  <td>
+                    <Button onClick={() => confirmDelete(app._id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                    <Button onClick={() => handleUpdate(app._id)} >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                    <Button onClick={() => handleApplicationClick(app._id)} >
+                      <FontAwesomeIcon icon={faArrowRight} />
+                    </Button>
+                  </td>
+                </tr>
+              ))) : (
               <tr>
-                <td colSpan={5}></td>
+                <td colSpan={5}>No Applications Found</td>
               </tr>
             )}
           </tbody>

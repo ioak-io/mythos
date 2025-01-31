@@ -1,8 +1,7 @@
-import { space } from "../LandingPage";
-import { appId } from "../ApplicationsPage";
+
 import { httpDelete, httpGet, httpPost, httpPut } from "../../../../src/components/Lib/RestTemplate";
 
-export const fetchRequirements = async (): Promise<Requirement[]> => {
+export const fetchRequirements = async (space: any, appId:any): Promise<Requirement[]> => {
     try {
         const response = await httpGet(`/${space}/application/${appId}/requirement`, {});
         return response?.data; 
@@ -12,15 +11,15 @@ export const fetchRequirements = async (): Promise<Requirement[]> => {
     }
 };
 
-export const postRequirements = async(reqCreatePayload: any)=>{
+export const postRequirements = async(space: any, appId:any, reqCreatePayload: any)=>{
   await httpPost(`/${space}/application/${appId}/requirement`, reqCreatePayload, {} );
 };
 
-export const deleteSingle = async(id:any) =>{
+export const deleteSingle = async(space: any, appId:any, id:any) =>{
   await httpDelete(`/${space}/application/${appId}/requirement/${id}`, {})
 };
 
-export const updateRequirement = async(id:any, data:any) =>{
+export const updateRequirement = async(space: any, appId:any, id:any, data:any) =>{
   const response = await httpPut(`/${space}/application/${appId}/requirement/${id}`, data ,{})
   return response.data;
 };

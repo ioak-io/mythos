@@ -13,7 +13,7 @@ export function httpGet(endpoint: string, headers: any, url?: string) {
     if (token) {
       headers["Authorization"] = token || "";
     }
-    return axiosInstance.get((url || baseUrl) + endpoint, { headers });
+    return axiosInstance.get((baseUrl||url) + endpoint, { headers });
 
   } catch (error) {
     console.error("Get Api Error: ");

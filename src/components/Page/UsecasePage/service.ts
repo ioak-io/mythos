@@ -1,9 +1,6 @@
 import { httpGet, httpPost, httpPostGenerate, httpDelete, httpPut } from "../../Lib/RestTemplate";
-import { space } from "../LandingPage";
-import { appId } from "../ApplicationsPage";
-import { reqId } from "../RequirementsPage";
 
-export const fetchUsecases = async(): Promise<Usecases[]> =>{
+export const fetchUsecases = async(space:any, appId:any, reqId:any): Promise<Usecases[]> =>{
     try {
             const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase`, {});
             return response?.data; 
@@ -13,23 +10,23 @@ export const fetchUsecases = async(): Promise<Usecases[]> =>{
         }
 };
 
-export const postUsecases = async(usecaseCreatePayload: any)=>{
+export const postUsecases = async(space:any, appId:any, reqId:any,usecaseCreatePayload: any)=>{
   await httpPost(`/${space}/application/${appId}/requirement/${reqId}/usecase`, usecaseCreatePayload, {} );
 };
 
-export const generateUsecases = async()=>{
+export const generateUsecases = async(space:any, appId:any, reqId:any)=>{
   await httpPostGenerate(`/${space}/application/${appId}/requirement/${reqId}/usecase/generate`, {} );
 };
 
-export const deleteSingle = async(id:string)=>{
+export const deleteSingle = async(space:any, appId:any, reqId:any,id:string)=>{
   await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${id}`, {})
 };
 
-export const deleteUsecases = async()=>{
+export const deleteUsecases = async(space:any, appId:any, reqId:any)=>{
   await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase`, {})
 };
 
-export const updateUsecase = async(id:string, data:any)=>{
+export const updateUsecase = async(space:any, appId:any, reqId:any,id:string, data:any)=>{
   const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${id}`,data,  {})
   return response.data;
 };

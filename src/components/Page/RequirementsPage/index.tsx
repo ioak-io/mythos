@@ -10,7 +10,7 @@ import {
     Textarea
 } from "basicui";
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate} from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faArrowRight, faTrash, faEdit,
@@ -18,26 +18,25 @@ import {
     faCheck
 } from "@fortawesome/free-solid-svg-icons";
 import { deleteSingle, fetchRequirements, postRequirements, updateRequirement } from "./service";
-import { space } from '../LandingPage';
-import { appId } from '../ApplicationsPage';
 import Topbar from '../../Topbar';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import MainSection from '../../MainSection';
-
-export let reqId: string | null = null;
 
 const RequirementsPage = () => {
     const [requirements, setRequirements] = useState<Requirement[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const searchParams = useSearchParams();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleModalOpen = () => setIsModalOpen(true);
     const [formData, setFormData] = useState({ reqDescription: "", });
     const [currentReqId, setCurrentReqId] = useState<string | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [reqToDelete, setReqToDelete] = useState<string | null>(null);
+    const location = useLocation();
+    const params = location.pathname.split('/');
+    const space = params[1];
+    const appId = params[3];
 
     const handleModalClose = () => {
         setIsModalOpen(false);
@@ -53,7 +52,7 @@ const RequirementsPage = () => {
     useEffect(() => {
         const loadRequirements = async () => {
             try {
-                const data = await fetchRequirements();
+                const data = await fetchRequirements(space, appId);
                 setRequirements(data);
             } catch (err) {
                 setError("Data Could Not Be Fetched");
@@ -63,11 +62,10 @@ const RequirementsPage = () => {
         };
 
         loadRequirements();
-    }, [appId]);
+    }, []);
 
 
-    const handleRequirementClick = (id: any) => {
-        reqId = id;
+    const handleRequirementClick = (reqId: any) => {
         navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase`);
     };
 
@@ -84,12 +82,12 @@ const RequirementsPage = () => {
         setLoading(true);
         try {
             if (currentReqId) {
-                await updateRequirement(currentReqId, reqCreatePayload);
+                await updateRequirement(space, appId, currentReqId, reqCreatePayload);
             } else {
-                await postRequirements(reqCreatePayload);
+                await postRequirements(space, appId, reqCreatePayload);
             }
 
-            const updatedRequirements = await fetchRequirements();
+            const updatedRequirements = await fetchRequirements(space, appId);
             setRequirements(updatedRequirements);
             handleModalClose();
         } catch (error) {
@@ -107,8 +105,8 @@ const RequirementsPage = () => {
     const handleDelete = async () => {
         if (!reqToDelete) return;
         try {
-            await deleteSingle(reqToDelete);
-            const updated = await fetchRequirements();
+            await deleteSingle(space, appId, reqToDelete);
+            const updated = await fetchRequirements(space, appId);
             setRequirements(updated);
         } catch (error) {
             console.error("Error Deleting Requirement:", error);

@@ -1,13 +1,9 @@
 import { httpGet, httpPut, httpPost } from "../../Lib/RestTemplate";
-import { appId } from "../ApplicationsPage";
-import { space } from "../LandingPage";
-import { reqId } from "../RequirementsPage";
-import { useId } from "../UsecasePage";
-import { testId } from "../TestcasePage";
 
-export const fetchSingleTestcase = async (id: string): Promise<TestCase[]> => {
+
+export const fetchSingleTestcase = async (space:any, appId:any, reqId:any, useId:any,id: string): Promise<TestCase[]> => {
     try {
-        const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${testId}`, {});
+        const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, {});
         const testcase = Array.isArray(response?.data) ? response?.data[0] : response?.data;
         return testcase;
     } catch (error) {
@@ -16,11 +12,11 @@ export const fetchSingleTestcase = async (id: string): Promise<TestCase[]> => {
     }
 };
 
-export const postTestcases = async (testcaseCreatePayload: any) => {
+export const postTestcases = async (space:any, appId:any, reqId:any, useId:any,testcaseCreatePayload: any) => {
     await httpPost(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, testcaseCreatePayload, {});
 };
 
-export const updateTestcase = async (id: string, data: any) => {
+export const updateTestcase = async (space:any, appId:any, reqId:any, useId:any,id: string, data: any) => {
     const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, data, {})
     return response.data;
 };

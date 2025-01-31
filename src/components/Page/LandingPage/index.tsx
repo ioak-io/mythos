@@ -7,7 +7,8 @@ import './style.scss';
 import ReceiptModel from '../../../model/ReceiptModel';
 import ExpenseModel from '../../../model/ExpenseModel';
 import Topbar from '../../../components/Topbar';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { fetchAndSetCompanyItems } from '../../../store/actions/CompanyActions';
 
 const EMPTY_EXPENSE: ExpenseModel = {
   amount: undefined,
@@ -29,21 +30,25 @@ interface Props {
   space: string;
   location: any;
 }
-export let space: Number | null = null;
 
 const LandingPage = (props: Props) => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const dispatch = useDispatch();
   const authorization = useSelector((state: any) => state.authorization);
   const companyList = useSelector((state: any) => state.company.items);
 
+  // useEffect(() => {
+  //   if (location.state?.refresh || !companyList.length) {
+  //     dispatch(fetchAndSetCompanyItems(authorization));
+  //   }
+  // }, [location.state, dispatch, authorization]);
 
   const goToCreateCompanyPage = () => {
     navigate('/company/edit');
   };
 
   const goToCompanyPage = (companyReference: number) => {
-    space = companyReference;
     navigate(`/${companyReference}/application`);
   };
 

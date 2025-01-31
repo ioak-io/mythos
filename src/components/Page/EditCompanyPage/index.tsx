@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +9,7 @@ import './style.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
 import { updateCompany, createCompany } from './service';
+import { fetchAndSetCompanyItems } from 'src/store/actions/CompanyActions';
 
 interface Props {
   history: any;
@@ -31,30 +32,32 @@ const EditCompanyPage = (props: Props) => {
   const [searchParams] = useSearchParams();
   const [formId, setFormId] = useState(newId());
   const [state, setState] = useState<CompanyModel>({ ...EMPTY_COMPANY });
-
+  const dispatch = useDispatch();
   const handleChange = (event: any) => {
     setState({ ...state, [event.currentTarget.name]: event.currentTarget.value });
   };
 
-  const save = () => {
+  const save = async() => {
     if (searchParams.get('id')) {
-      updateCompany(state, authorization).then((response: any) => {
-        goBack();
+      await updateCompany(state, authorization).then((response: any) => {
       }).catch((error: any) => {
         console.error("Failed to update company:", error);
       });
     } else {
-      createCompany(state, authorization).then((response: any) => {
-        goBack();
+      await createCompany(state, authorization).then((response: any) => {
+        console.log("State", state);
+        console.log("Authorization", authorization);
       }).catch((error: any) => {
         console.error("Failed to create company:", error);
       });
     }
+    // await dispatch(fetchAndSetCompanyItems(authorization));
+    goBack();
   };
   
 
   const goBack = () => {
-    navigate(-1);
+    navigate(`/`,{replace:true, state: { refresh: true }});
   };
 
   return (

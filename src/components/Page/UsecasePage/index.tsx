@@ -12,16 +12,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
 import { deleteSingle, deleteUsecases, fetchUsecases, generateUsecases, postUsecases, updateUsecase } from "./service";
-import { useNavigate } from "react-router-dom";
-import { space } from "../LandingPage";
-import { appId } from "../ApplicationsPage";
-import { reqId } from "../RequirementsPage";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Topbar from "../../Topbar";
 import MainSection from "../../MainSection";
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter, Input, ThemeType, Textarea } from "basicui";
 import { deleteTestcases, deleteTestcasesByUsecase } from "../TestcasePage/service";
-
-export let useId: string | null = null;
 
 const UsecasesPage = () => {
     const [usecases, setUsecases] = useState<Usecases[]>([]);
@@ -34,6 +29,11 @@ const UsecasesPage = () => {
     const [currentUsecaseId, setCurrentUsecaseId] = useState<string | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [usecaseToDelete, setUsecaseToDelete] = useState<string | null>(null);
+    const location = useLocation();
+    const params = location.pathname.split('/');
+    const space = params[1];
+    const appId = params[3];
+    const reqId = params[5];
 
     const handleModalClose = () => {
         setIsModalOpen(false);
@@ -49,7 +49,7 @@ const UsecasesPage = () => {
     useEffect(() => {
         const loadUsecases = async () => {
             try {
-                const data = await fetchUsecases();
+                const data = await fetchUsecases(space, appId, reqId);
                 setUsecases(data);
             } catch (err) {
                 setError("Data Could Not Be Fetched");
@@ -61,8 +61,7 @@ const UsecasesPage = () => {
         loadUsecases();
     }, []);
 
-    const handleUsecaseClick = (id: any) => {
-        useId = id;
+    const handleUsecaseClick = (useId: any) => {
         navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`);
     };
 
@@ -79,12 +78,12 @@ const UsecasesPage = () => {
         setLoading(true);
         try {
             if (currentUsecaseId) {
-                await updateUsecase(currentUsecaseId, usecaseCreatePayload);
+                await updateUsecase(space, appId, reqId,currentUsecaseId, usecaseCreatePayload);
             } else {
-                await postUsecases(usecaseCreatePayload);
+                await postUsecases(space, appId, reqId,usecaseCreatePayload);
             };
 
-            const newUsecases = await fetchUsecases();
+            const newUsecases = await fetchUsecases(space, appId, reqId);
             setUsecases(newUsecases);
             handleModalClose();
         } catch (error) {
@@ -97,17 +96,17 @@ const UsecasesPage = () => {
     const handleGenerateUsecase = async () => {
         setLoading(true);
         try {
-            const usecases = await fetchUsecases();
+            const usecases = await fetchUsecases(space, appId, reqId);
             const usecaseIds = usecases.map((usecase: { _id: string }) => usecase._id);
 
             for (const id of usecaseIds) {
-                await deleteTestcasesByUsecase(id);
+                await deleteTestcasesByUsecase(space, appId, reqId,id);
             };
 
-            await deleteUsecases();
+            await deleteUsecases(space, appId, reqId);
 
-            await generateUsecases();
-            const newData = await fetchUsecases();
+            await generateUsecases(space, appId, reqId);
+            const newData = await fetchUsecases(space, appId, reqId);
             setUsecases(newData);
         } catch (error) {
             console.error("Error Generating Usecases: ");
@@ -126,8 +125,8 @@ const UsecasesPage = () => {
     const handleDelete = async () => {
         if (!usecaseToDelete) return;
         try {
-            await deleteSingle(usecaseToDelete);
-            const updated = await fetchUsecases();
+            await deleteSingle(space, appId, reqId,usecaseToDelete);
+            const updated = await fetchUsecases(space, appId, reqId);
             setUsecases(updated);
         } catch (error) {
             console.error("Error Deleting Usecase:", error);
@@ -151,7 +150,7 @@ const UsecasesPage = () => {
                 <div className="topbar-actions">
                     <Button onClick={handleModalOpen}>
                         <FontAwesomeIcon icon={faPlus} />
-                        New Usecase
+                        Usecase
                     </Button>
                     <Modal isOpen={isModalOpen} onClose={handleModalClose}>
                         <ModalHeader onClose={handleModalClose} heading={currentUsecaseId ? "Update Usecase" : "New Usecase"}></ModalHeader>
