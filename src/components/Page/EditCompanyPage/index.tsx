@@ -9,7 +9,6 @@ import './style.scss';
 import { newId } from '../../../events/MessageService';
 import CompanyModel from '../../../model/CompanyModel';
 import { updateCompany, createCompany } from './service';
-import { fetchAndSetCompanyItems } from 'src/store/actions/CompanyActions';
 
 interface Props {
   history: any;
@@ -46,12 +45,11 @@ const EditCompanyPage = (props: Props) => {
     } else {
       await createCompany(state, authorization).then((response: any) => {
         console.log("State", state);
-        console.log("Authorization", authorization);
+        console.log("Authorization", authorization); 
       }).catch((error: any) => {
         console.error("Failed to create company:", error);
       });
     }
-    // await dispatch(fetchAndSetCompanyItems(authorization));
     goBack();
   };
   
