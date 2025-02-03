@@ -131,7 +131,7 @@ const RequirementsPage = () => {
                     <div className="topbar-actions">
                         <Button onClick={handleModalOpen}>
                             <FontAwesomeIcon icon={faPlus} />
-                            New Requirement
+                            Requirement
                         </Button>
                         <Modal isOpen={isModalOpen} onClose={handleModalClose}>
                             <ModalHeader onClose={handleModalClose} heading={currentReqId ? "Update Requirement" : "New Requirement"}></ModalHeader>

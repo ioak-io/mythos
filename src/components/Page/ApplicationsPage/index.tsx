@@ -121,7 +121,7 @@ const ApplicationsPage = (props: Props) => {
         <div className="topbar-actions">
           <Button onClick={handleModalOpen}>
             <FontAwesomeIcon icon={faPlus} />
-            New app
+            Application
           </Button>
           <Modal isOpen={isModalOpen} onClose={handleModalClose}>
             <ModalHeader border={true} onClose={handleModalClose} heading={currentAppId ? "Update Application" : "New Application"}></ModalHeader>
