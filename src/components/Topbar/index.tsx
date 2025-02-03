@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./style.scss";
 
 interface Props {
-  title?: string;
+  title: string;
   children?: any;
-  realm?: string;
-  hideSidebarOnDesktop?: any;
 }
 
 const Topbar = (props: Props) => {
