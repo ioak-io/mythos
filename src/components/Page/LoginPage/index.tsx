@@ -22,7 +22,7 @@ interface Props {
 
 const realm = process.env.REACT_APP_ONEAUTH_APPSPACE_ID || "";
 const environment: any = process.env.REACT_APP_ENVIRONMENT || "local";
-const apiKey = "78b4e61d-de91-4700-9404-3a9a0924ba8a";
+const apiKey = process.env.REACT_APP_ONEAUTH_API_KEY || "78b4e61d-de91-4700-9404-3a9a0924ba8a";
 const emailConfirmationPageLink: any =
   process.env.REACT_APP_REDIRECT_CONFIRM_EMAIL || undefined;
 const resetPasswordPageLink: any =
