@@ -61,8 +61,8 @@ const MobileSidebar = (props: MobileSidebarProps) => {
     message = "You have been logged out"
   ) => {
     dispatch(removeAuth());
-    removeSessionValue(`testgenie-access_token`);
-    removeSessionValue(`testgenie-refresh_token`);
+    removeSessionValue(`mythos-access_token`);
+    removeSessionValue(`mythos-refresh_token`);
     navigate(`/`);
   };
 

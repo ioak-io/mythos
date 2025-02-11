@@ -7,10 +7,10 @@ import BodyContainer from "../App/BodyContainer";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AppShell } from "basicui";
 
-import logoIconWhite from "../../images/testgenie_white_small.svg";
-import logoTextWhite from "../../images/testgenie_white_text.svg";
-import logoIconBlack from "../../images/testgenie_black_small.svg";
-import logoTextBlack from "../../images/testgenie_black_text.svg";
+import logoIconWhite from "../../images/mythos_white_small.svg";
+import logoTextWhite from "../../images/mythos_white_text.svg";
+import logoIconBlack from "../../images/mythos_black_small.svg";
+import logoTextBlack from "../../images/mythos_black_text.svg";
 import SideNavLink from "./SideNavLink";
 import {
   faBook,
@@ -65,7 +65,7 @@ const MainContent = (props: Props) => {
 
   const toggleSidebar = () => {
     sessionStorage.setItem(
-      "testgenie_pref_sidebar_status",
+      "mythos_pref_sidebar_status",
       profile.sidebar ? "collapsed" : "expanded"
     );
 
@@ -74,8 +74,8 @@ const MainContent = (props: Props) => {
 
   const logout = () => {
     dispatch(removeAuth());
-    removeSessionValue(`testgenie-access_token`);
-    removeSessionValue(`testgenie-refresh_token`);
+    removeSessionValue(`mythos-access_token`);
+    removeSessionValue(`mythos-refresh_token`);
     navigate(`/`);
   };
 

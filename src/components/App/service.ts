@@ -12,7 +12,7 @@ export const rotateToken = async (space: string, authorization: any) => {
         .then((response) => {
             if (response.status === 200) {
                 setSessionValue(
-                    `testgenie-access_token`,
+                    `mythos-access_token`,
                     response.data.access_token
                 );
                 return Promise.resolve(response.data);

@@ -106,10 +106,10 @@ const Init = () => {
 
   const initializeProfileFromSession = () => {
     const colorMode = sessionStorage.getItem(
-      "testgenie_pref_profile_colormode"
+      "mythos_pref_profile_colormode"
     );
     const sidebarStatus = sessionStorage.getItem(
-      "testgenie_pref_sidebar_status"
+      "mythos_pref_sidebar_status"
     );
 
     if (colorMode || sidebarStatus) {

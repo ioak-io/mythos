@@ -26,7 +26,7 @@ const RightNav = (props: Props) => {
   ) => {
     dispatch(removeAuth());
     removeSessionValue(
-      `testgenie_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
+      `mythos_${process.env.REACT_APP_ONEAUTH_APPSPACE_ID}`
     );
     navigate(`/`);
     sendMessage('notification', true, {

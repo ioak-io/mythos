@@ -17,7 +17,7 @@ const Home = (props: Props) => {
         Secure identity and authentication provider
       </div>
       <div className="page-home--subtitle">
-        Testgenie handles user account setup, password management and
+        Mythos handles user account setup, password management and
         authentication needs of your organization. Connect all your
         applications/assets with a single user account per user. Supports
         sign-in with social identity providers such as Google, Outlook and

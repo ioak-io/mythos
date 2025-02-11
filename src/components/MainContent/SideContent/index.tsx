@@ -73,10 +73,10 @@ const SideContent = (props: Props) => {
   ) => {
     dispatch(removeAuth());
     removeSessionValue(
-      `testgenie-access_token`
+      `mythos-access_token`
     );
     removeSessionValue(
-      `testgenie-refresh_token`
+      `mythos-refresh_token`
     );
     navigate(`/`);
   };
@@ -91,7 +91,7 @@ const SideContent = (props: Props) => {
 
   const toggleSidebar = () => {
     sessionStorage.setItem(
-      'testgenie_pref_sidebar_status',
+      'mythos_pref_sidebar_status',
       profile.sidebar ? 'collapsed' : 'expanded'
     );
 

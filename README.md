@@ -1,4 +1,4 @@
-# Testgenie - Zettelkasten-inspired Note-Taking Platform
+# Mythos - Zettelkasten-inspired Note-Taking Platform
 
 A dynamic note-taking system designed to foster idea connections through clusters. It harnesses artificial intelligence to intuitively link related notes, transforming information into a coherent network of interconnected ideas.
 
@@ -29,12 +29,12 @@ This project is developed and tested with the following versions:
 - npm: v10.0.0 or higher
 
 ## Prerequisites and dependencies
-- Testgenie REST API service module (https://github.com/ioak-io/testgenie-service)
+- Mythos REST API service module (https://github.com/ioak-io/mythos-service)
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/ioak-io/testgenie.git`
-2. Navigate to the project directory: `cd testgenie`
+1. Clone the repository: `git clone https://github.com/ioak-io/mythos.git`
+2. Navigate to the project directory: `cd mythos`
 3. Install dependencies: `npm install`
 
 ## Usage

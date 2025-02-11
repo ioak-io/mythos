@@ -61,7 +61,7 @@ const GettingStartedAsset = (props: Props) => {
             <div className="typography-4">
               An asset represents an application or product being supported.
               Create an asset to get started with the process of onboarding your
-              product into Testgenie.
+              product into Mythos.
             </div>
           </div>
         </div>

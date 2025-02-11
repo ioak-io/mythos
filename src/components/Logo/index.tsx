@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, connect, useDispatch } from "react-redux";
 import "./style.scss";
-import testgenieWhiteSmall from "../../images/testgenie_white_small.svg";
-import testgenieWhiteText from "../../images/testgenie_white_text.svg";
-import testgenieBlackSmall from "../../images/testgenie_black_small.svg";
-import testgenieBlackText from "../../images/testgenie_black_text.svg";
-import testgenieBlack from "../../images/testgenie_black.svg";
+import mythosWhiteSmall from "../../images/mythos_white_small.svg";
+import mythosWhiteText from "../../images/mythos_white_text.svg";
+import mythosBlackSmall from "../../images/mythos_black_small.svg";
+import mythosBlackText from "../../images/mythos_black_text.svg";
+import mythosBlack from "../../images/mythos_black.svg";
 
 interface Props {
   variant: "full" | "short";
@@ -22,19 +22,19 @@ const Logo = (props: Props) => {
     <div className="logo">
       <div className="logo--image">
         {profile.theme === "basicui-light" && (
-          <img src={testgenieBlackSmall} alt="Testgenie logo" />
+          <img src={mythosBlackSmall} alt="Mythos logo" />
         )}
         {profile.theme === "basicui-dark" && (
-          <img src={testgenieWhiteSmall} alt="Testgenie logo" />
+          <img src={mythosWhiteSmall} alt="Mythos logo" />
         )}
       </div>
       {props.variant === "full" && (
         <div className="logo--text">
           {profile.theme === "basicui-light" && (
-            <img src={testgenieBlackText} alt="Testgenie logo" />
+            <img src={mythosBlackText} alt="Mythos logo" />
           )}
           {profile.theme === "basicui-dark" && (
-            <img src={testgenieWhiteText} alt="Testgenie logo" />
+            <img src={mythosWhiteText} alt="Mythos logo" />
           )}
         </div>
       )}

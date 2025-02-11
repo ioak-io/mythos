@@ -1,25 +1,25 @@
 {
-  "name": "testgenie",
+  "name": "mythos",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "homepage": "https://testgenie-app.ioak.io",
+  "homepage": "https://mythos-app.ioak.io",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --config webpack.config.js --mode development",
     "build": "webpack --env target=production --config webpack.config.js --mode production",
     "deploy-gh": "npm run build&&gh-pages -d build",
-    "deploy": "pm2 delete testgenie-app && pm2 start npm --name 'testgenie-app' -- start -- --port=7004"
+    "deploy": "pm2 delete mythos-app && pm2 start npm --name 'mythos-app' -- start -- --port=7004"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ioak-io/testgenie.git"
+    "url": "git+https://github.com/ioak-io/mythos.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ioak-io/testgenie/issues"
+    "url": "https://github.com/ioak-io/mythos/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.20.7",

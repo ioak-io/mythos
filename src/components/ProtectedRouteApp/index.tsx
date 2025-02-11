@@ -82,8 +82,8 @@ const ProtectedRouteApp = (props: Props) => {
       }
       return true;
     }
-    const accessToken = getSessionValue(`testgenie-access_token`);
-    const refreshToken = getSessionValue(`testgenie-refresh_token`);
+    const accessToken = getSessionValue(`mythos-access_token`);
+    const refreshToken = getSessionValue(`mythos-refresh_token`);
     if (accessToken && refreshToken) {
       httpPost(
         `/${appRealm}/user/auth/token`,
@@ -96,7 +96,7 @@ const ProtectedRouteApp = (props: Props) => {
             let newAccessToken = accessToken;
             if (response.data?.access_token) {
               newAccessToken = response.data.access_token;
-              setSessionValue(`testgenie-access_token`, newAccessToken);
+              setSessionValue(`mythos-access_token`, newAccessToken);
             }
             dispatch(
               addAuth({
@@ -111,8 +111,8 @@ const ProtectedRouteApp = (props: Props) => {
           }
         })
         .catch((error: any) => {
-          removeSessionValue(`testgenie-access_token`);
-          removeSessionValue(`testgenie-refresh_token`);
+          removeSessionValue(`mythos-access_token`);
+          removeSessionValue(`mythos-refresh_token`);
           redirectToLogin(appRealm);
         });
     } else if (redirect) {

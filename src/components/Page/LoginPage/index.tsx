@@ -77,9 +77,9 @@ const LoginPage = (props: Props) => {
         console.log(response);
         setSigninFormErrorMessages(response.errorMessages);
         if (response.outcome === "SUCCESS") {
-          setSessionValue(`testgenie-access_token`, response.data.access_token);
+          setSessionValue(`mythos-access_token`, response.data.access_token);
           setSessionValue(
-            `testgenie-refresh_token`,
+            `mythos-refresh_token`,
             response.data.refresh_token
           );
           navigate(searchParams.get("from") || "/home");

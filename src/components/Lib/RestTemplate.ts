@@ -9,7 +9,7 @@ const baseUrl = process.env.REACT_APP_API_URL;
 
 export function httpGet(endpoint: string, headers: any, url?: string) {
   try {
-    const token = getSessionValue('testgenie-access_token');
+    const token = getSessionValue('mythos-access_token');
     if (token) {
       headers["Authorization"] = token || "";
     }
@@ -32,7 +32,7 @@ export function httpPost(
   headers: any,
   url?: string
 ) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   // if (token) {
   //   headers["Authorization"] = token;
   // }
@@ -50,7 +50,7 @@ export function httpPostGenerate(
   payload?: any,
   url?: string
 ) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   if (token) {
     headers["Authorization"] = token || "";
   }
@@ -63,7 +63,7 @@ export function httpPut(
   headers: any,
   url?: string
 ) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   if (token) {
     headers["Authorization"] = token;
   }
@@ -79,7 +79,7 @@ export function httpDelete(
   headers: any,
   url?: string
 ) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   if (token) {
     headers["Authorization"] = token;
   }
@@ -95,7 +95,7 @@ export function httpDelete(
 }
 
 export function httpGetManual(endpoint: string, headers: any, url?: string) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   if (token) {
     headers["Authorization"] = token;
   }
@@ -112,7 +112,7 @@ export function httpPostManual(
   headers: any,
   url?: string
 ) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   if (token) {
     headers["Authorization"] = token;
   }
@@ -133,7 +133,7 @@ export function httpPutManual(
   headers: any,
   url?: string
 ) {
-  const token = getSessionValue('testgenie-access_token');
+  const token = getSessionValue('mythos-access_token');
   if (token) {
     headers["Authorization"] = token;
   }

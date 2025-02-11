@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 
 // Default props value.
 const defaultPortalProps = {
-    wrapperId: "testgenie-portal"
+    wrapperId: "mythos-portal"
 }
 // Define Portal props.
 type PortalProps = {

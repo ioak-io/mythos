@@ -25,8 +25,8 @@ const OaLogin = (props: Props) => {
         .then((response) => {
           if (response.status === 200) {
             console.log('**', response.data.token);
-            setSessionValue(`testgenie-access_token`, response.data.token);
-            setSessionValue(`testgenie-refresh_token`, searchParams.get("refresh_token") || '');
+            setSessionValue(`mythos-access_token`, response.data.token);
+            setSessionValue(`mythos-refresh_token`, searchParams.get("refresh_token") || '');
             navigate(searchParams.get("from") || '/home');
           }
           return Promise.resolve({});
