@@ -88,7 +88,7 @@ const ProtectedRouteApp = (props: Props) => {
       httpPost(
         `/${appRealm}/user/auth/token`,
         { grant_type: "refresh_token", refresh_token: refreshToken },
-        null,
+        {},
         process.env.REACT_APP_ONEAUTH_API_URL
       )
         .then((response: any) => {

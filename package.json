@@ -32,6 +32,8 @@
     "@popperjs/core": "^2.11.8",
     "@redux-devtools/core": "^4.0.0",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/eslint": "^9.6.1",
+    "@types/express": "^4.17.21",
     "@types/lodash": "^4.14.202",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",

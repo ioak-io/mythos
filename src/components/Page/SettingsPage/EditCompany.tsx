@@ -48,16 +48,18 @@ const EditCompany = (props: Props) => {
   };
 
   const save = () => {
-    console.log(state);
+    console.log("State", state);
     if (state._id) {
       updateCompany(state, authorization).then((response: any) => {
         console.log("company details updated");
       });
+      
     } else {
       createCompany(state, authorization).then((response: any) => {
         console.log("company details updated");
       });
     }
+    navigate(`/`, {state:{refresh:true}});
   };
 
   return (

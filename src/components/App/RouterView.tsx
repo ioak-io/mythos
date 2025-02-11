@@ -14,6 +14,10 @@ import Permissions from "../Page/SettingsPage/Permissions";
 import BackupAndRestore from "../Page/SettingsPage/BackupAndRestore";
 import LoginPage from "../Page/LoginPage";
 import ApplicationsPage from "../Page/ApplicationsPage";
+import RequirementsPage from "../Page/RequirementsPage";
+import UsecasesPage from "../Page/UsecasePage";
+import TestcasesPage from "../Page/TestcasePage";
+import EditTestcasePage from "../Page/EditTestcasePage";
 
 interface Props {}
 
@@ -94,11 +98,56 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/applications"
+          path="/:space/application"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}
               component={ApplicationsPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={RequirementsPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement/:id/usecase"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={UsecasesPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement/:id/usecase/:id/testcase"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={TestcasesPage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement/:id/usecase/:id/testcase/edit/:id"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={EditTestcasePage}
+            />
+          }
+        />
+        <Route
+          path="/:space/application/:id/requirement/:id/usecase/:id/testcase/edit"
+          element={
+            <ProtectedRouteApp
+              middleware={["authenticate"]}
+              component={EditTestcasePage}
             />
           }
         />
