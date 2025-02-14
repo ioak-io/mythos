@@ -150,7 +150,7 @@ const UsecasesPage = () => {
         <div>
             <Topbar title="Usecase">
                 <div className="topbar-actions">
-                    <Button onClick={handleModalOpen}>
+                    <Button onClick={handleModalOpen} disabled={loading}>
                         <FontAwesomeIcon icon={faPlus} />
                         Usecase
                     </Button>
@@ -185,7 +185,7 @@ const UsecasesPage = () => {
                             </Button>
                         </ModalFooter>
                     </Modal>
-                    <Button onClick={handleGenerateUsecase} loading={loading}>
+                    <Button onClick={handleGenerateUsecase} loading={loading} disabled={loading}>
                         <FontAwesomeIcon icon={faMagicWandSparkles}></FontAwesomeIcon>
                         Generate Usecase
                     </Button>
@@ -207,13 +207,13 @@ const UsecasesPage = () => {
                                     <td className="description-column">{usecase.description}</td>
                                     <td className="actions-column">
                                         <div className="actions-wrapper">
-                                            <Button onClick={() => confirmDelete(usecase._id)}>
+                                            <Button onClick={() => confirmDelete(usecase._id)} disabled={loading}>
                                                 <FontAwesomeIcon icon={faTrashAlt} />
                                             </Button>
-                                            <Button onClick={() => handleUpdate(usecase._id)} >
+                                            <Button onClick={() => handleUpdate(usecase._id)} disabled={loading} >
                                                 <FontAwesomeIcon icon={faPen} />
                                             </Button>
-                                            <Button onClick={() => handleUsecaseClick(usecase._id)} >
+                                            <Button onClick={() => handleUsecaseClick(usecase._id)} disabled={loading}>
                                                 <FontAwesomeIcon icon={faArrowRight} />
                                             </Button>
                                         </div>
