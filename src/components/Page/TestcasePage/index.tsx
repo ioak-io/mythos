@@ -7,10 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCheck,
     faClose,
-    faEdit,
+    faPen,
     faMagicWandSparkles,
     faPlus,
-    faTrash,
+    faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
 import { deleteSingleTestcase, deleteTestcases, fetchTestcases, generateTestcases } from "./service";
@@ -38,10 +38,10 @@ const TestcasesPage = () => {
 
     useEffect(() => {
         if (location.state?.refresh) {
-          fetchTestcases(space, appId, reqId, useId); 
-          navigate(location.pathname, { replace: true, state: {} });
+            fetchTestcases(space, appId, reqId, useId);
+            navigate(location.pathname, { replace: true, state: {} });
         }
-      }, [location.state]);
+    }, [location.state]);
 
     useEffect(() => {
         const loadTestcases = async () => {
@@ -100,11 +100,11 @@ const TestcasesPage = () => {
         <div className="testcases-page">
             <Topbar title="Testcase">
                 <div className="topbar-actions">
-                    <Button onClick={() => handleEditTestcaseClick(null)}>
+                    <Button onClick={() => handleEditTestcaseClick(null)} disabled={loading}>
                         <FontAwesomeIcon icon={faPlus} />
                         Testcase
                     </Button>
-                    <Button onClick={handleGenerateTestcase} loading={loading}>
+                    <Button onClick={handleGenerateTestcase} loading={loading} disabled={loading}>
                         <FontAwesomeIcon icon={faMagicWandSparkles}></FontAwesomeIcon>
                         Generate Testcase
                     </Button>
@@ -118,9 +118,7 @@ const TestcasesPage = () => {
                             <th>Steps</th>
                             <th>Expected Outcome</th>
                             <th>Label</th>
-                            <th>Priority</th>
-                            <th>Created Date</th>
-                            <th>Actions</th>
+                            <th colSpan={2}>Priority</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,35 +135,35 @@ const TestcasesPage = () => {
                                     </td>
                                     <td className="text-column">{testcase.description.expectedOutcome}</td>
                                     <td className="text-column">{testcase.label}</td>
-                                    <td>{testcase.priority}</td>
-                                    <td>{new Date(testcase.createdDate).toLocaleDateString()}</td>
-                                    <td className="options-column">
-                                        <Button onClick={() => confirmDelete(testcase._id)} >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </Button>
-                                        <Button onClick={() => handleEditTestcaseClick(testcase._id)}>
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </Button>
+                                    <td className="text-column">{testcase.priority}</td>
+                                    <td className="actions-column">
+                                        <div className="actions-wrapper">
+                                            <Button onClick={() => confirmDelete(testcase._id)} disabled={loading}>
+                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                            </Button>
+                                            <Button onClick={() => handleEditTestcaseClick(testcase._id)} disabled={loading}>
+                                                <FontAwesomeIcon icon={faPen} />
+                                            </Button>
+                                        </div>
                                     </td>
                                 </tr>))) : (
                             <tr>
-                                <td colSpan={7}> No Testcases Found</td>
+                                <td colSpan={6}> No Testcases Found</td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </MainSection>
             <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
-                <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
                 <ModalBody>
                     Are you sure you want to delete this testcase? This action cannot be undone.
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
-                        <FontAwesomeIcon icon={faClose} />
+                    <Button onClick={handleDeleteModalClose} theme={ThemeType.primary}>
+                        No
                     </Button>
                     <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
-                        <FontAwesomeIcon icon={faCheck} />
+                        Yes
                     </Button>
                 </ModalFooter>
             </Modal>

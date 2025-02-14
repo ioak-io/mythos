@@ -20,10 +20,10 @@ interface FormData {
 };
 
 const labelOptions: OptionsObjectType[] = [
-    { name: "Positive Testcase", value: "positive" },
-    { name: "Negative Testcase", value: "negative" },
-    { name: "Edge Case Testcase", value: "edge case" },
-    { name: "Alternative Flow Testcase", value: "alternative flow" },
+    { name: "Positive Testcase", value: "Positive" },
+    { name: "Negative Testcase", value: "Negative" },
+    { name: "Edge Case Testcase", value: "Edge Case" },
+    { name: "Alternative Flow Testcase", value: "Alternative Flow" },
 ];
 
 const priorityOptions: OptionsObjectType[] = [

@@ -8,7 +8,7 @@ import {
   faExclamationTriangle,
   faExpandAlt,
   faFileExport,
-  faTrash,
+  faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import {Button} from 'basicui';
 
@@ -146,7 +146,7 @@ const RunLog = (props: Props) => {
                     className="button backup-runlog__main__delete-button"
                     onClick={() => deleteTransaction(record)}
                   >
-                    <FontAwesomeIcon icon={faTrash} />
+                    <FontAwesomeIcon icon={faTrashAlt} />
                   </button>
                   <button
                     className="button backup-runlog__main__export-button"

@@ -10,10 +10,10 @@ import {
     Textarea
 } from "basicui";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faArrowRight, faTrash, faEdit,
+    faArrowRight, faTrashAlt, faPen,
     faClose,
     faCheck
 } from "@fortawesome/free-solid-svg-icons";
@@ -104,6 +104,7 @@ const RequirementsPage = () => {
 
     const handleDelete = async () => {
         if (!reqToDelete) return;
+        setLoading(true);
         try {
             await deleteSingle(space, appId, reqToDelete);
             const updated = await fetchRequirements(space, appId);
@@ -111,6 +112,7 @@ const RequirementsPage = () => {
         } catch (error) {
             console.error("Error Deleting Requirement:", error);
         } finally {
+            setLoading(false);
             handleDeleteModalClose();
         }
     };
@@ -150,8 +152,8 @@ const RequirementsPage = () => {
                                 <Button onClick={handleModalClose} theme={ThemeType.default}>
                                     <FontAwesomeIcon icon={faClose}></FontAwesomeIcon>
                                 </Button>
-                                <Button onClick={handleSubmit} theme={ThemeType.default} loading={loading}>
-                                    <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+                                <Button onClick={handleSubmit} theme={ThemeType.primary} loading={loading}>
+                                    Save
                                 </Button>
                             </ModalFooter>
                         </Modal>
@@ -161,11 +163,7 @@ const RequirementsPage = () => {
                     <table className="basicui-table table-hover">
                         <thead>
                             <tr>
-                                <th>Description</th>
-                                <th>Created Date</th>
-                                <th>Updated Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th colSpan={2}>Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -174,41 +172,39 @@ const RequirementsPage = () => {
                                     <tr key={requ._id} >
                                         <td className="description-column">{requ.description}
                                         </td>
-                                        <td>{new Date(requ.createdDate).toLocaleDateString()}</td>
-                                        <td>{new Date(requ.lastModifiedDate).toLocaleDateString()}</td>
-                                        <td>Active</td>
-                                        <td>
-                                            <Button onClick={() => confirmDelete(requ._id)}>
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </Button>
-                                            <Button onClick={() => handleUpdate(requ._id)} >
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </Button>
-                                            <Button onClick={() => handleRequirementClick(requ._id)} >
-                                                <FontAwesomeIcon icon={faArrowRight} />
-                                            </Button>
+                                        <td className="actions-column">
+                                            <div className="actions-wrapper">
+                                                <Button onClick={() => confirmDelete(requ._id)}>
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </Button>
+                                                <Button onClick={() => handleUpdate(requ._id)} >
+                                                    <FontAwesomeIcon icon={faPen} />
+                                                </Button>
+                                                <Button onClick={() => handleRequirementClick(requ._id)} >
+                                                    <FontAwesomeIcon icon={faArrowRight} />
+                                                </Button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5}>No Requirements Found</td>
+                                    <td colSpan={2}>No Requirements Found</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </MainSection>
                 <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
-                    <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
                     <ModalBody>
                         Are you sure you want to delete this requirement? This action cannot be undone.
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
-                            <FontAwesomeIcon icon={faClose} />
+                        <Button onClick={handleDeleteModalClose} theme={ThemeType.primary}>
+                            No
                         </Button>
                         <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
-                            <FontAwesomeIcon icon={faCheck} />
+                            Yes
                         </Button>
                     </ModalFooter>
                 </Modal>

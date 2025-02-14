@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Input } from 'basicui';
 
 import './Permissions.scss';
@@ -101,7 +101,7 @@ const Permissions = (props: Props) => {
                         className="permissions__list__button button"
                         onClick={() => deleteUser(user._id)}
                       >
-                        <FontAwesomeIcon icon={faTrash} />
+                        <FontAwesomeIcon icon={faTrashAlt} />
                       </button>
                     </td>
                   </tr>
