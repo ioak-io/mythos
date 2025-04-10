@@ -11,12 +11,15 @@ import {
     faMagicWandSparkles,
     faPlus,
     faTrashAlt,
+    faFileExport,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
 import { deleteSingleTestcase, deleteTestcases, fetchTestcases, generateTestcases } from "./service";
 import Topbar from "../../Topbar";
 import MainSection from "../../MainSection";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 const TestcasesPage = () => {
     const [testcases, setTestcases] = useState<TestCase[]>([]);
@@ -96,6 +99,62 @@ const TestcasesPage = () => {
         navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/edit${id ? `/${id}` : ''}`)
     };
 
+    const exportToExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Testcases");
+    
+        worksheet.columns = [
+            { header: "ApplicationID", key: "appId", width: 20 },
+            { header: "RequirementID", key: "reqId", width: 20 },
+            { header: "UsecaseID", key: "useId", width: 20 },
+            { header: "Overview", key: "overview", width: 30 },
+            { header: "Steps", key: "steps", width: 50 },
+            { header: "Expected Outcome", key: "expectedOutcome", width: 30 },
+            { header: "Label", key: "label", width: 20 },
+            { header: "Priority", key: "priority", width: 15 },
+        ];
+    
+        testcases.forEach((testcase) => {
+            worksheet.addRow({
+                appId: appId,
+                reqId: reqId,
+                useId: useId,
+                overview: testcase.description.overview,
+                steps: testcase.description.steps.join("\n"),
+                expectedOutcome: testcase.description.expectedOutcome,
+                label: testcase.label,
+                priority: testcase.priority,
+            });
+        });
+    
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFEEEEEE' }
+            };
+            cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
+            };
+        });
+    
+        worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+                cell.alignment = { wrapText: true, vertical: 'top' };
+            });
+        });
+    
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        saveAs(blob, "testcases.xlsx");
+    };
+    
+
     return (
         <div className="testcases-page">
             <Topbar title="Testcase">
@@ -107,6 +166,10 @@ const TestcasesPage = () => {
                     <Button onClick={handleGenerateTestcase} loading={loading} disabled={loading}>
                         <FontAwesomeIcon icon={faMagicWandSparkles}></FontAwesomeIcon>
                         Generate Testcase
+                    </Button>
+                    <Button onClick={exportToExcel} disabled={loading}>
+                        <FontAwesomeIcon icon={faFileExport}></FontAwesomeIcon>
+                        Export
                     </Button>
                 </div>
             </Topbar>
