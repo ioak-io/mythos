@@ -6,11 +6,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './basicui-styles/index.scss';
 import App from './components/App';
+import { UsecaseProvider } from './components/Page/UsecasePage/usecaseContext';
 // import './index.scss';
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <App />,
+  <UsecaseProvider>
+    <App />
+  </UsecaseProvider>,
   document.getElementById('root')
 );
 

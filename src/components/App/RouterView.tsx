@@ -107,7 +107,7 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/application/:id/requirement"
+          path="/:space/requirement/search"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}

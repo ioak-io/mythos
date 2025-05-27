@@ -17,6 +17,7 @@ import Topbar from "../../Topbar";
 import MainSection from "../../MainSection";
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter, Input, ThemeType, Textarea } from "basicui";
 import { deleteTestcases, deleteTestcasesByUsecase } from "../TestcasePage/service";
+import TestcasesPage from "../TestcasePage";
 
 const UsecasesPage = () => {
     const [usecases, setUsecases] = useState<Usecases[]>([]);
@@ -103,7 +104,7 @@ const UsecasesPage = () => {
                 await deleteTestcasesByUsecase(space, appId, reqId, id);
             };
 
-            await deleteUsecases(space, appId, reqId);
+            await deleteUsecases(space);
 
             await generateUsecases(space, appId, reqId);
             const newData = await fetchUsecases(space, appId, reqId);

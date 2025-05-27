@@ -82,9 +82,9 @@ const RequirementsPage = () => {
         setLoading(true);
         try {
             if (currentReqId) {
-                await updateRequirement(space, appId, currentReqId, reqCreatePayload);
+                await updateRequirement(space, currentReqId, reqCreatePayload);
             } else {
-                await postRequirements(space, appId, reqCreatePayload);
+                await postRequirements(space, reqCreatePayload);
             }
 
             const updatedRequirements = await fetchRequirements(space, appId);
@@ -106,7 +106,7 @@ const RequirementsPage = () => {
         if (!reqToDelete) return;
         setLoading(true);
         try {
-            await deleteSingle(space, appId, reqToDelete);
+            await deleteSingle(space, reqToDelete);
             const updated = await fetchRequirements(space, appId);
             setRequirements(updated);
         } catch (error) {

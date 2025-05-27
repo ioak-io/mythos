@@ -20,9 +20,11 @@ import MainSection from "../../MainSection";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { UsecaseProvider, useUsecaseContext } from "../UsecasePage/usecaseContext";
 
 const TestcasesPage = () => {
     const [testcases, setTestcases] = useState<TestCase[]>([]);
+    const { usecases, setUsecases } = useUsecaseContext();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -38,7 +40,7 @@ const TestcasesPage = () => {
     const appId = params[3];
     const reqId = params[5];
     const useId = params[7];
-
+    console.log("USECASES:", usecases);
     useEffect(() => {
         if (location.state?.refresh) {
             fetchTestcases(space, appId, reqId, useId);
@@ -99,10 +101,17 @@ const TestcasesPage = () => {
         navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/edit${id ? `/${id}` : ''}`)
     };
 
+    const handleExportFilename = async () => {
+        const title = usecases.find((usecase: any) => usecase._id === useId)?.title;
+        console.log("TITLE:", title);
+        const arr = title?.split(" ");
+        console.log("ARR:", arr);
+    }
+
     const exportToExcel = async () => {
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Testcases");
-    
+
         worksheet.columns = [
             { header: "ApplicationID", key: "appId", width: 20 },
             { header: "RequirementID", key: "reqId", width: 20 },
@@ -113,7 +122,7 @@ const TestcasesPage = () => {
             { header: "Label", key: "label", width: 20 },
             { header: "Priority", key: "priority", width: 15 },
         ];
-    
+
         testcases.forEach((testcase) => {
             worksheet.addRow({
                 appId: appId,
@@ -126,7 +135,7 @@ const TestcasesPage = () => {
                 priority: testcase.priority,
             });
         });
-    
+
         worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
@@ -142,18 +151,20 @@ const TestcasesPage = () => {
                 right: { style: 'thin' }
             };
         });
-    
+
         worksheet.eachRow((row) => {
             row.eachCell((cell) => {
                 cell.alignment = { wrapText: true, vertical: 'top' };
             });
         });
-    
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        saveAs(blob, "testcases.xlsx");
+        const filename = handleExportFilename().toString() + ".xlsx";
+        console.log(filename);
+        saveAs(blob, filename);
     };
-    
+
 
     return (
         <div className="testcases-page">

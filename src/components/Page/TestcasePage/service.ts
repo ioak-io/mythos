@@ -1,5 +1,5 @@
 import { httpGet, httpPost, httpDelete, httpPut, httpPostGenerate } from "../../Lib/RestTemplate";
-
+const domain = "testcase";
 export const fetchTestcases = async(space:any, appId:any, reqId:any, useId:any): Promise<TestCase[]> =>{
     try {
             const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, {});
@@ -32,5 +32,5 @@ export const deleteTestcases = async(space:any, appId:any, reqId:any, useId:any)
 };
 
 export const deleteTestcasesByUsecase = async (space:any, appId:any, reqId:any,usecaseId: string) => {
-  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${usecaseId}/testcase`, {});
+  await httpDelete(`/${space}/${domain}/${usecaseId}/testcase`, {});
 };

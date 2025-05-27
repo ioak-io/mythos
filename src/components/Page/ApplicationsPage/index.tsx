@@ -57,7 +57,7 @@ const ApplicationsPage = (props: Props) => {
   }, []);
 
   const handleApplicationClick = (appId: any) => {
-    navigate(`/${space}/application/${appId}/requirement`)
+    navigate(`/${space}/requirement/search`)
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +110,7 @@ const ApplicationsPage = (props: Props) => {
   };
 
   const handleUpdate = (id: string) => {
-    const appToEdit = applications.find((app) => app._id === id);
+    const appToEdit = applications.find((app) => app.reference === id);
     if (!appToEdit) return;
 
     setFormData({ appName: appToEdit.name });
@@ -164,13 +164,13 @@ const ApplicationsPage = (props: Props) => {
                   <td>{app.name}</td>
                   <td className="actions-column">
                     <div className="actions-wrapper">
-                      <Button onClick={() => confirmDelete(app._id)}>
+                      <Button onClick={() => confirmDelete(app.reference)}>
                         <FontAwesomeIcon icon={faTrashAlt} />
                       </Button>
-                      <Button onClick={() => handleUpdate(app._id)}>
+                      <Button onClick={() => handleUpdate(app.reference)}>
                         <FontAwesomeIcon icon={faPen} />
                       </Button>
-                      <Button onClick={() => handleApplicationClick(app._id)}>
+                      <Button onClick={() => handleApplicationClick(app.reference)}>
                         <FontAwesomeIcon icon={faArrowRight} />
                       </Button>
                     </div>
