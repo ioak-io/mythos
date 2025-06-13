@@ -1,25 +1,31 @@
 import { httpGet, httpPost, httpDelete, httpPut, httpPostGenerate } from "../../Lib/RestTemplate";
-
-export const fetchTestcases = async(space:any, appId:any, reqId:any, useId:any): Promise<TestCase[]> =>{
+const domain = "testcase";
+export const fetchTestcases = async(space:any, useId:any): Promise<TestCase[]> =>{
     try {
-            const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, {});
-            return response?.data; 
-        } catch (error) {
-            console.error("Error fetching data:", error);
-            throw error;
+      console.log("USE ID:", useId)
+      const payload = {
+        filters: {
+          usecase: useId
         }
+      }
+      const response = await httpPost(`/${space}/${domain}/search`, payload, {});
+      return response?.data?.data; 
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        throw error;
+    }
 };
 
 export const postTestcases = async(space:any, appId:any, reqId:any, useId:any,testcaseCreatePayload: any)=>{
-  await httpPost(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, testcaseCreatePayload, {} );
+  await httpPost(`/${space}/${domain}`, testcaseCreatePayload, {} );
 };
 
-export const generateTestcases = async(space:any, appId:any, reqId:any, useId:any)=>{
-  await httpPostGenerate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/generate`,  {} );
+export const generateTestcases = async(space:any, useId:any)=>{
+  const response = await httpPostGenerate(`/${space}/${useId}/generate/testcase`,  {} );
 };
 
 export const deleteSingleTestcase = async(space:any, appId:any, reqId:any, useId:any,id:string)=>{
-  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, {})
+  await httpDelete(`/${space}/${domain}/${id}`, {})
 };
 
 export const updateTestcase = async(space:any, appId:any, reqId:any, useId:any,id:string, data: any)=>{
@@ -28,9 +34,9 @@ export const updateTestcase = async(space:any, appId:any, reqId:any, useId:any,i
 };
 
 export const deleteTestcases = async(space:any, appId:any, reqId:any, useId:any) => {
-  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, {});
+  await httpDelete(`/${space}/${domain}`, {});
 };
 
-export const deleteTestcasesByUsecase = async (space:any, appId:any, reqId:any,usecaseId: string) => {
-  await httpDelete(`/${space}/application/${appId}/requirement/${reqId}/usecase/${usecaseId}/testcase`, {});
+export const deleteTestcasesByUsecase = async (space:any, usecaseId: string) => {
+  await httpDelete(`/${space}/${domain}/${usecaseId}/testcase`, {});
 };

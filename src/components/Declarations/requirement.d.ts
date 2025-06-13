@@ -1,6 +1,7 @@
 interface Requirement {
     _id: string;
-    applicationId: string;
+    application: string;
+    reference: string;
     description: string;
     createdDate: string;
     lastModifiedDate: string;

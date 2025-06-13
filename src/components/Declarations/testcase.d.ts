@@ -7,9 +7,8 @@ interface Description {
 
 interface TestCase {
     _id:string;
-    applicationId: string; 
-    requirementId: string; 
-    usecaseId: string;
+    usecase: string;
+    reference: string;
     description: Description; 
     summary: string; 
     priority: string; 

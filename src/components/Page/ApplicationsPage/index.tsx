@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./style.scss";
-import { useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Topbar from "../../../components/Topbar";
 import { Button, Input, Modal, ModalBody, ModalFooter, ModalHeader, ThemeType } from "basicui";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowRight, faTrash, faEdit, faCheck, faClose } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faArrowRight, faTrashAlt, faPen, faCheck, faClose } from "@fortawesome/free-solid-svg-icons";
 import MainSection from "../../../components/MainSection";
 import { deleteSingle, fetchData, postData, updateApp } from "./service";
 
@@ -56,8 +56,8 @@ const ApplicationsPage = (props: Props) => {
     loadApplications();
   }, []);
 
-  const handleApplicationClick = (appId: any) => {
-    navigate(`/${space}/application/${appId}/requirement`)
+  const handleApplicationClick = async(id: any) => {
+    navigate(`/${space}/${id}/requirement/search`)
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +95,8 @@ const ApplicationsPage = (props: Props) => {
 
   const handleDelete = async () => {
     if (!appToDelete) return;
+    setLoading(true);
+
     try {
       await deleteSingle(space, appToDelete);
       const updated = await fetchData(space);
@@ -102,12 +104,13 @@ const ApplicationsPage = (props: Props) => {
     } catch (error) {
       console.error("Error Deleting Application:", error);
     } finally {
+      setLoading(false);
       handleDeleteModalClose();
     }
   };
 
   const handleUpdate = (id: string) => {
-    const appToEdit = applications.find((app) => app._id === id);
+    const appToEdit = applications.find((app) => app.reference === id);
     if (!appToEdit) return;
 
     setFormData({ appName: appToEdit.name });
@@ -140,8 +143,8 @@ const ApplicationsPage = (props: Props) => {
               <Button onClick={handleModalClose} theme={ThemeType.default}>
                 <FontAwesomeIcon icon={faClose} />
               </Button>
-              <Button onClick={handleSubmit} theme={ThemeType.default} loading={loading}>
-                <FontAwesomeIcon icon={faCheck} />
+              <Button onClick={handleSubmit} theme={ThemeType.primary} loading={loading}>
+                Save
               </Button>
             </ModalFooter>
           </Modal>
@@ -151,52 +154,47 @@ const ApplicationsPage = (props: Props) => {
         <table className="basicui-table table-hover">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Created Date</th>
-              <th>Updated Date</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th colSpan={2}>Name</th>
             </tr>
           </thead>
           <tbody>
             {applications?.length > 0 ? (
               applications.map((app) => (
-                <tr key={app._id} >
+                <tr key={app._id}>
                   <td>{app.name}</td>
-                  <td>{app.createdDate.slice(0, 10)}</td>
-                  <td>{app.lastModifiedDate.slice(0, 10)}</td>
-                  <td>Active</td>
-                  <td>
-                    <Button onClick={() => confirmDelete(app._id)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                    <Button onClick={() => handleUpdate(app._id)} >
-                      <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                    <Button onClick={() => handleApplicationClick(app._id)} >
-                      <FontAwesomeIcon icon={faArrowRight} />
-                    </Button>
+                  <td className="actions-column">
+                    <div className="actions-wrapper">
+                      <Button onClick={() => confirmDelete(app.reference)}>
+                        <FontAwesomeIcon icon={faTrashAlt} />
+                      </Button>
+                      <Button onClick={() => handleUpdate(app.reference)}>
+                        <FontAwesomeIcon icon={faPen} />
+                      </Button>
+                      <Button onClick={() => handleApplicationClick(app.reference)}>
+                        <FontAwesomeIcon icon={faArrowRight} />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
-              ))) : (
+              ))
+            ) : (
               <tr>
-                <td colSpan={5}>No Applications Found</td>
+                <td colSpan={2}>No Applications Found</td>
               </tr>
             )}
           </tbody>
         </table>
       </MainSection>
       <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
-        <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
         <ModalBody>
           Are you sure you want to delete this application? This action cannot be undone.
         </ModalBody>
         <ModalFooter>
-          <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
-            <FontAwesomeIcon icon={faClose} />
+          <Button onClick={handleDeleteModalClose} theme={ThemeType.primary}>
+            No
           </Button>
           <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
-            <FontAwesomeIcon icon={faCheck} />
+            Yes
           </Button>
         </ModalFooter>
       </Modal>

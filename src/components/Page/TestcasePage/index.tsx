@@ -7,19 +7,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCheck,
     faClose,
-    faEdit,
+    faPen,
     faMagicWandSparkles,
     faPlus,
-    faTrash,
+    faTrashAlt,
+    faFileExport,
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.scss";
 import { deleteSingleTestcase, deleteTestcases, fetchTestcases, generateTestcases } from "./service";
 import Topbar from "../../Topbar";
 import MainSection from "../../MainSection";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import { UsecaseProvider, useUsecaseContext } from "../UsecasePage/usecaseContext";
 
 const TestcasesPage = () => {
     const [testcases, setTestcases] = useState<TestCase[]>([]);
+    const { usecases, setUsecases } = useUsecaseContext();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -32,21 +37,21 @@ const TestcasesPage = () => {
     const location = useLocation();
     const params = location.pathname.split('/');
     const space = params[1];
-    const appId = params[3];
-    const reqId = params[5];
-    const useId = params[7];
-
+    const appId = params[2];
+    const reqId = params[3];
+    const useId = params[4];
+    
     useEffect(() => {
         if (location.state?.refresh) {
-          fetchTestcases(space, appId, reqId, useId); 
-          navigate(location.pathname, { replace: true, state: {} });
+            fetchTestcases(space, useId);
+            navigate(location.pathname, { replace: true, state: { useId } });
         }
-      }, [location.state]);
+    }, [location.state]);
 
     useEffect(() => {
         const loadTestcases = async () => {
             try {
-                const data = await fetchTestcases(space, appId, reqId, useId);
+                const data = await fetchTestcases(space, useId);
                 setTestcases(data);
             } catch (err) {
                 setError("Data Could Not Be Fetched");
@@ -62,8 +67,8 @@ const TestcasesPage = () => {
         setLoading(true);
         await deleteTestcases(space, appId, reqId, useId);
         try {
-            await generateTestcases(space, appId, reqId, useId);
-            const newtestcase = await fetchTestcases(space, appId, reqId, useId);
+            await generateTestcases(space, useId);
+            const newtestcase = await fetchTestcases(space, useId);
             setTestcases(newtestcase);
         } catch (error) {
             console.error("Error Submitting Usecase: ", error);
@@ -82,7 +87,7 @@ const TestcasesPage = () => {
         setLoading(true);
         try {
             await deleteSingleTestcase(space, appId, reqId, useId, testcaseToDelete);
-            const updated = await fetchTestcases(space, appId, reqId, useId);
+            const updated = await fetchTestcases(space, useId);
             setTestcases(updated);
         } catch (error) {
             console.error("Error Deleting Usecase:", error);
@@ -93,20 +98,89 @@ const TestcasesPage = () => {
     };
 
     const handleEditTestcaseClick = async (id: string | null) => {
-        navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/edit${id ? `/${id}` : ''}`)
+        navigate(`/${space}/${appId}/${reqId}/${useId}/testcase/edit${id ? `/${id}` : ''}`)
     };
+
+    const handleExportFilename = () => {
+        const title = location.state?.usecaseTitle || "Untitled";
+        const arr = title.trim().split(/\s+/); 
+        const formattedTitle = arr.slice(0, 5).join("-");
+        return `${formattedTitle}-Testcases`;
+    };
+    
+
+    const exportToExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Testcases");
+
+        worksheet.columns = [
+            { header: "ApplicationID", key: "appId", width: 20 },
+            { header: "RequirementID", key: "reqId", width: 20 },
+            { header: "UsecaseID", key: "useId", width: 20 },
+            { header: "Overview", key: "overview", width: 30 },
+            { header: "Steps", key: "steps", width: 50 },
+            { header: "Expected Outcome", key: "expectedOutcome", width: 30 },
+            { header: "Label", key: "label", width: 20 },
+            { header: "Priority", key: "priority", width: 15 },
+        ];
+
+        testcases.forEach((testcase) => {
+            worksheet.addRow({
+                appId: appId,
+                reqId: reqId,
+                useId: useId,
+                overview: testcase.description.overview,
+                steps: testcase.description.steps.join("\n"),
+                expectedOutcome: testcase.description.expectedOutcome,
+                label: testcase.label,
+                priority: testcase.priority,
+            });
+        });
+
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+            cell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFEEEEEE' }
+            };
+            cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' }
+            };
+        });
+
+        worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+                cell.alignment = { wrapText: true, vertical: 'top' };
+            });
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const filename = handleExportFilename().toString() + ".xlsx";
+        saveAs(blob, filename);
+    };
+
 
     return (
         <div className="testcases-page">
             <Topbar title="Testcase">
                 <div className="topbar-actions">
-                    <Button onClick={() => handleEditTestcaseClick(null)}>
+                    <Button onClick={() => handleEditTestcaseClick(null)} disabled={loading}>
                         <FontAwesomeIcon icon={faPlus} />
                         Testcase
                     </Button>
-                    <Button onClick={handleGenerateTestcase} loading={loading}>
+                    <Button onClick={handleGenerateTestcase} loading={loading} disabled={loading}>
                         <FontAwesomeIcon icon={faMagicWandSparkles}></FontAwesomeIcon>
                         Generate Testcase
+                    </Button>
+                    <Button onClick={exportToExcel} disabled={loading}>
+                        <FontAwesomeIcon icon={faFileExport}></FontAwesomeIcon>
+                        Export
                     </Button>
                 </div>
             </Topbar>
@@ -118,9 +192,7 @@ const TestcasesPage = () => {
                             <th>Steps</th>
                             <th>Expected Outcome</th>
                             <th>Label</th>
-                            <th>Priority</th>
-                            <th>Created Date</th>
-                            <th>Actions</th>
+                            <th colSpan={2}>Priority</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,35 +209,35 @@ const TestcasesPage = () => {
                                     </td>
                                     <td className="text-column">{testcase.description.expectedOutcome}</td>
                                     <td className="text-column">{testcase.label}</td>
-                                    <td>{testcase.priority}</td>
-                                    <td>{new Date(testcase.createdDate).toLocaleDateString()}</td>
-                                    <td className="options-column">
-                                        <Button onClick={() => confirmDelete(testcase._id)} >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </Button>
-                                        <Button onClick={() => handleEditTestcaseClick(testcase._id)}>
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </Button>
+                                    <td className="text-column">{testcase.priority}</td>
+                                    <td className="actions-column">
+                                        <div className="actions-wrapper">
+                                            <Button onClick={() => confirmDelete(testcase.reference)} disabled={loading}>
+                                                <FontAwesomeIcon icon={faTrashAlt} />
+                                            </Button>
+                                            <Button onClick={() => handleEditTestcaseClick(testcase.reference)} disabled={loading}>
+                                                <FontAwesomeIcon icon={faPen} />
+                                            </Button>
+                                        </div>
                                     </td>
                                 </tr>))) : (
                             <tr>
-                                <td colSpan={7}> No Testcases Found</td>
+                                <td colSpan={6}> No Testcases Found</td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </MainSection>
             <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
-                <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
                 <ModalBody>
                     Are you sure you want to delete this testcase? This action cannot be undone.
                 </ModalBody>
                 <ModalFooter>
-                    <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
-                        <FontAwesomeIcon icon={faClose} />
+                    <Button onClick={handleDeleteModalClose} theme={ThemeType.primary}>
+                        No
                     </Button>
                     <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
-                        <FontAwesomeIcon icon={faCheck} />
+                        Yes
                     </Button>
                 </ModalFooter>
             </Modal>

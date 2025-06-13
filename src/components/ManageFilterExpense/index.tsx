@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
-  faTrash,
+  faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash';
 import { Button, Input, Select, Checkbox, Modal, ModalBody, ModalFooter, ModalHeader } from 'basicui';
@@ -172,7 +172,7 @@ const ManageFilterExpense = (props: Props) => {
                         <Button
                           onClick={() => deleteFilter(record)}
                         >
-                          <FontAwesomeIcon icon={faTrash} />
+                          <FontAwesomeIcon icon={faTrashAlt} />
                         </Button>
                       </div>
                     </td>

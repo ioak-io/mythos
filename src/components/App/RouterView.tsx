@@ -107,7 +107,7 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/application/:id/requirement"
+          path="/:space/:appId/requirement/search"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}
@@ -116,7 +116,7 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/application/:id/requirement/:id/usecase"
+          path="/:space/:appId/:reqId/usecase/search"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}
@@ -125,7 +125,7 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/application/:id/requirement/:id/usecase/:id/testcase"
+          path="/:space/:appId/:reqId/:useId/testcase/search"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}
@@ -134,7 +134,7 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/application/:id/requirement/:id/usecase/:id/testcase/edit/:id"
+          path="/:space/:appId/:reqId/:useId/testcase/edit"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}
@@ -143,7 +143,7 @@ const RouterView = (props: Props) => {
           }
         />
         <Route
-          path="/:space/application/:id/requirement/:id/usecase/:id/testcase/edit"
+          path="/:space/:appId/:reqId/:useId/testcase/edit/:id"
           element={
             <ProtectedRouteApp
               middleware={["authenticate"]}

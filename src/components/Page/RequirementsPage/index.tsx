@@ -10,10 +10,10 @@ import {
     Textarea
 } from "basicui";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faArrowRight, faTrash, faEdit,
+    faArrowRight, faTrashAlt, faPen,
     faClose,
     faCheck
 } from "@fortawesome/free-solid-svg-icons";
@@ -36,8 +36,7 @@ const RequirementsPage = () => {
     const location = useLocation();
     const params = location.pathname.split('/');
     const space = params[1];
-    const appId = params[3];
-
+    const appId = params[2];
     const handleModalClose = () => {
         setIsModalOpen(false);
         setFormData({ reqDescription: "" });
@@ -66,7 +65,7 @@ const RequirementsPage = () => {
 
 
     const handleRequirementClick = (reqId: any) => {
-        navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase`);
+        navigate(`/${space}/${appId}/${reqId}/usecase/search`);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,13 +77,13 @@ const RequirementsPage = () => {
     };
 
     const handleSubmit = async () => {
-        const reqCreatePayload = { description: formData.reqDescription };
+        const reqCreatePayload = {application: appId, description: formData.reqDescription };
         setLoading(true);
         try {
             if (currentReqId) {
-                await updateRequirement(space, appId, currentReqId, reqCreatePayload);
+                await updateRequirement(space, currentReqId, reqCreatePayload);
             } else {
-                await postRequirements(space, appId, reqCreatePayload);
+                await postRequirements(space, reqCreatePayload);
             }
 
             const updatedRequirements = await fetchRequirements(space, appId);
@@ -104,19 +103,21 @@ const RequirementsPage = () => {
 
     const handleDelete = async () => {
         if (!reqToDelete) return;
+        setLoading(true);
         try {
-            await deleteSingle(space, appId, reqToDelete);
+            await deleteSingle(space, reqToDelete);
             const updated = await fetchRequirements(space, appId);
             setRequirements(updated);
         } catch (error) {
             console.error("Error Deleting Requirement:", error);
         } finally {
+            setLoading(false);
             handleDeleteModalClose();
         }
     };
 
     const handleUpdate = (id: string) => {
-        const reqToEdit = requirements.find((requ) => requ._id === id);
+        const reqToEdit = requirements.find((requ) => requ.reference === id);
         if (!reqToEdit) return;
 
         setFormData({ reqDescription: reqToEdit.description });
@@ -150,8 +151,8 @@ const RequirementsPage = () => {
                                 <Button onClick={handleModalClose} theme={ThemeType.default}>
                                     <FontAwesomeIcon icon={faClose}></FontAwesomeIcon>
                                 </Button>
-                                <Button onClick={handleSubmit} theme={ThemeType.default} loading={loading}>
-                                    <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+                                <Button onClick={handleSubmit} theme={ThemeType.primary} loading={loading}>
+                                    Save
                                 </Button>
                             </ModalFooter>
                         </Modal>
@@ -161,11 +162,7 @@ const RequirementsPage = () => {
                     <table className="basicui-table table-hover">
                         <thead>
                             <tr>
-                                <th>Description</th>
-                                <th>Created Date</th>
-                                <th>Updated Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th colSpan={2}>Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -174,41 +171,39 @@ const RequirementsPage = () => {
                                     <tr key={requ._id} >
                                         <td className="description-column">{requ.description}
                                         </td>
-                                        <td>{new Date(requ.createdDate).toLocaleDateString()}</td>
-                                        <td>{new Date(requ.lastModifiedDate).toLocaleDateString()}</td>
-                                        <td>Active</td>
-                                        <td>
-                                            <Button onClick={() => confirmDelete(requ._id)}>
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </Button>
-                                            <Button onClick={() => handleUpdate(requ._id)} >
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </Button>
-                                            <Button onClick={() => handleRequirementClick(requ._id)} >
-                                                <FontAwesomeIcon icon={faArrowRight} />
-                                            </Button>
+                                        <td className="actions-column">
+                                            <div className="actions-wrapper">
+                                                <Button onClick={() => confirmDelete(requ.reference)}>
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </Button>
+                                                <Button onClick={() => handleUpdate(requ.reference)} >
+                                                    <FontAwesomeIcon icon={faPen} />
+                                                </Button>
+                                                <Button onClick={() => handleRequirementClick(requ.reference)} >
+                                                    <FontAwesomeIcon icon={faArrowRight} />
+                                                </Button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={5}>No Requirements Found</td>
+                                    <td colSpan={2}>No Requirements Found</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </MainSection>
                 <Modal isOpen={isDeleteModalOpen} onClose={handleDeleteModalClose}>
-                    <ModalHeader border={true} onClose={handleDeleteModalClose} heading="Confirm Deletion"></ModalHeader>
                     <ModalBody>
                         Are you sure you want to delete this requirement? This action cannot be undone.
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={handleDeleteModalClose} theme={ThemeType.default}>
-                            <FontAwesomeIcon icon={faClose} />
+                        <Button onClick={handleDeleteModalClose} theme={ThemeType.primary}>
+                            No
                         </Button>
                         <Button onClick={handleDelete} theme={ThemeType.default} loading={loading}>
-                            <FontAwesomeIcon icon={faCheck} />
+                            Yes
                         </Button>
                     </ModalFooter>
                 </Modal>

@@ -20,10 +20,10 @@ interface FormData {
 };
 
 const labelOptions: OptionsObjectType[] = [
-    { name: "Positive Testcase", value: "positive" },
-    { name: "Negative Testcase", value: "negative" },
-    { name: "Edge Case Testcase", value: "edge case" },
-    { name: "Alternative Flow Testcase", value: "alternative flow" },
+    { name: "Positive Testcase", value: "Positive" },
+    { name: "Negative Testcase", value: "Negative" },
+    { name: "Edge Case Testcase", value: "Edge Case" },
+    { name: "Alternative Flow Testcase", value: "Alternative Flow" },
 ];
 
 const priorityOptions: OptionsObjectType[] = [
@@ -48,10 +48,10 @@ const EditTestcasePage = () => {
     const location = useLocation();
     const params = location.pathname.split('/');
     const space = params[1];
-    const appId = params[3];
-    const reqId = params[5];
-    const useId = params[7];
-    const testId = params[10] ? params[10] : null;
+    const appId = params[2];
+    const reqId = params[3];
+    const useId = params[4];
+    const testId = params[7] ? params[7] : null;
     const isEdit = Boolean(testId);
 
     useEffect(() => {
@@ -115,6 +115,7 @@ const EditTestcasePage = () => {
         }
 
         const testcasePayload = {
+            usecase: useId,
             description: {
                 overview: formData.testcaseOverview,
                 steps: steps,
@@ -130,7 +131,7 @@ const EditTestcasePage = () => {
             } else {
                 await postTestcases(space, appId, reqId, useId, testcasePayload);
             }
-            navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, {
+            navigate(`/${space}/${appId}/${reqId}/${useId}/testcase/search`, {
                 state: { refresh: true }
             });
         } catch (err) {
