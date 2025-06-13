@@ -1,9 +1,9 @@
 import { httpGet, httpPut, httpPost } from "../../Lib/RestTemplate";
 
-
+const domain = "testcase";
 export const fetchSingleTestcase = async (space:any, appId:any, reqId:any, useId:any,id: string): Promise<TestCase[]> => {
     try {
-        const response = await httpGet(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, {});
+        const response = await httpGet(`/${space}/${domain}/${id}`, {});
         const testcase = Array.isArray(response?.data) ? response?.data[0] : response?.data;
         return testcase;
     } catch (error) {
@@ -13,10 +13,10 @@ export const fetchSingleTestcase = async (space:any, appId:any, reqId:any, useId
 };
 
 export const postTestcases = async (space:any, appId:any, reqId:any, useId:any,testcaseCreatePayload: any) => {
-    await httpPost(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`, testcaseCreatePayload, {});
+    await httpPost(`/${space}/${domain}`, testcaseCreatePayload, {});
 };
 
 export const updateTestcase = async (space:any, appId:any, reqId:any, useId:any,id: string, data: any) => {
-    const response = await httpPut(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/${id}`, data, {})
+    const response = await httpPut(`/${space}/${domain}/${id}`, data, {})
     return response.data;
 };

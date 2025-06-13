@@ -56,8 +56,8 @@ const ApplicationsPage = (props: Props) => {
     loadApplications();
   }, []);
 
-  const handleApplicationClick = (appId: any) => {
-    navigate(`/${space}/requirement/search`)
+  const handleApplicationClick = async(id: any) => {
+    navigate(`/${space}/${id}/requirement/search`)
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

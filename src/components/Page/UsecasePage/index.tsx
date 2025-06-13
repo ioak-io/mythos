@@ -33,9 +33,8 @@ const UsecasesPage = () => {
     const location = useLocation();
     const params = location.pathname.split('/');
     const space = params[1];
-    const appId = params[3];
-    const reqId = params[5];
-
+    const appId = params[2];
+    const reqId = params[3];
     const handleModalClose = () => {
         setIsModalOpen(false);
         setFormData({ usecaseTitle: "", usecaseDescription: "" });
@@ -50,7 +49,7 @@ const UsecasesPage = () => {
     useEffect(() => {
         const loadUsecases = async () => {
             try {
-                const data = await fetchUsecases(space, appId, reqId);
+                const data = await fetchUsecases(space, reqId);
                 setUsecases(data);
             } catch (err) {
                 setError("Data Could Not Be Fetched");
@@ -63,7 +62,8 @@ const UsecasesPage = () => {
     }, []);
 
     const handleUsecaseClick = (useId: any) => {
-        navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase`);
+        const title = usecases.find((usecase: any) => usecase.reference === useId)?.title;
+        navigate(`/${space}/${appId}/${reqId}/${useId}/testcase/search`, {state: { usecaseTitle: title},});
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,16 +75,16 @@ const UsecasesPage = () => {
     };
 
     const handleSubmit = async () => {
-        const usecaseCreatePayload = { description: formData.usecaseDescription };
+        const usecaseCreatePayload = { requirement: reqId ,title: formData.usecaseTitle, description: formData.usecaseDescription };
         setLoading(true);
         try {
             if (currentUsecaseId) {
-                await updateUsecase(space, appId, reqId, currentUsecaseId, usecaseCreatePayload);
+                await updateUsecase(space, reqId, currentUsecaseId, usecaseCreatePayload);
             } else {
-                await postUsecases(space, appId, reqId, usecaseCreatePayload);
+                await postUsecases(space, reqId, usecaseCreatePayload);
             };
 
-            const newUsecases = await fetchUsecases(space, appId, reqId);
+            const newUsecases = await fetchUsecases(space, reqId);
             setUsecases(newUsecases);
             handleModalClose();
         } catch (error) {
@@ -97,20 +97,17 @@ const UsecasesPage = () => {
     const handleGenerateUsecase = async () => {
         setLoading(true);
         try {
-            const usecases = await fetchUsecases(space, appId, reqId);
-            const usecaseIds = usecases.map((usecase: { _id: string }) => usecase._id);
-
+            const usecases = await fetchUsecases(space, reqId);
+            const usecaseIds = usecases.map((usecase: { reference: string }) => usecase.reference);
             for (const id of usecaseIds) {
-                await deleteTestcasesByUsecase(space, appId, reqId, id);
+                await deleteTestcasesByUsecase(space, id);
             };
-
             await deleteUsecases(space);
-
-            await generateUsecases(space, appId, reqId);
-            const newData = await fetchUsecases(space, appId, reqId);
+            await generateUsecases(space, reqId);
+            const newData = await fetchUsecases(space, reqId);
             setUsecases(newData);
         } catch (error) {
-            console.error("Error Generating Usecases: ");
+            console.error("Error Generating Usecases: ", error);
         } finally {
             setLoading(false);
         }
@@ -127,8 +124,8 @@ const UsecasesPage = () => {
         if (!usecaseToDelete) return;
         setLoading(true);
         try {
-            await deleteSingle(space, appId, reqId, usecaseToDelete);
-            const updated = await fetchUsecases(space, appId, reqId);
+            await deleteSingle(space, reqId, usecaseToDelete);
+            const updated = await fetchUsecases(space, reqId);
             setUsecases(updated);
         } catch (error) {
             console.error("Error Deleting Usecase:", error);
@@ -139,7 +136,7 @@ const UsecasesPage = () => {
     };
 
     const handleUpdate = (id: string) => {
-        const usecaseToEdit = usecases.find((usecase) => usecase._id === id);
+        const usecaseToEdit = usecases.find((usecase) => usecase.reference === id);
         if (!usecaseToEdit) return;
 
         setFormData({ usecaseTitle: usecaseToEdit.title, usecaseDescription: usecaseToEdit.description });
@@ -208,13 +205,13 @@ const UsecasesPage = () => {
                                     <td className="description-column">{usecase.description}</td>
                                     <td className="actions-column">
                                         <div className="actions-wrapper">
-                                            <Button onClick={() => confirmDelete(usecase._id)} disabled={loading}>
+                                            <Button onClick={() => confirmDelete(usecase.reference)} disabled={loading}>
                                                 <FontAwesomeIcon icon={faTrashAlt} />
                                             </Button>
-                                            <Button onClick={() => handleUpdate(usecase._id)} disabled={loading} >
+                                            <Button onClick={() => handleUpdate(usecase.reference)} disabled={loading} >
                                                 <FontAwesomeIcon icon={faPen} />
                                             </Button>
-                                            <Button onClick={() => handleUsecaseClick(usecase._id)} disabled={loading}>
+                                            <Button onClick={() => handleUsecaseClick(usecase.reference)} disabled={loading}>
                                                 <FontAwesomeIcon icon={faArrowRight} />
                                             </Button>
                                         </div>

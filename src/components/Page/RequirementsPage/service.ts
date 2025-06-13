@@ -1,9 +1,14 @@
 
 import { httpDelete, httpGet, httpPost, httpPut } from "../../../../src/components/Lib/RestTemplate";
 const domain = "requirement";
-export const fetchRequirements = async (space: any, appId:any): Promise<Requirement[]> => {
+export const fetchRequirements = async (space: any, reference:any): Promise<Requirement[]> => {
     try {
-        const response = await httpPost(`/${space}/${domain}/search`, {}, {});
+        const payload = {
+          filters: {
+            application: reference
+          }
+        }
+        const response = await httpPost(`/${space}/${domain}/search`, payload , {});
         return response?.data?.data; 
     } catch (error) {
         console.error("Error fetching data:", error);

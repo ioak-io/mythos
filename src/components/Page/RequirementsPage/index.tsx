@@ -36,8 +36,7 @@ const RequirementsPage = () => {
     const location = useLocation();
     const params = location.pathname.split('/');
     const space = params[1];
-    const appId = params[3];
-
+    const appId = params[2];
     const handleModalClose = () => {
         setIsModalOpen(false);
         setFormData({ reqDescription: "" });
@@ -66,7 +65,7 @@ const RequirementsPage = () => {
 
 
     const handleRequirementClick = (reqId: any) => {
-        navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase`);
+        navigate(`/${space}/${appId}/${reqId}/usecase/search`);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +77,7 @@ const RequirementsPage = () => {
     };
 
     const handleSubmit = async () => {
-        const reqCreatePayload = { description: formData.reqDescription };
+        const reqCreatePayload = {application: appId, description: formData.reqDescription };
         setLoading(true);
         try {
             if (currentReqId) {
@@ -118,7 +117,7 @@ const RequirementsPage = () => {
     };
 
     const handleUpdate = (id: string) => {
-        const reqToEdit = requirements.find((requ) => requ._id === id);
+        const reqToEdit = requirements.find((requ) => requ.reference === id);
         if (!reqToEdit) return;
 
         setFormData({ reqDescription: reqToEdit.description });
@@ -174,13 +173,13 @@ const RequirementsPage = () => {
                                         </td>
                                         <td className="actions-column">
                                             <div className="actions-wrapper">
-                                                <Button onClick={() => confirmDelete(requ._id)}>
+                                                <Button onClick={() => confirmDelete(requ.reference)}>
                                                     <FontAwesomeIcon icon={faTrashAlt} />
                                                 </Button>
-                                                <Button onClick={() => handleUpdate(requ._id)} >
+                                                <Button onClick={() => handleUpdate(requ.reference)} >
                                                     <FontAwesomeIcon icon={faPen} />
                                                 </Button>
-                                                <Button onClick={() => handleRequirementClick(requ._id)} >
+                                                <Button onClick={() => handleRequirementClick(requ.reference)} >
                                                     <FontAwesomeIcon icon={faArrowRight} />
                                                 </Button>
                                             </div>

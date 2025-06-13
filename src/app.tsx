@@ -11,10 +11,10 @@ import { UsecaseProvider } from './components/Page/UsecasePage/usecaseContext';
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <UsecaseProvider>
-    <App />
-  </UsecaseProvider>,
-  document.getElementById('root')
+    <UsecaseProvider>
+      <App />
+    </UsecaseProvider>
+  ,document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

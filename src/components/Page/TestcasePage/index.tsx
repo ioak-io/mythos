@@ -37,21 +37,21 @@ const TestcasesPage = () => {
     const location = useLocation();
     const params = location.pathname.split('/');
     const space = params[1];
-    const appId = params[3];
-    const reqId = params[5];
-    const useId = params[7];
-    console.log("USECASES:", usecases);
+    const appId = params[2];
+    const reqId = params[3];
+    const useId = params[4];
+    
     useEffect(() => {
         if (location.state?.refresh) {
-            fetchTestcases(space, appId, reqId, useId);
-            navigate(location.pathname, { replace: true, state: {} });
+            fetchTestcases(space, useId);
+            navigate(location.pathname, { replace: true, state: { useId } });
         }
     }, [location.state]);
 
     useEffect(() => {
         const loadTestcases = async () => {
             try {
-                const data = await fetchTestcases(space, appId, reqId, useId);
+                const data = await fetchTestcases(space, useId);
                 setTestcases(data);
             } catch (err) {
                 setError("Data Could Not Be Fetched");
@@ -67,8 +67,8 @@ const TestcasesPage = () => {
         setLoading(true);
         await deleteTestcases(space, appId, reqId, useId);
         try {
-            await generateTestcases(space, appId, reqId, useId);
-            const newtestcase = await fetchTestcases(space, appId, reqId, useId);
+            await generateTestcases(space, useId);
+            const newtestcase = await fetchTestcases(space, useId);
             setTestcases(newtestcase);
         } catch (error) {
             console.error("Error Submitting Usecase: ", error);
@@ -87,7 +87,7 @@ const TestcasesPage = () => {
         setLoading(true);
         try {
             await deleteSingleTestcase(space, appId, reqId, useId, testcaseToDelete);
-            const updated = await fetchTestcases(space, appId, reqId, useId);
+            const updated = await fetchTestcases(space, useId);
             setTestcases(updated);
         } catch (error) {
             console.error("Error Deleting Usecase:", error);
@@ -98,15 +98,16 @@ const TestcasesPage = () => {
     };
 
     const handleEditTestcaseClick = async (id: string | null) => {
-        navigate(`/${space}/application/${appId}/requirement/${reqId}/usecase/${useId}/testcase/edit${id ? `/${id}` : ''}`)
+        navigate(`/${space}/${appId}/${reqId}/${useId}/testcase/edit${id ? `/${id}` : ''}`)
     };
 
-    const handleExportFilename = async () => {
-        const title = usecases.find((usecase: any) => usecase._id === useId)?.title;
-        console.log("TITLE:", title);
-        const arr = title?.split(" ");
-        console.log("ARR:", arr);
-    }
+    const handleExportFilename = () => {
+        const title = location.state?.usecaseTitle || "Untitled";
+        const arr = title.trim().split(/\s+/); 
+        const formattedTitle = arr.slice(0, 5).join("-");
+        return `${formattedTitle}-Testcases`;
+    };
+    
 
     const exportToExcel = async () => {
         const workbook = new ExcelJS.Workbook();
@@ -161,7 +162,6 @@ const TestcasesPage = () => {
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const filename = handleExportFilename().toString() + ".xlsx";
-        console.log(filename);
         saveAs(blob, filename);
     };
 
@@ -212,10 +212,10 @@ const TestcasesPage = () => {
                                     <td className="text-column">{testcase.priority}</td>
                                     <td className="actions-column">
                                         <div className="actions-wrapper">
-                                            <Button onClick={() => confirmDelete(testcase._id)} disabled={loading}>
+                                            <Button onClick={() => confirmDelete(testcase.reference)} disabled={loading}>
                                                 <FontAwesomeIcon icon={faTrashAlt} />
                                             </Button>
-                                            <Button onClick={() => handleEditTestcaseClick(testcase._id)} disabled={loading}>
+                                            <Button onClick={() => handleEditTestcaseClick(testcase.reference)} disabled={loading}>
                                                 <FontAwesomeIcon icon={faPen} />
                                             </Button>
                                         </div>
